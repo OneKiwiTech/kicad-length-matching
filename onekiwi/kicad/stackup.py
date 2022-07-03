@@ -1,5 +1,5 @@
 import json
-from .pcb import *
+from .board import *
 
 class Stackup:
     def __init__(self, name, thickness):

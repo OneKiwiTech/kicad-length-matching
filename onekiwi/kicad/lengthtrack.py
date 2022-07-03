@@ -1,5 +1,6 @@
 import pcbnew
 
+ANY_LAYER = 'Any'
 
 class TrackLength:
     def __init__(self, id):
@@ -62,7 +63,7 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
     end_pad_layer = board.FindFootprintByReference(reference2).IsFlipped()
 
     startpoint = start_pad.GetPosition()
-    startlayer = 'Any'
+    startlayer = ANY_LAYER
     if start_pad.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
         if start_pad_layer == True:
             # F_Cu = 31
@@ -72,7 +73,7 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
             startlayer = pcbnew.F_Cu
 
     endpoint = end_pad.GetPosition()
-    endlayer = 'Any'
+    endlayer = ANY_LAYER
     if end_pad.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
         if end_pad_layer == True:
             endlayer = pcbnew.B_Cu
@@ -98,7 +99,7 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
                         via.add_start(current.startlayer)
                         trackslength[index].add_via(via)
                         current.via1 = len(trackslength[index].vias) -1
-                        current.startlayer = 'Any'
+                        current.startlayer = ANY_LAYER
                         tracks.remove(track)
                         isEnd = True
                     if current.endpoint == via_point:
@@ -106,25 +107,25 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
                         via.add_start(current.endlayer)
                         trackslength[index].add_via(via)
                         current.via2 = len(trackslength[index].vias) - 1
-                        current.endlayer = 'Any'
+                        current.endlayer = ANY_LAYER
                         tracks.remove(track)
                         isEnd = True
                 else:
                     point_start = track.GetStart()
                     point_end = track.GetEnd()
                     track_layer = track.GetLayer()
-                    if current.startpoint == point_start and (current.startlayer == track_layer or current.startlayer == 'Any'):
+                    if current.startpoint == point_start and (current.startlayer == track_layer or current.startlayer == ANY_LAYER):
                         if track not in trackslength[index].tracks:
-                            if current.startlayer == 'Any':
+                            if current.startlayer == ANY_LAYER:
                                 trackslength[index].vias[current.via1].add_end(track_layer)
                             trackslength[index].add_track(track)
                             current.startpoint = point_end
                             current.startlayer = track_layer
                             tracks.remove(track)
                             isEnd = True
-                    elif current.startpoint == point_end and (current.startlayer == track_layer or current.startlayer == 'Any'):
+                    elif current.startpoint == point_end and (current.startlayer == track_layer or current.startlayer == ANY_LAYER):
                         if track not in trackslength[index].tracks:
-                            if current.startlayer == 'Any':
+                            if current.startlayer == ANY_LAYER:
                                 trackslength[index].vias[current.via1].add_end(track_layer)
                             trackslength[index].add_track(track)
                             current.startpoint = point_start
@@ -132,18 +133,18 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
                             tracks.remove(track)
                             isEnd = True
 
-                    if current.endpoint == point_start and (current.endlayer == track_layer or current.endlayer == 'Any'):
+                    if current.endpoint == point_start and (current.endlayer == track_layer or current.endlayer == ANY_LAYER):
                         if track not in trackslength[index].tracks:
-                            if current.endlayer == 'Any':
+                            if current.endlayer == ANY_LAYER:
                                 trackslength[index].vias[current.via2].add_end(track_layer)
                             trackslength[index].add_track(track)
                             current.endpoint = point_end
                             current.endlayer = track_layer
                             tracks.remove(track)
                             isEnd = True
-                    elif current.endpoint == point_end and (current.endlayer == track_layer or current.endlayer == 'Any'):
+                    elif current.endpoint == point_end and (current.endlayer == track_layer or current.endlayer == ANY_LAYER):
                         if track not in trackslength[index].tracks:
-                            if current.endlayer == 'Any':
+                            if current.endlayer == ANY_LAYER:
                                 trackslength[index].vias[current.via2].add_end(track_layer)
                             trackslength[index].add_track(track)
                             current.endpoint = point_start
@@ -158,15 +159,13 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
     for via in trackslength[0].vias:
         stackupsv = []
         stackupsv.clear()
-        start = 2*via.start - 2
-        end  = 2*via.end - 2
-        if start < 0:
-            start = 0
+        start = 2*via.start
+        end = 2*via.end
         if end >= len(stackups):
             end = len(stackups)
             stackupsv = stackups[start:]
         else:
-            stackupsv = stackups[start:end]
+            stackupsv = stackups[start:end+1]
         print('start %d end %d ' %(start, end))
         offset = (stackupsv[0].thickness + stackupsv[len(stackupsv) - 1].thickness)/2
         via_length = 0
