@@ -1,5 +1,6 @@
 from ..observable.observable import Observable
-from ..data.netclass import *
+from ..kicad.netclass import *
+from ..kicad.stackup import *
 
 class NetClass:
     def __init__(self, name):
@@ -32,6 +33,7 @@ class Model:
         self.status = Observable('')
         self.status2 = Observable('')
         self.classes = get_net_classes()
+        self.thickness = get_thickness_stackup()
         self.netclasses = []
 
     def init_data(self):
