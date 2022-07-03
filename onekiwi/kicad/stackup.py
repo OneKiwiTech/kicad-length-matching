@@ -17,7 +17,7 @@ def get_layer_stackup():
     f = open(job_file)
   
     # returns JSON object as 
-    # a dictionary
+    # a dictionaryget layge
     data = json.load(f)
   
     # Iterating through the json

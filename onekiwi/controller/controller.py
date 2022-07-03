@@ -14,6 +14,7 @@ class Controller:
         #self.DisplayStatus(self.model.status.get())
         #self.model.status.addCallback(self.DisplayStatus)
         # Connect Events
+        self.panel1.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdateClick)
         self.panel1.buttonLoad.Bind(wx.EVT_BUTTON, self.OnLoadClick)
         self.panel1.comboClass.Bind(wx.EVT_COMBOBOX, self.OnClassChange)
 
@@ -21,6 +22,10 @@ class Controller:
         self.view.ShowModal()
 
     # Virtual event handlers, override them in your derived class
+    def OnUpdateClick(self, event):
+        track, via, count = self.model.get_track_length()
+        self.panel1.UpadateLength(track, via, count)
+
     def OnLoadClick(self, event):
         #self.model.set_status1('Loading')
         self.model.init_data()

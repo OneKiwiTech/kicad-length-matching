@@ -1,4 +1,5 @@
 import pcbnew
+import logging
 
 ANY_LAYER = 'Any'
 
@@ -19,6 +20,7 @@ class TrackLength:
     
     def add_via(self, via):
         self.vias.append(via)
+
 
 class Via:
     def __init__(self, via):
@@ -47,12 +49,16 @@ def get_track_length(netname):
     tracks = board.TracksInNet(netcode)
     sum = 0.0
     for track in tracks:
-        if track.GetClass() != "VIA":
+        if track.GetClass() != "PCB_VIA":
             sum += track.GetLength()
     length = round(sum/pcbnew.IU_PER_MM, 4)
     return length
 
-def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
+def length_test():
+    logging.debug('X1A')
+
+def get_min_track_lenght(reference1, pad1, reference2, pad2):
+    logging.debug('X1')
     board = pcbnew.GetBoard()
     start_pad = board.FindFootprintByReference(reference1).FindPadByNumber(pad1)
     end_pad = board.FindFootprintByReference(reference2).FindPadByNumber(pad2)
@@ -64,6 +70,7 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
 
     startpoint = start_pad.GetPosition()
     startlayer = ANY_LAYER
+    logging.debug('X2')
     if start_pad.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
         if start_pad_layer == True:
             # F_Cu = 31
@@ -86,8 +93,8 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
     trackslength.append(TrackLength(0))
     currents = []
     currents.append(Current(startpoint, startlayer, endpoint, endlayer))
-    print('currents %s' %(len(currents)))
-    print('trackslength %s' %(len(trackslength)))
+    #print('currents %s' %(len(currents)))
+    #print('trackslength %s' %(len(trackslength)))
     while (len(tracks)) > 0 and (isLoop == True) and (isEnd == True):
         isEnd = False
         for track in tracks:
@@ -154,7 +161,8 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
                     
                 if current.startpoint == current.endpoint and (current.startlayer == current.endlayer):
                     isLoop = False
-    
+    return trackslength[0]
+    """
     print('trackslength via %d ' %(len(trackslength[0].vias)))
     for via in trackslength[0].vias:
         stackupsv = []
@@ -184,4 +192,5 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2, stackups):
         sum += track.GetLength()
     length = round(sum/pcbnew.IU_PER_MM, 4)
     print('trackslength %d %7.4f' %(len(trackslength[0].tracks), length))
-    return length
+    """
+    #return trackslength[0]

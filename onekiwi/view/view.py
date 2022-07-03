@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import logging
 import wx
 import wx.grid
 
@@ -19,22 +20,27 @@ class NetPanel(NetPanelBase):
     def UpdateClass(self, classes):
         self.comboClass.Append(classes)
 
+    def GetClassSelection(self):
+        return self.comboClass.GetValue()
+
     def UpadateNets(self, nets):
-        self.textLength.LabelText = '123'
         rows = self.gridNet.GetNumberRows()
         self.gridNet.DeleteRows(0, rows)
         self.gridNet.AppendRows(len(nets))
-        for row, net in enumerate(nets, start=0):   # Python indexes start at zero
+        for row, net in enumerate(nets, start=0):
             self.gridNet.SetCellValue(row, 0, net.name)
-            #pads = get_pads_from_net_name(net)
             pins = [item.pin for item in net.pads]
             choice_editor = wx.grid.GridCellChoiceEditor(pins, True)
             self.gridNet.SetCellEditor(row, 1, choice_editor)
             self.gridNet.SetCellEditor(row, 2, choice_editor)
             self.gridNet.SetCellValue(row, 1, pins[0])
             self.gridNet.SetCellValue(row, 2, pins[1])
-
-
+    
+    def UpadateLength(self, track, via, count):
+        logging.debug('hala')
+        self.gridNet.SetCellValue(0, 3, str(count))
+        self.gridNet.SetCellValue(0, 4, str(via))
+        self.gridNet.SetCellValue(0, 5, str(track))
 
 class xNetPanel(xNetPanelBase):
     def __init__(self, parent):

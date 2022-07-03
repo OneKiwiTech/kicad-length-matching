@@ -1,6 +1,8 @@
+import logging
 from ..observable.observable import Observable
 from ..kicad.netclass import *
 from ..kicad.stackup import *
+from ..kicad.lengthtrack import *
 
 class NetClass:
     def __init__(self, name):
@@ -56,5 +58,63 @@ class Model:
     def set_status(self, value):
         self.status.set(value)
 
+    def get_track_length(self):
+        logging.debug('A1')
+        net = self.netclasses[0].nets[0]
+        length_test()
+        logging.debug('A2')
+        track_data = get_min_track_lenght(net.reference1, net.pad1, net.reference2, net.pad2)
+        logging.debug('A3')
+        via_counts = len(track_data.vias)
+        sum_via_length = 0.0
+        
+        for via in track_data.vias:
+            stackupsv = []
+            stackupsv.clear()
+            start = 2*via.start
+            end = 2*via.end
+            if end >= len(self.stackups):
+                end = len(self.stackups)
+                stackupsv = self.stackups[start:]
+            else:
+                stackupsv = self.stackups[start:end+1]
+            offset = (stackupsv[0].thickness + stackupsv[len(stackupsv) - 1].thickness)/2
+            via_length = 0
+            for item in stackupsv:
+                via_length += item.thickness
+                #print('name %s %f' %(item.name, item.thickness))
+            via_length = via_length - offset
+            sum_via_length += via_length
 
+        sum = 0.0
+        for track in track_data.tracks:
+            #startpoint = track.GetStart()
+            #endpoint = track.GetEnd()
+            #ind = track_data.tracks.index(track) + 1
+            #print('%d, %s,%s' %(ind, startpoint, endpoint))
+            sum += track.GetLength()
+        sum_track_length = sum/pcbnew.IU_PER_MM
+        logging.debug('AN %f %f %d' %(sum_track_length, sum_via_length, via_counts))
+        return sum_track_length, sum_via_length, via_counts
+
+"""
+"netclasses":{
+    "name": "name class"
+    "nets":[
+        {
+            "name": "net name"
+            "code": "net code"
+            "reference1": "reference start"
+            "pad1": "pad start"
+            "reference2": "reference end"
+            "pad2": "pad end"
+            "pads":[
+                "reference": "reference"
+                "pad": "pad"
+                "pin": "reference.pad"
+            ]
+        }
+    ]
+}
+"""
 
