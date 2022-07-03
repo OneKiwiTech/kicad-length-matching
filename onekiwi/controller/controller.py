@@ -11,14 +11,24 @@ class Controller:
         self.view.notebook.AddPage(self.panel1, "Panel1")
         self.view.notebook.AddPage(self.panel2, "Panel2")
 
+        #self.DisplayStatus(self.model.status.get())
+        #self.model.status.addCallback(self.DisplayStatus)
         # Connect Events
-        self.panel1.buttonLoad.Bind( wx.EVT_BUTTON, self.OnLoadClick )
+        self.panel1.buttonLoad.Bind(wx.EVT_BUTTON, self.OnLoadClick)
+        self.panel1.comboClass.Bind(wx.EVT_COMBOBOX, self.OnClassChange)
 
     def Show(self):
         self.view.ShowModal()
 
     # Virtual event handlers, override them in your derived class
-    def OnLoadClick( self, event ):
-        self.view.textStatus.LabelText = "Loading"
+    def OnLoadClick(self, event):
+        #self.model.set_status1('Loading')
         self.model.init_data()
-        self.panel1.comboClass.Append(self.model.classes)
+        self.panel1.UpdateClass(self.model.classes)
+
+    def OnClassChange(self, event):
+        net_class = event.GetEventObject().GetValue() 
+        for netclass in self.model.netclasses:
+            if net_class == netclass.name:
+                self.view.SetText(netclass.name)
+                self.panel1.UpadateNets(netclass.nets)

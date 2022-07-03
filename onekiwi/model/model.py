@@ -29,7 +29,7 @@ class PadPin:
 
 class Model:
     def __init__(self):
-        self.status1 = Observable('')
+        self.status = Observable('')
         self.status2 = Observable('')
         self.classes = get_net_classes()
         self.netclasses = []
@@ -51,8 +51,8 @@ class Model:
                 nets.append(net)
             nameclass.set_nets(nets)
 
-    def set_status2(self, value):
-        self.status2.set(value)
+    def set_status(self, value):
+        self.status.set(value)
 
 
 

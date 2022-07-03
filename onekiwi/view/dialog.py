@@ -112,7 +112,7 @@ class NetPanelBase ( wx.Panel ):
 		self.gridNet.SetColSize( 4, 120 )
 		self.gridNet.SetColSize( 5, 120 )
 		self.gridNet.SetColSize( 6, 120 )
-		self.gridNet.AutoSizeColumns()
+		#self.gridNet.AutoSizeColumns()
 		self.gridNet.EnableDragColMove( False )
 		self.gridNet.EnableDragColSize( True )
 		self.gridNet.SetColLabelValue( 0, u"Net Name" )
