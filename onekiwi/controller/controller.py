@@ -21,20 +21,23 @@ class Controller:
         self.view.ShowModal()
 
     # Virtual event handlers, override them in your derived class
-    def OnUpdateClick(self, event):
-        self.model.get_track_length()
-        self.panel1.UpadateLength(self.model.netclasses)
 
     def OnLoadClick(self, event):
         self.model.init_data()
+        self.model.get_track_length()
         self.panel1.UpdateClass(self.model.classes)
+        self.panel1.UpadateTable(self.model.netclasses[0].nets)
+
+    def OnUpdateClick(self, event):
+        self.model.get_track_length()
+        self.panel1.UpadateLength(self.model.netclasses)
 
     def OnClassChange(self, event):
         net_class = event.GetEventObject().GetValue() 
         for netclass in self.model.netclasses:
             if net_class == netclass.name:
                 self.view.SetText(netclass.name)
-                self.panel1.UpadateNets(netclass.nets)
+                self.panel1.UpadateTable(netclass.nets)
     
     def OnGirdCellChange(self, event):
         row = event.GetRow()

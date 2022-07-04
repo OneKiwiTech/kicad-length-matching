@@ -75,12 +75,12 @@ class NetPanelBase ( wx.Panel ):
 
 		comboClassChoices = []
 		self.comboClass = wx.ComboBox( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, comboClassChoices, 0 )
-		bSizer2.Add( self.comboClass, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5 )
+		bSizer2.Add( self.comboClass, 2, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
 		bSizer2.Add( ( 0, 0), 1, wx.EXPAND, 5 )
 
-		self.buttonLoad = wx.Button( self, wx.ID_ANY, u"Load Init", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.buttonLoad = wx.Button( self, wx.ID_ANY, u"Load Setting", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer2.Add( self.buttonLoad, 0, wx.ALL, 5 )
 
 		self.buttonSave = wx.Button( self, wx.ID_ANY, u"Save Setting", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -142,6 +142,9 @@ class NetPanelBase ( wx.Panel ):
 
 		# Connect Events
 		self.buttonLoad.Bind( wx.EVT_BUTTON, self.OnLoadClick )
+		self.buttonSave.Bind( wx.EVT_BUTTON, self.OnSaveClick )
+		self.buttonUpdate.Bind( wx.EVT_BUTTON, self.OnUpdateClick )
+		self.gridNet.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnGirdCellChange )
 
 	def __del__( self ):
 		pass
@@ -149,6 +152,15 @@ class NetPanelBase ( wx.Panel ):
 
 	# Virtual event handlers, override them in your derived class
 	def OnLoadClick( self, event ):
+		event.Skip()
+
+	def OnSaveClick( self, event ):
+		event.Skip()
+
+	def OnUpdateClick( self, event ):
+		event.Skip()
+
+	def OnGirdCellChange( self, event ):
 		event.Skip()
 
 

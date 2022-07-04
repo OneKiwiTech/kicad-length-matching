@@ -18,12 +18,14 @@ class NetPanel(NetPanelBase):
         NetPanelBase.__init__(self, parent)
     
     def UpdateClass(self, classes):
+        self.comboClass.Clear()
         self.comboClass.Append(classes)
+        self.comboClass.SetSelection(0)
 
     def GetClassSelection(self):
         return self.comboClass.GetValue()
 
-    def UpadateNets(self, nets):
+    def UpadateTable(self, nets):
         rows = self.gridNet.GetNumberRows()
         self.gridNet.DeleteRows(0, rows)
         self.gridNet.AppendRows(len(nets))
@@ -35,6 +37,13 @@ class NetPanel(NetPanelBase):
             self.gridNet.SetCellEditor(row, 2, choice_editor)
             self.gridNet.SetCellValue(row, 1, pins[0])
             self.gridNet.SetCellValue(row, 2, pins[1])
+            vialength = round(net.vialength, 4)
+            tracklength = round(net.tracklength, 4)
+            totallength = round(net.totallength, 4)
+            self.gridNet.SetCellValue(row, 3, str(net.viacount))
+            self.gridNet.SetCellValue(row, 4, str(vialength))
+            self.gridNet.SetCellValue(row, 5, str(tracklength))
+            self.gridNet.SetCellValue(row, 6, str(totallength))
     
     def UpadateLength(self, netclasses):
         logging.debug('Upadate Length')
