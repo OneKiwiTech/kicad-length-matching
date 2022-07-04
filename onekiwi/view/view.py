@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-import logging
 import wx
 import wx.grid
 
@@ -46,10 +44,9 @@ class NetPanel(NetPanelBase):
             self.gridNet.SetCellValue(row, 6, str(totallength))
     
     def UpadateLength(self, netclasses):
-        logging.debug('Upadate Length')
-        nets = netclasses[1].nets
+        index = self.comboClass.GetSelection()
+        nets = netclasses[index].nets
         for index, net in enumerate(nets, start=0):
-            #viacount = round(net.viacount, 4)
             vialength = round(net.vialength, 4)
             tracklength = round(net.tracklength, 4)
             totallength = round(net.totallength, 4)
