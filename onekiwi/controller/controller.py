@@ -11,8 +11,6 @@ class Controller:
         self.view.notebook.AddPage(self.panel1, "Panel1")
         self.view.notebook.AddPage(self.panel2, "Panel2")
 
-        #self.DisplayStatus(self.model.status.get())
-        #self.model.status.addCallback(self.DisplayStatus)
         # Connect Events
         self.panel1.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdateClick)
         self.panel1.buttonLoad.Bind(wx.EVT_BUTTON, self.OnLoadClick)
@@ -23,11 +21,10 @@ class Controller:
 
     # Virtual event handlers, override them in your derived class
     def OnUpdateClick(self, event):
-        track, via, count = self.model.get_track_length()
-        self.panel1.UpadateLength(track, via, count)
+        self.model.get_track_length()
+        self.panel1.UpadateLength(self.model.netclasses)
 
     def OnLoadClick(self, event):
-        #self.model.set_status1('Loading')
         self.model.init_data()
         self.panel1.UpdateClass(self.model.classes)
 

@@ -19,6 +19,10 @@ class NetName:
         self.pad1 = pad1
         self.reference2 = reference2
         self.pad2 = pad2
+        self.totallength = 0.0
+        self.tracklength = 0.0
+        self.vialength = 0.0
+        self.viacount = 0.0
 
     def set_pads(self, pads):
         self.pads = pads
@@ -52,16 +56,63 @@ class Model:
                 nets.append(net)
             nameclass.set_nets(nets)
 
-    def set_status(self, value):
-        self.status.set(value)
-
     def get_track_length(self):
-        logging.debug('A1')
+        logging.debug('get_track_length')
+        for thick in self.thickness:
+            logging.debug('thickness: %f', thick)
+        for netclass in self.netclasses:
+            logging.debug('class: %s', netclass.name)
+            nets = netclass.nets
+            for net in nets:
+                logging.debug('net: %s', net.name)
+                track_data = get_min_track_lenght(net.reference1, net.pad1, net.reference2, net.pad2)
+                net.viacount = len(track_data.vias)
+                sum_via_length = 0.0
+                for via in track_data.vias:
+                    stackup = []
+                    start = 2*via.start
+                    end = 2*via.end
+                    logging.debug('via start: %d - %d' %(via.start, via.end))
+                    logging.debug('via stack: %d - %d' %(start, end))
+                    if end >= len(self.thickness):
+                        end = len(self.thickness)
+                        stackup = self.thickness[start:]
+                        logging.debug('zz1')
+                        logging.debug(stackup)
+                    else:
+                        logging.debug('zz2')
+                        stackup = self.thickness[start:end+1]
+                        logging.debug(stackup)
+                    offset = 0.0
+                    offset = (stackup[0] + stackup[len(stackup) - 1])/2
+                    logging.debug('offset', offset)
+                    via_length = 0.0
+                    logging.debug('zz3')
+                    for item in stackup:
+                        logging.debug(item)
+                        via_length += item
+                        logging.debug('vialength %f' %via_length)
+                        #print('name %s %f' %(item.name, item.thickness))
+                    logging.debug('zz4')
+                    via_length = via_length - offset
+                    logging.debug('vialength %f' %via_length)
+                    sum_via_length += via_length
+                    logging.debug('sum_via_length %f' %sum_via_length)
+                logging.debug('zz5')
+                net.vialength = sum_via_length
+
+                sum_track_length = 0.0
+                for track in track_data.tracks:
+                    sum_track_length += track.GetLength()
+                net.tracklength = sum_track_length/pcbnew.IU_PER_MM
+                net.totallength = net.tracklength + net.vialength
+                logging.debug('%f %f %f' %(net.tracklength, net.vialength, net.viacount))
+                logging.debug('==============')
+        #logging.debug('end get_track_length')
+    ############################
+        """"
         net = self.netclasses[0].nets[0]
-        length_test()
-        logging.debug('A2')
         track_data = get_min_track_lenght(net.reference1, net.pad1, net.reference2, net.pad2)
-        logging.debug('A3')
         via_counts = len(track_data.vias)
         sum_via_length = 0.0
         
@@ -91,8 +142,8 @@ class Model:
             #print('%d, %s,%s' %(ind, startpoint, endpoint))
             sum += track.GetLength()
         sum_track_length = sum/pcbnew.IU_PER_MM
-        logging.debug('AN %f %f %d' %(sum_track_length, sum_via_length, via_counts))
         return sum_track_length, sum_via_length, via_counts
+        """
 
 """
 "netclasses":{

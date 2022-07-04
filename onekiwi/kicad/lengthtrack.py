@@ -1,5 +1,5 @@
-import pcbnew
 import logging
+import pcbnew
 
 ANY_LAYER = 'Any'
 
@@ -54,11 +54,8 @@ def get_track_length(netname):
     length = round(sum/pcbnew.IU_PER_MM, 4)
     return length
 
-def length_test():
-    logging.debug('X1A')
-
 def get_min_track_lenght(reference1, pad1, reference2, pad2):
-    logging.debug('X1')
+    logging.debug('get_min_track_lenght')
     board = pcbnew.GetBoard()
     start_pad = board.FindFootprintByReference(reference1).FindPadByNumber(pad1)
     end_pad = board.FindFootprintByReference(reference2).FindPadByNumber(pad2)
@@ -70,7 +67,6 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2):
 
     startpoint = start_pad.GetPosition()
     startlayer = ANY_LAYER
-    logging.debug('X2')
     if start_pad.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
         if start_pad_layer == True:
             # F_Cu = 31
@@ -93,8 +89,6 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2):
     trackslength.append(TrackLength(0))
     currents = []
     currents.append(Current(startpoint, startlayer, endpoint, endlayer))
-    #print('currents %s' %(len(currents)))
-    #print('trackslength %s' %(len(trackslength)))
     while (len(tracks)) > 0 and (isLoop == True) and (isEnd == True):
         isEnd = False
         for track in tracks:
@@ -161,6 +155,7 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2):
                     
                 if current.startpoint == current.endpoint and (current.startlayer == current.endlayer):
                     isLoop = False
+    logging.debug('end get_min_track_lenght')
     return trackslength[0]
     """
     print('trackslength via %d ' %(len(trackslength[0].vias)))

@@ -36,11 +36,18 @@ class NetPanel(NetPanelBase):
             self.gridNet.SetCellValue(row, 1, pins[0])
             self.gridNet.SetCellValue(row, 2, pins[1])
     
-    def UpadateLength(self, track, via, count):
-        logging.debug('hala')
-        self.gridNet.SetCellValue(0, 3, str(count))
-        self.gridNet.SetCellValue(0, 4, str(via))
-        self.gridNet.SetCellValue(0, 5, str(track))
+    def UpadateLength(self, netclasses):
+        logging.debug('Upadate Length')
+        nets = netclasses[1].nets
+        for index, net in enumerate(nets, start=0):
+            #viacount = round(net.viacount, 4)
+            vialength = round(net.vialength, 4)
+            tracklength = round(net.tracklength, 4)
+            totallength = round(net.totallength, 4)
+            self.gridNet.SetCellValue(index, 3, str(net.viacount))
+            self.gridNet.SetCellValue(index, 4, str(vialength))
+            self.gridNet.SetCellValue(index, 5, str(tracklength))
+            self.gridNet.SetCellValue(index, 6, str(totallength))
 
 class xNetPanel(xNetPanelBase):
     def __init__(self, parent):
