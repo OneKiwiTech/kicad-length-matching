@@ -1,4 +1,3 @@
-from pyexpat import model
 from ..model.model import Model
 from ..view.view import *
 
@@ -21,29 +20,27 @@ class Controller:
     def Show(self):
         self.view.ShowModal()
 
-    # Virtual event handlers, override them in your derived class
-
+    # Event handlers
     def OnLoadClick(self, event):
-        self.model.init_data2()
-        self.model.get_track_length2()
-        #self.model.init_data()
-        #self.model.get_track_length()
-        #self.panel1.UpdateClass(self.model.classes)
-        #self.panel1.UpadateTable(self.model.netclasses[0].nets)
+        self.model.init_data()
+        self.model.get_track_length()
+        self.panel1.UpdateCombobox(self.model.classes)
+        nets = self.model.nameclasses["classes"][0]['nets']
+        self.panel1.UpadateTable(nets)
     
     def OnSaveClick(self, event):
         self.model.to_json()
 
     def OnUpdateClick(self, event):
         self.model.get_track_length()
-        self.panel1.UpadateLength(self.model.netclasses)
+        index = self.panel1.GetComboboxSelection()
+        nets = self.model.nameclasses["classes"][index]['nets']
+        self.panel1.UpadateTable(nets)
 
     def OnClassChange(self, event):
-        net_class = event.GetEventObject().GetValue() 
-        for netclass in self.model.netclasses:
-            if net_class == netclass.name:
-                self.view.SetText(netclass.name)
-                self.panel1.UpadateTable(netclass.nets)
+        index = event.GetEventObject().GetSelection()
+        nets = self.model.nameclasses["classes"][index]['nets']
+        self.panel1.UpadateTable(nets)
     
     def OnGirdCellChange(self, event):
         row = event.GetRow()

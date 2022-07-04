@@ -1,4 +1,3 @@
-import logging
 import pcbnew
 
 ANY_LAYER = 'Any'
@@ -55,7 +54,6 @@ def get_track_length(netname):
     return length
 
 def get_min_track_lenght(reference1, pad1, reference2, pad2):
-    logging.debug('get_min_track_lenght')
     board = pcbnew.GetBoard()
     start_pad = board.FindFootprintByReference(reference1).FindPadByNumber(pad1)
     end_pad = board.FindFootprintByReference(reference2).FindPadByNumber(pad2)
@@ -155,7 +153,6 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2):
                     
                 if current.startpoint == current.endpoint and (current.startlayer == current.endlayer):
                     isLoop = False
-    logging.debug('end get_min_track_lenght')
     return trackslength[0]
     """
     print('trackslength via %d ' %(len(trackslength[0].vias)))
