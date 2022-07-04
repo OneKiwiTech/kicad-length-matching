@@ -1,5 +1,4 @@
 import logging
-from ..observable.observable import Observable
 from ..kicad.netclass import *
 from ..kicad.stackup import *
 from ..kicad.lengthtrack import *
@@ -32,8 +31,6 @@ class PadPin:
 
 class Model:
     def __init__(self):
-        self.status = Observable('')
-        self.status2 = Observable('')
         self.classes = get_net_classes()
         self.thickness = get_thickness_stackup()
         self.netclasses = []
