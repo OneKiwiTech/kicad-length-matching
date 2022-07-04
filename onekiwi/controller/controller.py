@@ -15,6 +15,7 @@ class Controller:
         self.panel1.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdateClick)
         self.panel1.buttonLoad.Bind(wx.EVT_BUTTON, self.OnLoadClick)
         self.panel1.comboClass.Bind(wx.EVT_COMBOBOX, self.OnClassChange)
+        self.panel1.gridNet.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.OnGirdCellChange)
 
     def Show(self):
         self.view.ShowModal()
@@ -34,3 +35,11 @@ class Controller:
             if net_class == netclass.name:
                 self.view.SetText(netclass.name)
                 self.panel1.UpadateNets(netclass.nets)
+    
+    def OnGirdCellChange(self, event):
+        row = event.GetRow()
+        col = event.GetCol()
+        value = str(self.panel1.gridNet.GetCellValue(row, col))
+        status =  str(row) + ' '  + str(col)
+        value = value + ' ' + status
+        self.view.SetText(value)

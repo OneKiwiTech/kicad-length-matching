@@ -10,6 +10,7 @@
 import wx
 import wx.xrc
 import wx.grid
+import wx.adv
 
 ###########################################################################
 ## Class LengthMatchingDialog
@@ -34,9 +35,13 @@ class LengthMatchingDialog ( wx.Dialog ):
 
 		bSizer5.Add( self.textStatus, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-		self.gaugeStatus = wx.Gauge( self, wx.ID_ANY, 100, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL )
-		self.gaugeStatus.SetValue( 0 )
-		bSizer5.Add( self.gaugeStatus, 0, wx.ALL|wx.EXPAND, 5 )
+		self.textAbout = wx.StaticText( self, wx.ID_ANY, u"About us:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.textAbout.Wrap( -1 )
+
+		bSizer5.Add( self.textAbout, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		self.hyperlink = wx.adv.HyperlinkCtrl( self, wx.ID_ANY, u"OneKiwi", u"https://github.com/OneKiwiTech", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
+		bSizer5.Add( self.hyperlink, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
 		bSizer4.Add( bSizer5, 0, wx.EXPAND, 5 )
