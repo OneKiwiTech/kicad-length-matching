@@ -1,12 +1,10 @@
 import os
 import sys
-import subprocess
 import threading
 import time
 
 import wx
 import wx.aui
-from wx import FileConfig
 
 def check_for_bom_button():
     # From Miles McCoo's blog

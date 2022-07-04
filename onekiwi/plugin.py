@@ -4,10 +4,12 @@ import tempfile
 import logging
 import wx
 import wx.aui
+import pcbnew
 from wx import FileConfig
 
-import pcbnew
+
 from .controller.controller import Controller
+from .version import version
 
 class OneKiwiPlugin(pcbnew.ActionPlugin, object):
     config_file = os.path.join(os.path.dirname(__file__), '..', 'config.ini')
@@ -19,12 +21,12 @@ class OneKiwiPlugin(pcbnew.ActionPlugin, object):
         self.logger = logging.getLogger(__name__)
 
         self.name = "Length Matching"
-        self.category = "Modify PCB"
+        self.category = "Read PCB"
         self.pcbnew_icon_support = hasattr(self, "show_toolbar_button")
         self.show_toolbar_button = True
         icon_dir = os.path.dirname(os.path.dirname(__file__))
         self.icon_file_name = os.path.join(icon_dir, 'icon.png')
-        self.description = "OneKiwi Plugin"
+        self.description = "Track Length Calculator"
         self.config = FileConfig(localFilename=self.config_file)
         
         self._pcbnew_frame = None
@@ -59,7 +61,7 @@ class OneKiwiPlugin(pcbnew.ActionPlugin, object):
             )
             return
 
-        controller = Controller(self._pcbnew_frame)
+        controller = Controller(self._pcbnew_frame, version)
 
         if controller.Show() == wx.ID_OK:
             

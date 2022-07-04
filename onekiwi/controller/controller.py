@@ -2,9 +2,9 @@ from ..model.model import Model
 from ..view.view import *
 
 class Controller:
-    def __init__(self, parent):
+    def __init__(self, parent, version):
         self.model = Model()
-        self.view = DialogMain(parent)
+        self.view = DialogMain(parent, version)
         self.panel1 = NetPanel(self.view.notebook)
         self.panel2 = xNetPanel(self.view.notebook)
         self.view.notebook.AddPage(self.panel1, "Display")

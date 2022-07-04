@@ -4,9 +4,9 @@ import wx.grid
 from .dialog import *
 
 class DialogMain(LengthMatchingDialog):
-    def __init__(self, parent):
+    def __init__(self, parent, version):
         LengthMatchingDialog.__init__(self, parent)
-        self.SetTitle('Length Matching')
+        self.SetTitle('Length Matching %s' %version)
     
     def SetText(self, status):
         self.textStatus.LabelText = status
