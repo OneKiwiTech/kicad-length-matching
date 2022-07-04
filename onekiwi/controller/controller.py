@@ -13,6 +13,7 @@ class Controller:
 
         # Connect Events
         self.panel1.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdateClick)
+        self.panel1.buttonSave.Bind(wx.EVT_BUTTON, self.OnSaveClick)
         self.panel1.buttonLoad.Bind(wx.EVT_BUTTON, self.OnLoadClick)
         self.panel1.comboClass.Bind(wx.EVT_COMBOBOX, self.OnClassChange)
         self.panel1.gridNet.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.OnGirdCellChange)
@@ -23,10 +24,15 @@ class Controller:
     # Virtual event handlers, override them in your derived class
 
     def OnLoadClick(self, event):
-        self.model.init_data()
-        self.model.get_track_length()
-        self.panel1.UpdateClass(self.model.classes)
-        self.panel1.UpadateTable(self.model.netclasses[0].nets)
+        self.model.init_data2()
+        self.model.get_track_length2()
+        #self.model.init_data()
+        #self.model.get_track_length()
+        #self.panel1.UpdateClass(self.model.classes)
+        #self.panel1.UpadateTable(self.model.netclasses[0].nets)
+    
+    def OnSaveClick(self, event):
+        self.model.to_json()
 
     def OnUpdateClick(self, event):
         self.model.get_track_length()

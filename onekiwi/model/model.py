@@ -2,6 +2,7 @@ import logging
 from ..kicad.netclass import *
 from ..kicad.stackup import *
 from ..kicad.lengthtrack import *
+import json
 
 class NetClass:
     def __init__(self, name):
@@ -38,6 +39,23 @@ class Model:
         self.classes = get_net_classes()
         self.thickness = get_thickness_stackup()
         self.netclasses = []
+        self.nameclasses = {}
+        self.nameclasses["classes"] = []
+
+    def to_json(self):
+        #board = get_board()
+        path = get_pcb_path()
+        logging.debug('path %s' %path)
+        name = get_pcb_name() + '_length-matching.json'
+        logging.debug('name %s' %name)
+        json_file = os.path.join(path, name)
+        logging.debug('file %s' %json_file)
+        # Serializing json 
+        json_object = json.dumps(self.netclasses, indent = 4)
+        #print(json_object)
+        # Writing to sample.json
+        #with open(json_file, "w") as outfile:
+            #outfile.write(json_object)
 
     def init_data(self):
         for name in self.classes:
@@ -46,8 +64,8 @@ class Model:
         for nameclass in self.netclasses:
             temp_nets = []
             nets = []
-            temp_nets = get_net_names(nameclass.name)
             pads = []
+            temp_nets = get_net_names(nameclass.name)
             for name in temp_nets:
                 netcode = get_net_code(name)
                 pads = get_pads_from_net_name(name)
@@ -55,6 +73,34 @@ class Model:
                 net.set_pads(pads)
                 nets.append(net)
             nameclass.set_nets(nets)
+
+    def init_data2(self):
+        for name in self.classes:
+            net = {"name": name, "nets":[]}
+            self.nameclasses['classes'].append(net)
+            
+        for nameclass in self.nameclasses['classes']:
+            nets = []
+            nets = get_net_names(nameclass['name'])
+            for ind, name in enumerate(nets):
+                pads = []
+                code = get_net_code(name)
+                pads = get_pads_from_net_name(name)
+                net = {'name': name, 'code': code, 'reference1': pads[0].reference, 'pad1':pads[0].pad, 'reference2': pads[1].reference, 'pad2':pads[1].pad, 'pads': []}
+                #self.nameclasses['classes'][index]['nets'].append(net)
+                nameclass['nets'].append(net)
+                for pad in pads:
+                    pad_info = {'reference': pad.reference, 'pad': pad.pad, 'pin': pad.pin}
+                    nameclass['nets'][ind]['pads'].append(pad_info)
+        #jsdata = json.dumps(self.nameclasses, indent = 4)
+        #logging.debug(jsdata)
+
+    def get_track_length2(self):
+        logging.debug('get_track_length2')
+        for netclass in enumerate(self.nameclass['classes']):
+            nets = netclass['nets']
+            for net in nets:
+                logging.debug(net)
 
     def get_track_length(self):
         logging.debug('get_track_length')
