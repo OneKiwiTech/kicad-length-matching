@@ -46,6 +46,20 @@ class Controller:
         row = event.GetRow()
         col = event.GetCol()
         value = str(self.panel1.gridNet.GetCellValue(row, col))
-        status =  str(row) + ' '  + str(col)
-        value = value + ' ' + status
         self.view.SetText(value)
+
+        # change pad start or pad end
+        if col == 1 or col == 2:
+            index = self.panel1.GetComboboxSelection()
+            net = self.model.nameclasses["classes"][index]['nets'][row]
+            for pad in net['pads']:
+                if value == pad['pin']:
+                    if col == 1:
+                        net['pad1'] = pad['pad']
+                        net['reference1'] = pad['reference']
+                    else:
+                        net['pad2'] = pad['pad']
+                        net['reference2'] = pad['reference']
+        
+
+            

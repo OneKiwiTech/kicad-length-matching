@@ -140,28 +140,8 @@ class NetPanelBase ( wx.Panel ):
 		self.SetSizer( bSizer1 )
 		self.Layout()
 
-		# Connect Events
-		self.buttonLoad.Bind( wx.EVT_BUTTON, self.OnLoadClick )
-		self.buttonSave.Bind( wx.EVT_BUTTON, self.OnSaveClick )
-		self.buttonUpdate.Bind( wx.EVT_BUTTON, self.OnUpdateClick )
-		self.gridNet.Bind( wx.grid.EVT_GRID_CELL_CHANGED, self.OnGirdCellChange )
-
 	def __del__( self ):
 		pass
-
-
-	# Virtual event handlers, override them in your derived class
-	def OnLoadClick( self, event ):
-		event.Skip()
-
-	def OnSaveClick( self, event ):
-		event.Skip()
-
-	def OnUpdateClick( self, event ):
-		event.Skip()
-
-	def OnGirdCellChange( self, event ):
-		event.Skip()
 
 
 ###########################################################################

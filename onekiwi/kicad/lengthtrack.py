@@ -154,35 +154,3 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2):
                 if current.startpoint == current.endpoint and (current.startlayer == current.endlayer):
                     isLoop = False
     return trackslength[0]
-    """
-    print('trackslength via %d ' %(len(trackslength[0].vias)))
-    for via in trackslength[0].vias:
-        stackupsv = []
-        stackupsv.clear()
-        start = 2*via.start
-        end = 2*via.end
-        if end >= len(stackups):
-            end = len(stackups)
-            stackupsv = stackups[start:]
-        else:
-            stackupsv = stackups[start:end+1]
-        print('start %d end %d ' %(start, end))
-        offset = (stackupsv[0].thickness + stackupsv[len(stackupsv) - 1].thickness)/2
-        via_length = 0
-        for item in stackupsv:
-            via_length += item.thickness
-            print('name %s %f' %(item.name, item.thickness))
-        via_length = via_length - offset
-        print('x via %f ' %(via_length))
-
-    sum = 0.0
-    for track in trackslength[0].tracks:
-        startpoint = track.GetStart()
-        endpoint = track.GetEnd()
-        ind = trackslength[0].tracks.index(track) + 1
-        print('%d, %s,%s' %(ind, startpoint, endpoint))
-        sum += track.GetLength()
-    length = round(sum/pcbnew.IU_PER_MM, 4)
-    print('trackslength %d %7.4f' %(len(trackslength[0].tracks), length))
-    """
-    #return trackslength[0]
