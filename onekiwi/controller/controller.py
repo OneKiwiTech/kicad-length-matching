@@ -8,8 +8,8 @@ class Controller:
         self.view = DialogMain(parent)
         self.panel1 = NetPanel(self.view.notebook)
         self.panel2 = xNetPanel(self.view.notebook)
-        self.view.notebook.AddPage(self.panel1, "Panel1")
-        self.view.notebook.AddPage(self.panel2, "Panel2")
+        self.view.notebook.AddPage(self.panel1, "Display")
+        self.view.notebook.AddPage(self.panel2, "xNet")
 
         # Connect Events
         self.panel1.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdateClick)

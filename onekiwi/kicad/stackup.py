@@ -53,5 +53,6 @@ def get_thickness_stackup():
     
     # Closing file
     f.close()
+    os.remove(job_file)
 
     return stackups
