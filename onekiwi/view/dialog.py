@@ -14,11 +14,10 @@ import wx.grid
 ###########################################################################
 ## Class LengthMatchingDialog
 ###########################################################################
-
 class LengthMatchingDialog ( wx.Dialog ):
 
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Length Matching", pos = wx.DefaultPosition, size = wx.Size( 800,480 ), style = wx.DEFAULT_DIALOG_STYLE )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Length Matching", pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.DEFAULT_DIALOG_STYLE )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -52,14 +51,12 @@ class LengthMatchingDialog ( wx.Dialog ):
 		pass
 
 
-
-
 ###########################################################################
 ## Class NetPanelBase
 ###########################################################################
 class NetPanelBase ( wx.Panel ):
 
-	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 800,480 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
 		bSizer1 = wx.BoxSizer( wx.VERTICAL )
@@ -106,50 +103,53 @@ class NetPanelBase ( wx.Panel ):
 
 		# Columns
 		self.gridNet.SetColSize( 0, 160 )
-		self.gridNet.SetColSize( 1, 120 )
-		self.gridNet.SetColSize( 2, 120 )
-		self.gridNet.SetColSize( 3, 120 )
-		self.gridNet.SetColSize( 4, 120 )
-		self.gridNet.SetColSize( 5, 120 )
-		self.gridNet.SetColSize( 6, 120 )
-		#self.gridNet.AutoSizeColumns()
+		self.gridNet.SetColSize( 1, 100 )
+		self.gridNet.SetColSize( 2, 100 )
+		self.gridNet.SetColSize( 3, 100 )
+		self.gridNet.SetColSize( 4, 100 )
+		self.gridNet.SetColSize( 5, 100 )
+		self.gridNet.SetColSize( 6, 100 )
 		self.gridNet.EnableDragColMove( False )
 		self.gridNet.EnableDragColSize( True )
 		self.gridNet.SetColLabelValue( 0, u"Net Name" )
-		self.gridNet.SetColLabelValue( 1, u"Start Pad" )
-		self.gridNet.SetColLabelValue( 2, u"End Pad" )
+		self.gridNet.SetColLabelValue( 1, u"Pad Start" )
+		self.gridNet.SetColLabelValue( 2, u"Pad End" )
 		self.gridNet.SetColLabelValue( 3, u"Via Count" )
 		self.gridNet.SetColLabelValue( 4, u"Via Length" )
 		self.gridNet.SetColLabelValue( 5, u"Track Length" )
-		self.gridNet.SetColLabelValue( 6, u"Pad End" )
-		self.gridNet.SetColLabelValue( 7, u"Pad Start" )
-		self.gridNet.SetColLabelValue( 8, wx.EmptyString )
-		self.gridNet.SetColLabelValue( 9, u"Total Length" )
-		self.gridNet.SetColLabelValue( 10, wx.EmptyString )
+		self.gridNet.SetColLabelValue( 6, u"Total Length" )
 		self.gridNet.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
 		# Rows
-		self.gridNet.EnableDragRowSize( True )
+		self.gridNet.EnableDragRowSize( False )
+		self.gridNet.SetRowLabelSize( 0 )
 		self.gridNet.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
 		# Label Appearance
 
 		# Cell Defaults
-		self.gridNet.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
+		self.gridNet.SetDefaultCellAlignment( wx.ALIGN_CENTER, wx.ALIGN_TOP )
 		bSizer1.Add( self.gridNet, 1, wx.ALL|wx.EXPAND, 5 )
 
 
 		self.SetSizer( bSizer1 )
 		self.Layout()
 
+		# Connect Events
+		self.buttonLoad.Bind( wx.EVT_BUTTON, self.OnLoadClick )
+
 	def __del__( self ):
 		pass
+
+
+	# Virtual event handlers, override them in your derived class
+	def OnLoadClick( self, event ):
+		event.Skip()
 
 
 ###########################################################################
 ## Class xNexPanelBase
 ###########################################################################
-
 class xNetPanelBase ( wx.Panel ):
 
 	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):

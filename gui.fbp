@@ -47,7 +47,7 @@
             <property name="minimum_size"></property>
             <property name="name">LengthMatchingDialog</property>
             <property name="pos"></property>
-            <property name="size">800,480</property>
+            <property name="size">798,532</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="title">Length Matching</property>
@@ -274,7 +274,7 @@
             <property name="minimum_size"></property>
             <property name="name">NetPanelBase</property>
             <property name="pos"></property>
-            <property name="size">800,480</property>
+            <property name="size">798,532</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="tooltip"></property>
             <property name="two_step_creation">0</property>
@@ -727,7 +727,7 @@
                         <property name="aui_name"></property>
                         <property name="aui_position"></property>
                         <property name="aui_row"></property>
-                        <property name="autosize_cols">1</property>
+                        <property name="autosize_cols">0</property>
                         <property name="autosize_rows">0</property>
                         <property name="best_size"></property>
                         <property name="bg"></property>
@@ -735,17 +735,17 @@
                         <property name="caption_visible">1</property>
                         <property name="cell_bg"></property>
                         <property name="cell_font"></property>
-                        <property name="cell_horiz_alignment">wxALIGN_LEFT</property>
+                        <property name="cell_horiz_alignment">wxALIGN_CENTER</property>
                         <property name="cell_text"></property>
                         <property name="cell_vert_alignment">wxALIGN_TOP</property>
                         <property name="center_pane">0</property>
                         <property name="close_button">1</property>
                         <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
                         <property name="col_label_size"></property>
-                        <property name="col_label_values">&quot;Net Name&quot; &quot;Start Pad&quot; &quot;End Pad&quot; &quot;Via Count&quot; &quot;Via Length&quot; &quot;Track Length&quot; &quot;Pad End&quot; &quot;Pad Start&quot; &quot;&quot; &quot;Total Length&quot; &quot;&quot;</property>
+                        <property name="col_label_values">&quot;Net Name&quot; &quot;Pad Start&quot; &quot;Pad End&quot; &quot;Via Count&quot; &quot;Via Length&quot; &quot;Track Length&quot; &quot;Total Length&quot;</property>
                         <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                         <property name="cols">7</property>
-                        <property name="column_sizes">160,120,120,120,120,120,120</property>
+                        <property name="column_sizes">160,100,100,100,100,100,100</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
                         <property name="default_pane">0</property>
@@ -755,7 +755,7 @@
                         <property name="drag_col_move">0</property>
                         <property name="drag_col_size">1</property>
                         <property name="drag_grid_size">0</property>
-                        <property name="drag_row_size">1</property>
+                        <property name="drag_row_size">0</property>
                         <property name="editing">1</property>
                         <property name="enabled">1</property>
                         <property name="fg"></property>
@@ -787,7 +787,7 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="row_label_horiz_alignment">wxALIGN_CENTER</property>
-                        <property name="row_label_size"></property>
+                        <property name="row_label_size">0</property>
                         <property name="row_label_values"></property>
                         <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                         <property name="row_sizes"></property>
