@@ -33,11 +33,13 @@ class NetPanel(NetPanelBase):
         for row, net in enumerate(nets):
             self.gridNet.SetCellValue(row, 0, net['name'])
             pins = [item['pin'] for item in net['pads']]
+            pin1 = net['pin1']
+            pin2 = net['pin2']
             choice_editor = wx.grid.GridCellChoiceEditor(pins, True)
             self.gridNet.SetCellEditor(row, 1, choice_editor)
             self.gridNet.SetCellEditor(row, 2, choice_editor)
-            self.gridNet.SetCellValue(row, 1, pins[0])
-            self.gridNet.SetCellValue(row, 2, pins[1])
+            self.gridNet.SetCellValue(row, 1, pin1)
+            self.gridNet.SetCellValue(row, 2, pin2)
             vialength = round(net['vialength'], 4)
             tracklength = round(net['tracklength'], 4)
             totallength = round(net['totallength'], 4)

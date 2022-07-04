@@ -22,23 +22,35 @@ class Controller:
 
     # Event handlers
     def OnLoadClick(self, event):
-        self.model.init_data()
+        self.model.compare_data()
         self.model.get_track_length()
         self.panel1.UpdateCombobox(self.model.classes)
         nets = self.model.nameclasses["classes"][0]['nets']
         self.panel1.UpadateTable(nets)
+        self.view.SetText('Load Setting: Done')
     
     def OnSaveClick(self, event):
-        self.model.to_json()
+        if self.model.statusinit == True:
+            self.model.export_to_json()
+            self.view.SetText('Save Setting: Done')
+        else:
+            self.view.SetText('Save Setting: Please press button Load Setting')
 
     def OnUpdateClick(self, event):
-        self.model.get_track_length()
-        index = self.panel1.GetComboboxSelection()
-        nets = self.model.nameclasses["classes"][index]['nets']
-        self.panel1.UpadateTable(nets)
+        if self.model.statusinit == True:
+            self.model.get_track_length()
+            index = self.panel1.GetComboboxSelection()
+            nets = self.model.nameclasses["classes"][index]['nets']
+            self.panel1.UpadateTable(nets)
+            self.view.SetText('Update Track: Done')
+        else:
+            self.view.SetText('Update Track: Please press button Load Setting')
 
     def OnClassChange(self, event):
         index = event.GetEventObject().GetSelection()
+        value = event.GetEventObject().GetValue()
+        value = 'Selected: ' + value
+        self.view.SetText(value)
         nets = self.model.nameclasses["classes"][index]['nets']
         self.panel1.UpadateTable(nets)
     
@@ -57,9 +69,15 @@ class Controller:
                     if col == 1:
                         net['pad1'] = pad['pad']
                         net['reference1'] = pad['reference']
+                        net['pin1'] = pad['pin']
+                        status = 'Pad Start: change to ' + value
+                        self.view.SetText(status)
                     else:
                         net['pad2'] = pad['pad']
                         net['reference2'] = pad['reference']
+                        net['pin2'] = pad['pin']
+                        status = 'Pad End: change to ' + value
+                        self.view.SetText(status)
         
 
             
