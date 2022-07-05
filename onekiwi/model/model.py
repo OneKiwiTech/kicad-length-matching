@@ -1,4 +1,5 @@
 import json
+import logging
 from ..kicad.netclass import *
 from ..kicad.stackup import *
 from ..kicad.lengthtrack import *
@@ -114,36 +115,42 @@ class Model:
                 pad1 = net['pad1']
                 pad2 = net['pad2']
                 track_data = get_min_track_lenght(reference1, pad1, reference2, pad2)
-                net['viacount'] = len(track_data.vias)
                 
                 sum_via_length = 0.0
                 for via in track_data.vias:
                     stackup = []
-                    start = 2*via.start
-                    end = 2*via.end
-                    if end >= len(self.thickness):
-                        end = len(self.thickness)
-                        stackup = self.thickness[start:]
+                    # check via has one layer connect
+                    if via.start == None or via.end == None:
+                        via_length = 0.0
+                        track_data.vias.remove(via)
                     else:
-                        stackup = self.thickness[start:end+1]
-                    offset = 0.0
-                    offset = (stackup[0] + stackup[len(stackup) - 1])/2
-                    via_length = 0.0
-                    for item in stackup:
-                        via_length += item
-                    via_length = via_length - offset
+                        start = 2*via.start
+                        end = 2*via.end
+                        if end >= len(self.thickness):
+                            end = len(self.thickness)
+                            stackup = self.thickness[start:]
+                        else:
+                            stackup = self.thickness[start:end+1]
+                        offset = 0.0
+                        offset = (stackup[0] + stackup[len(stackup) - 1])/2
+                        via_length = 0.0
+                        for item in stackup:
+                            via_length += item
+                        via_length = via_length - offset
                     sum_via_length += via_length
-                net['vialength'] = sum_via_length
 
                 sum_track_length = 0.0
                 for track in track_data.tracks:
                     sum_track_length += track.GetLength()
                 sum_track_length = sum_track_length/pcbnew.IU_PER_MM
+                net['status'] = track_data.status
+                net['viacount'] = len(track_data.vias)
+                net['vialength'] = sum_via_length
                 net['tracklength'] = sum_track_length
                 net['totallength'] = sum_track_length + sum_via_length
 
-        #jsdata = json.dumps(self.nameclasses, indent = 4)
-        #logging.debug(jsdata)
+        jsdata = json.dumps(self.nameclasses, indent = 4)
+        logging.debug(jsdata)
 
 """
 data class

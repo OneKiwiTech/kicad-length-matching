@@ -5,6 +5,7 @@ ANY_LAYER = 'Any'
 class TrackLength:
     def __init__(self, id):
         self.id = id
+        self.status = 'error'
         self.tracks = []
         self.vias = []
 
@@ -152,5 +153,6 @@ def get_min_track_lenght(reference1, pad1, reference2, pad2):
                             isEnd = True
                     
                 if current.startpoint == current.endpoint and (current.startlayer == current.endlayer):
+                    trackslength[index].status = 'ok'
                     isLoop = False
     return trackslength[0]

@@ -1,5 +1,7 @@
 from ..model.model import Model
 from ..view.view import *
+import json
+import logging
 
 class Controller:
     def __init__(self, parent, version):
@@ -33,6 +35,8 @@ class Controller:
     def OnSaveClick(self, event):
         if self.model.statusinit == True:
             self.model.export_to_json()
+            #jsdata = json.dumps(self.model.nameclasses, indent = 4)
+            #logging.debug(jsdata)
             self.view.SetText('Save Setting: Done')
         else:
             self.view.SetText('Save Setting: Please press button Load Setting')
