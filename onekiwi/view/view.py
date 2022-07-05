@@ -26,7 +26,12 @@ class NetPanel(NetPanelBase):
     def GetComboboxSelection(self):
         return self.comboClass.GetSelection()
 
-    def UpadateTable(self, nets):
+    def UpadateTable(self, nets, unit):
+        scale = 1.0
+        if unit == 'in':
+            scale = 10/254
+        elif unit == 'mil':
+            scale = 10000/254
         rows = self.gridNet.GetNumberRows()
         self.gridNet.DeleteRows(0, rows)
         self.gridNet.AppendRows(len(nets))
@@ -40,9 +45,9 @@ class NetPanel(NetPanelBase):
             self.gridNet.SetCellEditor(row, 2, choice_editor)
             self.gridNet.SetCellValue(row, 1, pin1)
             self.gridNet.SetCellValue(row, 2, pin2)
-            vialength = round(net['vialength'], 4)
-            tracklength = round(net['tracklength'], 4)
-            totallength = round(net['totallength'], 4)
+            vialength = round(net['vialength']*scale, 4)
+            tracklength = round(net['tracklength']*scale, 4)
+            totallength = round(net['totallength']*scale, 4)
             self.gridNet.SetCellValue(row, 3, str(net['viacount']))
             self.gridNet.SetCellValue(row, 4, str(vialength))
             self.gridNet.SetCellValue(row, 5, str(tracklength))

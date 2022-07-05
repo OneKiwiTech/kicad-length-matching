@@ -26,7 +26,8 @@ class Controller:
         self.model.get_track_length()
         self.panel1.UpdateCombobox(self.model.classes)
         nets = self.model.nameclasses["classes"][0]['nets']
-        self.panel1.UpadateTable(nets)
+        unit = self.model.get_unit()
+        self.panel1.UpadateTable(nets, unit)
         self.view.SetText('Load Setting: Done')
     
     def OnSaveClick(self, event):
@@ -41,7 +42,8 @@ class Controller:
             self.model.get_track_length()
             index = self.panel1.GetComboboxSelection()
             nets = self.model.nameclasses["classes"][index]['nets']
-            self.panel1.UpadateTable(nets)
+            unit = self.model.get_unit()
+            self.panel1.UpadateTable(nets, unit)
             self.view.SetText('Update Track: Done')
         else:
             self.view.SetText('Update Track: Please press button Load Setting')
@@ -52,7 +54,8 @@ class Controller:
         value = 'Selected: ' + value
         self.view.SetText(value)
         nets = self.model.nameclasses["classes"][index]['nets']
-        self.panel1.UpadateTable(nets)
+        unit = self.model.get_unit()
+        self.panel1.UpadateTable(nets, unit)
     
     def OnGirdCellChange(self, event):
         row = event.GetRow()

@@ -9,6 +9,18 @@ class Model:
         self.thickness = get_thickness_stackup()
         self.nameclasses = {}
         self.statusinit = False
+    
+    def get_unit(self):
+        unit = get_current_unit()
+        # pcbnew.EDA_UNITS_INCHES = 0
+        if unit == pcbnew.EDA_UNITS_INCHES:
+            return 'in'
+        # pcbnew.EDA_UNITS_MILLIMETRES = 1
+        elif unit == pcbnew.EDA_UNITS_MILLIMETRES:
+            return 'mm'
+        # pcbnew.EDA_UNITS_MILS = 5
+        elif unit == pcbnew.EDA_UNITS_MILS:
+            return 'mil'
 
     def export_to_json(self):
         path = get_pcb_path()

@@ -20,6 +20,9 @@ def get_pcb_path():
     file_name = pcbnew.GetBoard().GetFileName()
     path = os.path.dirname(file_name)
     return path
+    
+def get_current_unit():
+    return pcbnew.GetUserUnits()
 
 def get_plugin_path():
     # log_file = os.path.join(os.path.dirname(__file__), "..", "lengthmatching.log")
