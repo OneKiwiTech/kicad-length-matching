@@ -1,5 +1,5 @@
 import pcbnew
-
+from .board import *
 ANY_LAYER = 'Any'
 
 class TrackLength:
@@ -44,7 +44,7 @@ class Current:
         self.via2 = None
 
 def get_track_length(netname):
-    board = pcbnew.GetBoard()
+    board = get_board()
     netcode = board.GetNetcodeFromNetname(netname)
     tracks = board.TracksInNet(netcode)
     sum = 0.0
@@ -55,7 +55,7 @@ def get_track_length(netname):
     return length
 
 def get_min_track_lenght(reference1, pad1, reference2, pad2):
-    board = pcbnew.GetBoard()
+    board = get_board()
     start_pad = board.FindFootprintByReference(reference1).FindPadByNumber(pad1)
     end_pad = board.FindFootprintByReference(reference2).FindPadByNumber(pad2)
     net_name = start_pad.GetNetname()
