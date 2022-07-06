@@ -1,20 +1,16 @@
-import wx
-import wx.grid
-
 from .dialog import *
 
-class DialogMain(LengthMatchingDialog):
-    def __init__(self, parent, version):
-        LengthMatchingDialog.__init__(self, parent)
-        self.SetTitle('Length Matching %s' %version)
-    
+class LengthMatchingView(LengthMatchingFrame):
+    def __init__(self):
+        super(LengthMatchingView, self).__init__(None)
+
     def SetText(self, status):
         self.textStatus.LabelText = status
 
-class NetPanel(NetPanelBase):
-    def __init__(self, parent):
-        NetPanelBase.__init__(self, parent)
-    
+class NetPanelView(NetPanel):
+    def __init__( self, parent):
+        NetPanel.__init__(self, parent)
+
     def UpdateCombobox(self, classes):
         self.comboClass.Clear()
         self.comboClass.Append(classes)
@@ -53,7 +49,10 @@ class NetPanel(NetPanelBase):
             self.gridNet.SetCellValue(row, 5, str(tracklength))
             self.gridNet.SetCellValue(row, 6, str(totallength))
 
-class xNetPanel(xNetPanelBase):
-    def __init__(self, parent):
-        xNetPanelBase.__init__(self, parent)
+class InfoPanelView(InfoPanel):
+    def __init__( self, parent):
+        InfoPanel.__init__(self, parent)
 
+class xNetPanelView(xNetPanel):
+    def __init__( self, parent):
+        xNetPanel.__init__(self, parent)

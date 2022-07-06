@@ -4,13 +4,16 @@ import json
 import logging
 
 class Controller:
-    def __init__(self, parent, version):
+    def __init__(self):
         self.model = Model()
-        self.view = DialogMain(parent, version)
-        self.panel1 = NetPanel(self.view.notebook)
-        self.panel2 = xNetPanel(self.view.notebook)
+        self.view = LengthMatchingView()
+        self.panel1 = NetPanelView(self.view.notebook)
+        self.panel2 = xNetPanelView(self.view.notebook)
+        self.panel3 = InfoPanelView(self.view.notebook)
+        
         self.view.notebook.AddPage(self.panel1, "Display")
         self.view.notebook.AddPage(self.panel2, "xNet")
+        self.view.notebook.AddPage(self.panel3, "Net Info")
 
         # Connect Events
         self.panel1.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdateClick)
@@ -20,7 +23,7 @@ class Controller:
         self.panel1.gridNet.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.OnGirdCellChange)
 
     def Show(self):
-        self.view.ShowModal()
+        self.view.Show()
 
     # Event handlers
     def OnLoadClick(self, event):
@@ -85,6 +88,3 @@ class Controller:
                         net['pin2'] = pad['pin']
                         status = 'Pad End: change to ' + value
                         self.view.SetText(status)
-        
-
-            

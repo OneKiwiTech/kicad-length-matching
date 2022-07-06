@@ -9,16 +9,17 @@
 
 import wx
 import wx.xrc
-import wx.grid
 import wx.adv
+import wx.grid
 
 ###########################################################################
-## Class LengthMatchingDialog
+## Class LengthMatchingFrame
 ###########################################################################
-class LengthMatchingDialog ( wx.Dialog ):
+
+class LengthMatchingFrame ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Length Matching", pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.DEFAULT_DIALOG_STYLE )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"LengthMatching", pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -57,9 +58,10 @@ class LengthMatchingDialog ( wx.Dialog ):
 
 
 ###########################################################################
-## Class NetPanelBase
+## Class NetPanel
 ###########################################################################
-class NetPanelBase ( wx.Panel ):
+
+class NetPanel ( wx.Panel ):
 
 	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
@@ -140,14 +142,29 @@ class NetPanelBase ( wx.Panel ):
 		self.SetSizer( bSizer1 )
 		self.Layout()
 
+
 	def __del__( self ):
 		pass
 
 
 ###########################################################################
-## Class xNexPanelBase
+## Class InfoPanel
 ###########################################################################
-class xNetPanelBase ( wx.Panel ):
+
+class InfoPanel ( wx.Panel ):
+
+	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
+
+
+	def __del__( self ):
+		pass
+
+###########################################################################
+## Class xNetPanel
+###########################################################################
+
+class xNetPanel ( wx.Panel ):
 
 	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
@@ -165,3 +182,6 @@ class xNetPanelBase ( wx.Panel ):
 
 	def __del__( self ):
 		pass
+
+
+
