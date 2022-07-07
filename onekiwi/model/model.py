@@ -107,6 +107,7 @@ class Model:
 
                     
     def get_track_length(self):
+        logging.debug('get_track_length')
         for netclass in self.nameclasses['classes']:
             nets = netclass['nets']
             for net in nets:
@@ -114,40 +115,17 @@ class Model:
                 reference2 = net['reference2']
                 pad1 = net['pad1']
                 pad2 = net['pad2']
-                track_data = get_min_track_lenght(reference1, pad1, reference2, pad2)
-                
-                sum_via_length = 0.0
-                for via in track_data.vias:
-                    stackup = []
-                    # check via has one layer connect
-                    if via.start == None or via.end == None:
-                        via_length = 0.0
-                        track_data.vias.remove(via)
-                    else:
-                        start = 2*via.start
-                        end = 2*via.end
-                        if end >= len(self.thickness):
-                            end = len(self.thickness)
-                            stackup = self.thickness[start:]
-                        else:
-                            stackup = self.thickness[start:end+1]
-                        offset = 0.0
-                        offset = (stackup[0] + stackup[len(stackup) - 1])/2
-                        via_length = 0.0
-                        for item in stackup:
-                            via_length += item
-                        via_length = via_length - offset
-                    sum_via_length += via_length
-
-                sum_track_length = 0.0
-                for track in track_data.tracks:
-                    sum_track_length += track.GetLength()
-                sum_track_length = sum_track_length/pcbnew.IU_PER_MM
-                net['status'] = track_data.status
-                net['viacount'] = len(track_data.vias)
-                net['vialength'] = sum_via_length
-                net['tracklength'] = sum_track_length
-                net['totallength'] = sum_track_length + sum_via_length
+                logging.debug('track_data 0')
+                track_data = TrackLength(reference1, pad1, reference2, pad2, self.thickness)
+                logging.debug('track_data 1')
+                #track_data.find_min_track()
+                status, total_length, track_length, via_length, via_count = track_data.find_min_track()
+                logging.debug('track_data 2')
+                net['status'] = status
+                net['viacount'] = via_count
+                net['vialength'] = via_length
+                net['tracklength'] = track_length
+                net['totallength'] = total_length
 
         jsdata = json.dumps(self.nameclasses, indent = 4)
         logging.debug(jsdata)

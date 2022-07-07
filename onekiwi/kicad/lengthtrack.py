@@ -1,158 +1,56 @@
 import pcbnew
-from .board import *
+
+from .findtrack import FindNet
+
 ANY_LAYER = 'Any'
 
 class TrackLength:
-    def __init__(self, id):
-        self.id = id
-        self.status = 'error'
+    def __init__(self, ref_start, pad_start, ref_end, pad_end, thickness):
+        self.name = ''
+        self.code = 0
+        self.ref_start = ref_start
+        self.pad_start = pad_start
+        self.ref_end = ref_end
+        self.pad_end = pad_end
+        self.point_start = None
+        self.point_end = None
+        self.layer_start = ANY_LAYER
+        self.layer_end = ANY_LAYER
         self.tracks = []
-        self.vias = []
+        self.thickness = thickness
 
-    def add_tracks(self, tracks):
-        self.tracks = tracks
-    
-    def add_vias(self, vias):
-        self.vias = vias
-    
-    def add_track(self, track):
-        self.tracks.append(track)
-    
-    def add_via(self, via):
-        self.vias.append(via)
+    def get_info(self):
+        board = pcbnew.GetBoard()
+        pin_start = board.FindFootprintByReference(self.ref_start).FindPadByNumber(self.pad_start)
+        pin_end = board.FindFootprintByReference(self.ref_end).FindPadByNumber(self.pad_end)
+        self.name = pin_start.GetNetname()
+        self.code = board.GetNetcodeFromNetname(self.name)
+        self.tracks = list(board.TracksInNet(self.code)) #Convert Tuple to List
+        start_pad_layer = board.FindFootprintByReference(self.ref_start).IsFlipped()
+        end_pad_layer = board.FindFootprintByReference(self.ref_end).IsFlipped()
+        if self.ref_start == self.ref_end and self.pad_start == self.pad_end:
+            self.tracks.clear()
 
+        self.point_start = pin_start.GetPosition()
+        if pin_start.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
+            if start_pad_layer == True:
+                # F_Cu = 31
+                self.layer_start = pcbnew.B_Cu
+            else:
+                # F_Cu = 0
+                self.layer_start = pcbnew.F_Cu
 
-class Via:
-    def __init__(self, via):
-        self.via = via
-        self.start = None
-        self.end = None
-    
-    def add_start(self, layer):
-        self.start = layer
+        self.point_end = pin_end.GetPosition()
+        if pin_end.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
+            if end_pad_layer == True:
+                self.layer_end = pcbnew.B_Cu
+            else:
+                self.layer_end = pcbnew.F_Cu
 
-    def add_end(self, layer):
-        self.end = layer
+        print('netname: %s ' %(self.name))
 
-class Current:
-    def __init__(self, startpoint, startlayer, endpoint, endlayer):
-        self.startpoint = startpoint
-        self.startlayer = startlayer
-        self.endpoint = endpoint
-        self.endlayer = endlayer
-        self.via1 = None
-        self.via2 = None
+    def find_min_track(self):
+        self.get_info()
+        findtrack = FindNet(self.tracks, self.point_start, self.point_end, self.layer_start, self.layer_end, self.thickness)
+        return findtrack.get_min_track()
 
-def get_track_length(netname):
-    board = get_board()
-    netcode = board.GetNetcodeFromNetname(netname)
-    tracks = board.TracksInNet(netcode)
-    sum = 0.0
-    for track in tracks:
-        if track.GetClass() != "PCB_VIA":
-            sum += track.GetLength()
-    length = round(sum/pcbnew.IU_PER_MM, 4)
-    return length
-
-def get_min_track_lenght(reference1, pad1, reference2, pad2):
-    board = get_board()
-    start_pad = board.FindFootprintByReference(reference1).FindPadByNumber(pad1)
-    end_pad = board.FindFootprintByReference(reference2).FindPadByNumber(pad2)
-    net_name = start_pad.GetNetname()
-    net_code = board.GetNetcodeFromNetname(net_name)
-    tracks = list(board.TracksInNet(net_code)) #Convert Tuple to List
-    start_pad_layer = board.FindFootprintByReference(reference1).IsFlipped()
-    end_pad_layer = board.FindFootprintByReference(reference2).IsFlipped()
-
-    startpoint = start_pad.GetPosition()
-    startlayer = ANY_LAYER
-    if start_pad.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
-        if start_pad_layer == True:
-            # F_Cu = 31
-            startlayer = pcbnew.B_Cu
-        else:
-            # F_Cu = 0
-            startlayer = pcbnew.F_Cu
-
-    endpoint = end_pad.GetPosition()
-    endlayer = ANY_LAYER
-    if end_pad.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
-        if end_pad_layer == True:
-            endlayer = pcbnew.B_Cu
-        else:
-            endlayer = pcbnew.F_Cu
-
-    isLoop = True
-    isEnd = True
-    trackslength = []
-    trackslength.append(TrackLength(0))
-    currents = []
-    currents.append(Current(startpoint, startlayer, endpoint, endlayer))
-    while (len(tracks)) > 0 and (isLoop == True) and (isEnd == True):
-        isEnd = False
-        for track in tracks:
-            for index, current in enumerate(currents, start=0):
-                if track.GetClass() == 'PCB_VIA':
-                    via_point = track.GetPosition()
-                    if current.startpoint == via_point:
-                        via = Via(track)
-                        via.add_start(current.startlayer)
-                        trackslength[index].add_via(via)
-                        current.via1 = len(trackslength[index].vias) -1
-                        current.startlayer = ANY_LAYER
-                        tracks.remove(track)
-                        isEnd = True
-                    if current.endpoint == via_point:
-                        via = Via(track)
-                        via.add_start(current.endlayer)
-                        trackslength[index].add_via(via)
-                        current.via2 = len(trackslength[index].vias) - 1
-                        current.endlayer = ANY_LAYER
-                        tracks.remove(track)
-                        isEnd = True
-                else:
-                    point_start = track.GetStart()
-                    point_end = track.GetEnd()
-                    track_layer = track.GetLayer()
-                    if current.startpoint == point_start and (current.startlayer == track_layer or current.startlayer == ANY_LAYER):
-                        if track not in trackslength[index].tracks:
-                            if current.startlayer == ANY_LAYER:
-                                trackslength[index].vias[current.via1].add_end(track_layer)
-                            trackslength[index].add_track(track)
-                            current.startpoint = point_end
-                            current.startlayer = track_layer
-                            tracks.remove(track)
-                            isEnd = True
-                    elif current.startpoint == point_end and (current.startlayer == track_layer or current.startlayer == ANY_LAYER):
-                        if track not in trackslength[index].tracks:
-                            if current.startlayer == ANY_LAYER:
-                                trackslength[index].vias[current.via1].add_end(track_layer)
-                            trackslength[index].add_track(track)
-                            current.startpoint = point_start
-                            current.startlayer = track_layer
-                            tracks.remove(track)
-                            isEnd = True
-
-                    if current.endpoint == point_start and (current.endlayer == track_layer or current.endlayer == ANY_LAYER):
-                        if track not in trackslength[index].tracks:
-                            if current.endlayer == ANY_LAYER:
-                                trackslength[index].vias[current.via2].add_end(track_layer)
-                            trackslength[index].add_track(track)
-                            current.endpoint = point_end
-                            current.endlayer = track_layer
-                            tracks.remove(track)
-                            isEnd = True
-                    elif current.endpoint == point_end and (current.endlayer == track_layer or current.endlayer == ANY_LAYER):
-                        if track not in trackslength[index].tracks:
-                            if current.endlayer == ANY_LAYER:
-                                trackslength[index].vias[current.via2].add_end(track_layer)
-                            trackslength[index].add_track(track)
-                            current.endpoint = point_start
-                            current.endlayer = track_layer
-                            tracks.remove(track)
-                            isEnd = True
-                    
-                if current.startpoint == current.endpoint and (current.startlayer == current.endlayer):
-                    trackslength[index].status = 'ok'
-                    isLoop = False
-    return trackslength[0]
