@@ -29,7 +29,7 @@
         <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Dialog" expanded="1">
+        <object class="Frame" expanded="1">
             <property name="aui_managed">0</property>
             <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
             <property name="bg"></property>
@@ -45,19 +45,19 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">LengthMatchingDialog</property>
+            <property name="name">LengthMatchingFrame</property>
             <property name="pos"></property>
             <property name="size">798,532</property>
-            <property name="style">wxDEFAULT_DIALOG_STYLE</property>
+            <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass">; ; forward_declare</property>
-            <property name="title">Length Matching</property>
+            <property name="title"></property>
             <property name="tooltip"></property>
             <property name="two_step_creation">0</property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
-            <property name="window_style"></property>
-            <event name="OnInitDialog">OnDialogInit</event>
-            <object class="wxBoxSizer" expanded="1">
+            <property name="window_style">wxTAB_TRAVERSAL</property>
+            <property name="xrc_skip_sizer">1</property>
+            <object class="wxBoxSizer" expanded="0">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer4</property>
                 <property name="orient">wxVERTICAL</property>
@@ -121,7 +121,7 @@
                         <property name="window_style"></property>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">0</property>
@@ -333,7 +333,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">NetPanelBase</property>
+            <property name="name">NetPanel</property>
             <property name="pos"></property>
             <property name="size">798,532</property>
             <property name="subclass">; ; forward_declare</property>
@@ -347,11 +347,11 @@
                 <property name="name">bSizer1</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxBoxSizer" expanded="1">
+                    <object class="wxBoxSizer" expanded="0">
                         <property name="minimum_size"></property>
                         <property name="name">bSizer2</property>
                         <property name="orient">wxHORIZONTAL</property>
@@ -777,11 +777,11 @@
                         <property name="wrap">-1</property>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="flag">wxALL</property>
                     <property name="proportion">1</property>
-                    <object class="wxGrid" expanded="0">
+                    <object class="wxGrid" expanded="1">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>
                         <property name="RightDockable">1</property>
@@ -798,7 +798,7 @@
                         <property name="caption_visible">1</property>
                         <property name="cell_bg"></property>
                         <property name="cell_font"></property>
-                        <property name="cell_horiz_alignment">wxALIGN_CENTER</property>
+                        <property name="cell_horiz_alignment">wxALIGN_LEFT</property>
                         <property name="cell_text"></property>
                         <property name="cell_vert_alignment">wxALIGN_TOP</property>
                         <property name="center_pane">0</property>
@@ -808,7 +808,7 @@
                         <property name="col_label_values">&quot;Net Name&quot; &quot;Pad Start&quot; &quot;Pad End&quot; &quot;Via Count&quot; &quot;Via Length&quot; &quot;Track Length&quot; &quot;Total Length&quot;</property>
                         <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                         <property name="cols">7</property>
-                        <property name="column_sizes">160,100,100,100,100,100,100</property>
+                        <property name="column_sizes">100,100,100,100,100,100,100</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
                         <property name="default_pane">0</property>
@@ -818,7 +818,7 @@
                         <property name="drag_col_move">0</property>
                         <property name="drag_col_size">1</property>
                         <property name="drag_grid_size">0</property>
-                        <property name="drag_row_size">0</property>
+                        <property name="drag_row_size">1</property>
                         <property name="editing">1</property>
                         <property name="enabled">1</property>
                         <property name="fg"></property>
@@ -850,11 +850,11 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="row_label_horiz_alignment">wxALIGN_CENTER</property>
-                        <property name="row_label_size">0</property>
+                        <property name="row_label_size"></property>
                         <property name="row_label_values"></property>
                         <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                         <property name="row_sizes"></property>
-                        <property name="rows">1</property>
+                        <property name="rows">0</property>
                         <property name="show">1</property>
                         <property name="size"></property>
                         <property name="subclass">; ; forward_declare</property>
@@ -864,6 +864,8 @@
                         <property name="window_name"></property>
                         <property name="window_style"></property>
                         <event name="OnGridCellChange">OnGirdCellChange</event>
+                        <event name="OnGridLabelLeftClick">OnGridLabelLeftClick</event>
+                        <event name="OnGridLabelLeftDClick">OnGridLabelLeftDClick</event>
                     </object>
                 </object>
             </object>
@@ -882,7 +884,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">xNetPanelBase</property>
+            <property name="name">xNetPanel</property>
             <property name="pos"></property>
             <property name="size">500,300</property>
             <property name="subclass">; ; forward_declare</property>

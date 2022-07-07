@@ -34,6 +34,15 @@ class TrackData:
         self.size = index
         self.items:List[TrackFind] = []
 
+class TrackInfo:
+    def __init__(self, status, total_length, track_length, via_length, via_count, tracks):
+        self.status = status
+        self.total_length = total_length
+        self.track_length = track_length
+        self.via_length = via_length
+        self.via_count = via_count
+        self.tracks:List[pcbnew.PCB_TRACK] = tracks
+
 class FindNet:
     def __init__(self, tracks, point_start, point_end, layer_start, layer_end, thickness):
         self.status = 'run'
@@ -45,6 +54,7 @@ class FindNet:
         self.find:TrackFind = TrackFind(point_start, layer_start)
         self.tracks = tracks.copy()
         self.thickness = thickness
+        self.info:TrackInfo = TrackInfo('error', 0.0, 0.0, 0.0, 0, [])
 
     def find_track(self):
         self.find.temps.clear()
@@ -275,9 +285,12 @@ class FindNet:
             track_length = self.data.items[index].track_length
             via_length = self.data.items[index].via_length
             via_count = self.data.items[index].via_count
-            return 'done', total_length, track_length, via_length, via_count
-        else:
-            return 'error', 0.0, 0.0, 0.0, 0
+            tracks = []
+            for i, track in enumerate(self.tracks):
+                if self.data.items[index].temps[i].check == 1:
+                    tracks.append(track)
+            info = TrackInfo('done', total_length, track_length, via_length, via_count, tracks)
+            self.info = info
 
     def get_min_track(self):
         count = len(self.tracks)
@@ -288,5 +301,6 @@ class FindNet:
         self.find_next_track()
         print(count)
         self.get_length()
-        return self.find_min_track()
+        self.find_min_track()
+        return self.info
         

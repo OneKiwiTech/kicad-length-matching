@@ -1,14 +1,27 @@
 import json
 import logging
+from typing import List
 from ..kicad.netclass import *
 from ..kicad.stackup import *
 from ..kicad.lengthtrack import *
+
+class DataNet:
+    def __init__(self, name, code, tracks):
+        self.name = name
+        self.code = code
+        self.tracks = tracks
+
+class DataClass:
+    def __init__(self, name, nets):
+        self.name = name
+        self.nets:List[DataNet] = nets
 
 class Model:
     def __init__(self):
         self.classes = get_net_classes()
         self.thickness = get_thickness_stackup()
         self.nameclasses = {}
+        self.dataclass:List[DataClass] = []
         self.statusinit = False
     
     def get_unit(self):
@@ -110,25 +123,54 @@ class Model:
         logging.debug('get_track_length')
         for netclass in self.nameclasses['classes']:
             nets = netclass['nets']
+            datanets: List[DataNet] = []
             for net in nets:
                 reference1 = net['reference1']
                 reference2 = net['reference2']
                 pad1 = net['pad1']
                 pad2 = net['pad2']
-                logging.debug('track_data 0')
                 track_data = TrackLength(reference1, pad1, reference2, pad2, self.thickness)
-                logging.debug('track_data 1')
-                #track_data.find_min_track()
-                status, total_length, track_length, via_length, via_count = track_data.find_min_track()
-                logging.debug('track_data 2')
-                net['status'] = status
-                net['viacount'] = via_count
-                net['vialength'] = via_length
-                net['tracklength'] = track_length
-                net['totallength'] = total_length
+                info = track_data.find_min_track()
+                net['status'] = info.status
+                net['viacount'] = info.via_count
+                net['vialength'] = info.via_length
+                net['tracklength'] = info.track_length
+                net['totallength'] = info.total_length
 
-        jsdata = json.dumps(self.nameclasses, indent = 4)
-        logging.debug(jsdata)
+                data = DataNet(net['name'], net['code'], info.tracks)
+                datanets.append(data)
+            dataclass = DataClass(netclass['name'], datanets)
+            self.dataclass.append(dataclass)
+
+        #jsdata = json.dumps(self.nameclasses, indent = 4)
+        #logging.debug(jsdata)
+
+    def set_highlight_net(self, class_id, net_id):
+        logging.debug('aaaa')
+        tracks = self.dataclass[class_id].nets[net_id].tracks
+        logging.debug('bbbb')
+        for track in tracks:
+            track.SetBrightened()
+        pcbnew.Refresh()
+
+"""
+    def set_highlight_on_module(module):
+        pads_list = module.Pads()
+        for pad in pads_list:
+        pad.SetBrightened()
+        drawings = module.GraphicalItems()
+        for item in drawings:
+        item.SetBrightened()
+
+
+    def clear_highlight_on_module(module):
+        pads_list = module.Pads()
+        for pad in pads_list:
+        pad.ClearBrightened()
+        drawings = module.GraphicalItems()
+        for item in drawings:
+        item.ClearBrightened()   
+"""
 
 """
 data class

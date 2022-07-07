@@ -102,14 +102,14 @@ class NetPanel ( wx.Panel ):
 		self.gridNet = wx.grid.Grid( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 
 		# Grid
-		self.gridNet.CreateGrid( 1, 7 )
+		self.gridNet.CreateGrid( 0, 7 )
 		self.gridNet.EnableEditing( True )
 		self.gridNet.EnableGridLines( True )
 		self.gridNet.EnableDragGridSize( False )
 		self.gridNet.SetMargins( 0, 0 )
 
 		# Columns
-		self.gridNet.SetColSize( 0, 160 )
+		self.gridNet.SetColSize( 0, 100 )
 		self.gridNet.SetColSize( 1, 100 )
 		self.gridNet.SetColSize( 2, 100 )
 		self.gridNet.SetColSize( 3, 100 )
@@ -128,15 +128,14 @@ class NetPanel ( wx.Panel ):
 		self.gridNet.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
 		# Rows
-		self.gridNet.EnableDragRowSize( False )
-		self.gridNet.SetRowLabelSize( 0 )
+		self.gridNet.EnableDragRowSize( True )
 		self.gridNet.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
 		# Label Appearance
 
 		# Cell Defaults
-		self.gridNet.SetDefaultCellAlignment( wx.ALIGN_CENTER, wx.ALIGN_TOP )
-		bSizer1.Add( self.gridNet, 1, wx.ALL|wx.EXPAND, 5 )
+		self.gridNet.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
+		bSizer1.Add( self.gridNet, 1, wx.ALL, 5 )
 
 
 		self.SetSizer( bSizer1 )

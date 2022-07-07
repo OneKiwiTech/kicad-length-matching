@@ -21,6 +21,7 @@ class Controller:
         self.panel1.buttonLoad.Bind(wx.EVT_BUTTON, self.OnLoadClick)
         self.panel1.comboClass.Bind(wx.EVT_COMBOBOX, self.OnClassChange)
         self.panel1.gridNet.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.OnGirdCellChange)
+        self.panel1.gridNet.Bind(wx.grid.EVT_GRID_LABEL_LEFT_DCLICK, self.OnGridLabelLeftDClick)
 
     def Show(self):
         self.view.Show()
@@ -88,3 +89,12 @@ class Controller:
                         net['pin2'] = pad['pin']
                         status = 'Pad End: change to ' + value
                         self.view.SetText(status)
+
+    def OnGridLabelLeftDClick(self, event):
+        class_id = self.panel1.GetComboboxSelection()
+        row = event.GetRow()
+        col = event.GetCol() # col = -1
+        value = str(row) + ' ' + str(col)
+        self.model.set_highlight_net(class_id, row)
+        self.view.SetText(value)
+    

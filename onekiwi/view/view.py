@@ -31,6 +31,7 @@ class NetPanelView(NetPanel):
         rows = self.gridNet.GetNumberRows()
         self.gridNet.DeleteRows(0, rows)
         self.gridNet.AppendRows(len(nets))
+        #self.gridNet.SetCornerLabelValue('Net Code')
         for row, net in enumerate(nets):
             self.gridNet.SetCellValue(row, 0, net['name'])
             pins = [item['pin'] for item in net['pads']]
@@ -48,6 +49,8 @@ class NetPanelView(NetPanel):
             self.gridNet.SetCellValue(row, 4, str(vialength))
             self.gridNet.SetCellValue(row, 5, str(tracklength))
             self.gridNet.SetCellValue(row, 6, str(totallength))
+            self.gridNet.SetRowLabelValue( row, str(net['code']))
+            
 
 class InfoPanelView(InfoPanel):
     def __init__( self, parent):
