@@ -179,7 +179,6 @@ class FindNet:
     def check_add_track_via(self):
         index_data = self.data.index
         via_index = None
-        logging.debug('hala %d', len(self.find.temps))
         for i in range(0, len(self.find.temps)):
             if self.find.temps[i].type == 'track':
                 self.data.size += 1
@@ -300,10 +299,14 @@ class FindNet:
                     tr = self.tracks[index].GetLength()
                     sum_track_length += tr
                 if track.check == 1 and track.type == 'via':
-                    via_count += 1
                     layer1 = self.data.items[i].temps[index].via_layer1
                     layer2 = self.data.items[i].temps[index].via_layer2
-                    via_length = self.get_via_length(layer1, layer2)
+                    via_length = 0.0
+                    if layer1 == layer2:
+                        self.data.items[i].temps[index].check = 0
+                    else:
+                        via_count += 1
+                        via_length = self.get_via_length(layer1, layer2)
                     sum_via_length += via_length
             self.data.items[i].track_length = sum_track_length/pcbnew.IU_PER_MM
             self.data.items[i].via_length = sum_via_length
