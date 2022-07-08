@@ -47,8 +47,6 @@ class TrackLength:
             else:
                 self.layer_end = pcbnew.F_Cu
 
-        print('netname: %s ' %(self.name))
-
     def find_min_track(self):
         self.get_info()
         findtrack = FindNet(self.tracks, self.point_start, self.point_end, self.layer_start, self.layer_end, self.thickness)

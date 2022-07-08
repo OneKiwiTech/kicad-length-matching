@@ -85,7 +85,6 @@ class FindNet:
                         self.find.temps.append(TrackTemp(index, 'track',  track_layer, None, track_start, 1))
     
     def find_track_round(self):
-        print('find_track_round')
         self.find.temps.clear()
         current_point = self.find.current_point
         current_layer = self.find.current_layer
@@ -263,7 +262,6 @@ class FindNet:
             self.data.items[i].via_length = sum_via_length
             self.data.items[i].via_count = via_count
             self.data.items[i].total_length = (sum_track_length/pcbnew.IU_PER_MM) + sum_via_length
-            print('%f %f %s' %(sum_track_length, sum_via_length, nettrack.status))
 
     def find_min_track(self):
         check = False
@@ -280,7 +278,6 @@ class FindNet:
                         min_length = item.total_length
                         index = i
         if check == True:
-            #print('min_length: %d - %f' %(index, min_length))
             total_length = self.data.items[index].total_length
             track_length = self.data.items[index].track_length
             via_length = self.data.items[index].via_length
@@ -299,7 +296,6 @@ class FindNet:
         self.data.items[index_data].temps = temp.copy()
 
         self.find_next_track()
-        print(count)
         self.get_length()
         self.find_min_track()
         return self.info

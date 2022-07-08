@@ -15,11 +15,10 @@ import wx.grid
 ###########################################################################
 ## Class LengthMatchingFrame
 ###########################################################################
-
 class LengthMatchingFrame ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"LengthMatching", pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Length Matching", pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.CAPTION|wx.MINIMIZE_BOX|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -44,6 +43,9 @@ class LengthMatchingFrame ( wx.Frame ):
 		self.hyperlink = wx.adv.HyperlinkCtrl( self, wx.ID_ANY, u"OneKiwi", u"https://github.com/OneKiwiTech", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
 		bSizer5.Add( self.hyperlink, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
+		self.buttonClose = wx.Button( self, wx.ID_ANY, u"Close", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer5.Add( self.buttonClose, 0, wx.ALL, 5 )
+
 
 		bSizer4.Add( bSizer5, 0, wx.EXPAND, 5 )
 
@@ -53,6 +55,7 @@ class LengthMatchingFrame ( wx.Frame ):
 
 		self.Centre( wx.BOTH )
 
+
 	def __del__( self ):
 		pass
 
@@ -60,7 +63,6 @@ class LengthMatchingFrame ( wx.Frame ):
 ###########################################################################
 ## Class NetPanel
 ###########################################################################
-
 class NetPanel ( wx.Panel ):
 
 	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
@@ -94,10 +96,21 @@ class NetPanel ( wx.Panel ):
 
 		bSizer1.Add( bSizer2, 0, wx.ALL|wx.EXPAND, 5 )
 
+		bSizer6 = wx.BoxSizer( wx.HORIZONTAL )
+
 		self.textLength = wx.StaticText( self, wx.ID_ANY, u"Total Length = Track Length + Via Length", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.textLength.Wrap( -1 )
 
-		bSizer1.Add( self.textLength, 0, wx.ALL|wx.EXPAND, 5 )
+		bSizer6.Add( self.textLength, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+
+		bSizer6.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+		self.buttonClearHighlight = wx.Button( self, wx.ID_ANY, u"Clear Highlight", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer6.Add( self.buttonClearHighlight, 0, wx.ALL, 5 )
+
+
+		bSizer1.Add( bSizer6, 0, wx.EXPAND, 5 )
 
 		self.gridNet = wx.grid.Grid( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 
@@ -141,7 +154,6 @@ class NetPanel ( wx.Panel ):
 		self.SetSizer( bSizer1 )
 		self.Layout()
 
-
 	def __del__( self ):
 		pass
 
@@ -149,7 +161,6 @@ class NetPanel ( wx.Panel ):
 ###########################################################################
 ## Class InfoPanel
 ###########################################################################
-
 class InfoPanel ( wx.Panel ):
 
 	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
@@ -159,10 +170,10 @@ class InfoPanel ( wx.Panel ):
 	def __del__( self ):
 		pass
 
+
 ###########################################################################
 ## Class xNetPanel
 ###########################################################################
-
 class xNetPanel ( wx.Panel ):
 
 	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
@@ -181,6 +192,3 @@ class xNetPanel ( wx.Panel ):
 
 	def __del__( self ):
 		pass
-
-
-

@@ -23,6 +23,8 @@ class Model:
         self.nameclasses = {}
         self.dataclass:List[DataClass] = []
         self.statusinit = False
+        self.classid = None
+        self.netid =None
     
     def get_unit(self):
         unit = get_current_unit()
@@ -120,7 +122,6 @@ class Model:
 
                     
     def get_track_length(self):
-        logging.debug('get_track_length')
         for netclass in self.nameclasses['classes']:
             nets = netclass['nets']
             datanets: List[DataNet] = []
@@ -145,32 +146,24 @@ class Model:
         #jsdata = json.dumps(self.nameclasses, indent = 4)
         #logging.debug(jsdata)
 
+    def highlight_net(self, class_id, net_id):
+        self.clear_highlight_net()
+        self.set_highlight_net(class_id, net_id)
+
     def set_highlight_net(self, class_id, net_id):
-        logging.debug('aaaa')
+        self.classid = class_id
+        self.netid = net_id
         tracks = self.dataclass[class_id].nets[net_id].tracks
-        logging.debug('bbbb')
         for track in tracks:
             track.SetBrightened()
         pcbnew.Refresh()
 
-"""
-    def set_highlight_on_module(module):
-        pads_list = module.Pads()
-        for pad in pads_list:
-        pad.SetBrightened()
-        drawings = module.GraphicalItems()
-        for item in drawings:
-        item.SetBrightened()
-
-
-    def clear_highlight_on_module(module):
-        pads_list = module.Pads()
-        for pad in pads_list:
-        pad.ClearBrightened()
-        drawings = module.GraphicalItems()
-        for item in drawings:
-        item.ClearBrightened()   
-"""
+    def clear_highlight_net(self):
+        if self.classid != None and self.netid != None:
+            tracks = self.dataclass[self.classid].nets[self.netid].tracks
+            for track in tracks:
+                track.ClearBrightened()
+            pcbnew.Refresh()
 
 """
 data class
