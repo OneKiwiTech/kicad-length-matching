@@ -5,10 +5,10 @@ import logging
 import tempfile
 from .controller.controller import Controller
 
-class SimplePluginAction(pcbnew.ActionPlugin):
+class LengthMatchingAction(pcbnew.ActionPlugin):
 	def defaults(self):
-		self.name = "Simple Plugin MVC"
-		self.category = "A descriptive category name"
+		self.name = "Length Matching"
+		self.category = "Read PCB"
 		self.description = "A description of the plugin"
 		self.show_toolbar_button = True # Optional, defaults to False
 		self.icon_file_name = os.path.join(os.path.dirname(__file__), 'icon.png') # Optional

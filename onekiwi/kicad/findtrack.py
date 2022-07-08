@@ -1,3 +1,4 @@
+import logging
 import pcbnew
 from typing import List
 
@@ -152,6 +153,7 @@ class FindNet:
             if self.find.is_via == True:
                 ind = self.find.via_index
                 self.data.items[self.data.size].temps[ind].via_layer2 = find.temp_layer
+                self.find.is_via = False
         
         temp_find = self.find.temps[0]
         index = temp_find.index
@@ -160,11 +162,11 @@ class FindNet:
         index_data = self.data.index
         self.data.items[index_data].temps[index] = temp_find
         if self.find.is_via == True:
-                ind = self.find.via_index
-                self.data.items[index_data].temps[ind].via_layer2 = temp_find.temp_layer
-                self.find.is_via = False
+            ind = self.find.via_index
+            self.data.items[index_data].temps[ind].via_layer2 = temp_find.temp_layer
+            self.find.is_via = False
 
-    def check_add_via1(self):
+    def check_add_via(self):
         temp_find = self.find.temps[0]
         index = temp_find.index
         self.find.via_index = index
@@ -173,7 +175,52 @@ class FindNet:
         self.find.current_layer = temp_find.temp_layer
         index_data = self.data.index
         self.data.items[index_data].temps[index] = temp_find
+    
+    def check_add_track_via(self):
+        index_data = self.data.index
+        via_index = None
+        logging.debug('hala %d', len(self.find.temps))
+        for i in range(0, len(self.find.temps)):
+            if self.find.temps[i].type == 'track':
+                self.data.size += 1
+                # copy
+                current = self.data.items[index_data].temps
+                self.data.items.append(TrackFind(None, None))
+                self.data.items[self.data.size].temps = current.copy()
+                
+                #debug
+                """
+                count = len(self.data.items)
+                xx = len(self.data.items[0].temps)
+                print('=========')
+                for index in range(xx):
+                    a = []
+                    for ii in range(count):
+                        a.append(self.data.items[ii].temps[index].check)
+                    print('%d. %s' %(index, a))
+                """
+
+                # add
+                find = self.find.temps[i]
+                index = find.index
+                self.data.items[self.data.size].temps[index] = find
+                self.data.items[self.data.size].current_layer = find.temp_layer
+                self.data.items[self.data.size].current_point = find.temp_point
+
+            elif self.find.temps[i].type == 'via':
+                via_index = i
+        temp_find = self.find.temps[via_index]
+
         
+        index = temp_find.index
+        self.find.via_index = index
+        self.find.is_via = True
+        self.find.current_point = temp_find.temp_point
+        self.find.current_layer = temp_find.temp_layer
+        index_data = self.data.index
+        self.data.items[index_data].temps[index] = temp_find
+        test = self.data.items[index_data].temps[index]
+
     def check_track(self):
         track_find = 0
         via_find = 0
@@ -194,9 +241,10 @@ class FindNet:
             self.check_add_track()
         elif track_find == 0 and via_find == 1:
             self.status = 'run'
-            self.check_add_via1()
+            self.check_add_via()
         elif track_find > 0 and via_find == 1:
-            self.status = 'unkown'
+            self.status = 'run'
+            self.check_add_track_via()
         elif via_find > 1:
             self.status = 'unkown'
 
@@ -257,7 +305,6 @@ class FindNet:
                     layer2 = self.data.items[i].temps[index].via_layer2
                     via_length = self.get_via_length(layer1, layer2)
                     sum_via_length += via_length
-            #sum_track_length = round(sum_track_length/pcbnew.IU_PER_MM, 4)
             self.data.items[i].track_length = sum_track_length/pcbnew.IU_PER_MM
             self.data.items[i].via_length = sum_via_length
             self.data.items[i].via_count = via_count

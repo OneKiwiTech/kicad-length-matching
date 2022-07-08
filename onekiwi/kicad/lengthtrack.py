@@ -1,3 +1,4 @@
+import logging
 import pcbnew
 
 from .findtrack import FindNet

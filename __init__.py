@@ -1,2 +1,2 @@
-from .onekiwi.plugin import SimplePluginAction # Note the relative import!
-SimplePluginAction().register() # Instantiate and register to Pcbnew
+from .onekiwi.plugin import LengthMatchingAction # Note the relative import!
+LengthMatchingAction().register() # Instantiate and register to Pcbnew
