@@ -1,7 +1,6 @@
 import wx
 from onekiwi.controller.controller import Controller
 
-
 class SimplePluginApp(wx.App):
     def OnInit(self):
         controller = Controller()
