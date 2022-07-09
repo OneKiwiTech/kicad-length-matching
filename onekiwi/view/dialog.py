@@ -13,12 +13,13 @@ import wx.adv
 import wx.grid
 
 ###########################################################################
-## Class LengthMatchingFrame
+## Class LengthMatchingDialog
 ###########################################################################
-class LengthMatchingFrame ( wx.Frame ):
+
+class LengthMatchingDialog ( wx.Dialog ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Length Matching", pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.CAPTION|wx.MINIMIZE_BOX|wx.TAB_TRAVERSAL )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Length Matching", pos = wx.DefaultPosition, size = wx.Size( 798,532 ), style = wx.DEFAULT_DIALOG_STYLE )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -35,17 +36,6 @@ class LengthMatchingFrame ( wx.Frame ):
 
 		bSizer5.Add( self.textStatus, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-		self.textAbout = wx.StaticText( self, wx.ID_ANY, u"About us:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.textAbout.Wrap( -1 )
-
-		bSizer5.Add( self.textAbout, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-
-		self.hyperlink = wx.adv.HyperlinkCtrl( self, wx.ID_ANY, u"OneKiwi", u"https://github.com/OneKiwiTech", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
-		bSizer5.Add( self.hyperlink, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-
-		self.buttonClose = wx.Button( self, wx.ID_ANY, u"Close", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer5.Add( self.buttonClose, 0, wx.ALL, 5 )
-
 
 		bSizer4.Add( bSizer5, 0, wx.EXPAND, 5 )
 
@@ -55,9 +45,16 @@ class LengthMatchingFrame ( wx.Frame ):
 
 		self.Centre( wx.BOTH )
 
+		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.OnDialogClose )
 
 	def __del__( self ):
 		pass
+
+
+	# Virtual event handlers, override them in your derived class
+	def OnDialogClose( self, event ):
+		event.Skip()
 
 
 ###########################################################################

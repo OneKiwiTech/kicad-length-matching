@@ -1,9 +1,9 @@
 from .dialog import *
 from ..version import version
 
-class LengthMatchingView(LengthMatchingFrame):
+class LengthMatchingView(LengthMatchingDialog):
     def __init__(self):
-        super(LengthMatchingView, self).__init__(None)
+        LengthMatchingDialog.__init__(self, None)
         self.SetTitle('Length Matching %s' % version)
 
     def SetText(self, status):

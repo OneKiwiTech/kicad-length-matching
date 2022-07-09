@@ -13,10 +13,10 @@ class Controller:
         
         self.view.notebook.AddPage(self.panel1, "Display")
         self.view.notebook.AddPage(self.panel2, "xNet")
-        self.view.notebook.AddPage(self.panel3, "Net Info")
+        #self.view.notebook.AddPage(self.panel3, "Net Info")
 
         # Connect Events
-        self.view.buttonClose.Bind(wx.EVT_BUTTON, self.OnCloseClick)
+        self.view.Bind(wx.EVT_CLOSE, self.OnDialogClose)
         self.panel1.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdateClick)
         self.panel1.buttonSave.Bind(wx.EVT_BUTTON, self.OnSaveClick)
         self.panel1.buttonLoad.Bind(wx.EVT_BUTTON, self.OnLoadClick)
@@ -27,6 +27,9 @@ class Controller:
 
     def Show(self):
         self.view.Show()
+    
+    def Close(self):
+        self.view.Destroy()
 
     # Event handlers
     def OnLoadClick(self, event):
@@ -102,7 +105,7 @@ class Controller:
     def OnClearHighlightClick(self, event):
         self.model.clear_highlight_net()
 
-    def OnCloseClick(self, event):
+    def OnDialogClose(self, event):
         self.model.clear_highlight_net()
-        self.view.Close()
+        self.Close()
     
