@@ -48,6 +48,7 @@ class Model:
         # Writing to sample.json
         with open(json_file, "w") as outfile:
             outfile.write(results)
+        return json_file
     
     def read_json(self):
         data = {}

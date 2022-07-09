@@ -16,7 +16,6 @@ class Controller:
         self.view.notebook.AddPage(self.panel3, "Net Info")
 
         # Connect Events
-        #self.view.Bind(wx.EVT_CLOSE, self.OnFrameClose)
         self.view.buttonClose.Bind(wx.EVT_BUTTON, self.OnCloseClick)
         self.panel1.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdateClick)
         self.panel1.buttonSave.Bind(wx.EVT_BUTTON, self.OnSaveClick)
@@ -41,8 +40,9 @@ class Controller:
     
     def OnSaveClick(self, event):
         if self.model.statusinit == True:
-            self.model.export_to_json()
-            self.view.SetText('Save Setting: Done')
+            path = self.model.export_to_json()
+            display = 'Save Setting to file:' + path
+            self.view.SetText(display)
         else:
             self.view.SetText('Save Setting: Please press button Load Setting')
 

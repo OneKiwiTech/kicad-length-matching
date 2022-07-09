@@ -50,6 +50,7 @@ class TrackLength:
 
     def find_min_track(self):
         self.get_info()
+        logging.debug('netname: %s' %self.name)
         findtrack = FindNet(self.tracks, self.point_start, self.point_end, self.layer_start, self.layer_end, self.thickness)
         return findtrack.get_min_track()
 

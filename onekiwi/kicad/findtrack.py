@@ -249,6 +249,8 @@ class FindNet:
 
         if self.point_end == self.find.current_point and self.layer_end == self.find.current_layer:
             self.status = 'done'
+        if self.point_end == self.find.current_point and self.layer_end == ANY_LAYER:
+            self.status = 'done'
 
     def find_next_track(self):
         self.find_track()
@@ -306,6 +308,7 @@ class FindNet:
                         self.data.items[i].temps[index].check = 0
                     else:
                         via_count += 1
+                        logging.debug('via layer: %s - %s' %(str(layer1), str(layer2)))
                         via_length = self.get_via_length(layer1, layer2)
                     sum_via_length += via_length
             self.data.items[i].track_length = sum_track_length/pcbnew.IU_PER_MM
