@@ -2,6 +2,7 @@ import logging
 import pcbnew
 
 from .findtrack import FindNet
+from .netclass import *
 
 ANY_LAYER = 'Any'
 
@@ -19,9 +20,10 @@ class TrackLength:
         self.layer_end = ANY_LAYER
         self.tracks = []
         self.thickness = thickness
+        self.hole_pads = []
 
     def get_info(self):
-        board = pcbnew.GetBoard()
+        board = get_board()
         pin_start = board.FindFootprintByReference(self.ref_start).FindPadByNumber(self.pad_start)
         pin_end = board.FindFootprintByReference(self.ref_end).FindPadByNumber(self.pad_end)
         self.name = pin_start.GetNetname()
@@ -48,9 +50,20 @@ class TrackLength:
             else:
                 self.layer_end = pcbnew.F_Cu
 
+    def find_hole_pad(self):
+        pads = get_pads_from_net_name(self.name)
+        for item in pads:
+            pin = get_pin(item.reference, item.pad)
+            if pin.GetPosition() != self.point_start and pin.GetPosition() != self.point_end:
+                # Pad type: Through Hole
+                if pin.GetAttribute() == pcbnew.PAD_ATTRIB_PTH:
+                    self.hole_pads.append(pin)
+
+
     def find_min_track(self):
         self.get_info()
-        logging.debug('netname: %s' %self.name)
-        findtrack = FindNet(self.tracks, self.point_start, self.point_end, self.layer_start, self.layer_end, self.thickness)
+        #logging.debug('netname: %s' %self.name)
+        self.find_hole_pad()
+        findtrack = FindNet(self.tracks, self.point_start, self.point_end, self.layer_start, self.layer_end, self.thickness, self.hole_pads)
         return findtrack.get_min_track()
 

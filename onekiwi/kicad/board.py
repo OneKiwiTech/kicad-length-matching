@@ -4,7 +4,7 @@ import os
 DEBUG_GUI = 0
 
 def get_board():
-    filename = '/home/vanson/Downloads/radio-4g-imx-rt1052/iMXRT1052_Thatico.kicad_pcb'
+    filename = '/home/vanson/Downloads/radio-4g-imx-rt1052-v1.0/iMXRT1052_Thatico.kicad_pcb'
     board = None
     if DEBUG_GUI == 1:
         board = pcbnew.LoadBoard(filename)

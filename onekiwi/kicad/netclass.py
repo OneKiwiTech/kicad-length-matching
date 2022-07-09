@@ -1,4 +1,3 @@
-import pcbnew
 from .board import *
 
 class PadNet:
@@ -24,6 +23,10 @@ def get_net_code(netname):
     netcode = board.GetNetcodeFromNetname(netname)
     return netcode
 
+def get_pin(reference, pad):
+    board = get_board()
+    return board.FindFootprintByReference(reference).FindPadByNumber(pad)
+    
 def get_pads_from_net_name(netname):
     pads = []
     board = get_board()

@@ -1,3 +1,4 @@
+from cmath import log
 import logging
 import pcbnew
 from typing import List
@@ -5,6 +6,12 @@ from typing import List
 from .stackup import *
 
 ANY_LAYER = 'Any'
+
+class Hole:
+    def __init__(self, types, layer):
+        self.type = types
+        self.via_layer1 = layer
+        self.via_layer2 = None
 
 class TrackTemp:
     def __init__(self, index, types, layer, via1, point, check):
@@ -23,11 +30,15 @@ class TrackFind:
         self.status = 'none'
         self.via_index = None
         self.is_via = False
+        self.hole_index = None
+        self.is_hole = False
         self.total_length = 0.0
         self.track_length = 0.0
+        self.hole_length = 0.0
         self.via_length = 0.0
         self.via_count = 0.0
         self.temps:List[TrackTemp] = []
+        self.holes:List[Hole] = []
 
 class TrackData:
     def __init__(self, index):
@@ -45,7 +56,7 @@ class TrackInfo:
         self.tracks:List[pcbnew.PCB_TRACK] = tracks
 
 class FindNet:
-    def __init__(self, tracks, point_start, point_end, layer_start, layer_end, thickness):
+    def __init__(self, tracks, point_start, point_end, layer_start, layer_end, thickness, hole_pads):
         self.status = 'run'
         self.tracks:List[pcbnew.PCB_TRACK] = []
         self.point_end = point_end
@@ -56,6 +67,7 @@ class FindNet:
         self.tracks = tracks.copy()
         self.thickness = thickness
         self.info:TrackInfo = TrackInfo('error', 0.0, 0.0, 0.0, 0, [])
+        self.hole_pads = hole_pads
 
     def find_track(self):
         self.find.temps.clear()
@@ -128,8 +140,10 @@ class FindNet:
             self.data.size += 1
             # copy
             current = self.data.items[index_data].temps
+            holes = self.data.items[index_data].holes
             self.data.items.append(TrackFind(None, None))
             self.data.items[self.data.size].temps = current.copy()
+            self.data.items[self.data.size].holes = holes.copy()
             
             #debug
             """
@@ -153,7 +167,11 @@ class FindNet:
             if self.find.is_via == True:
                 ind = self.find.via_index
                 self.data.items[self.data.size].temps[ind].via_layer2 = find.temp_layer
-                self.find.is_via = False
+                #self.find.is_via = False
+            if self.find.is_hole == True:
+                ii = self.find.hole_index
+                self.data.items[self.data.size].holes[ii].via_layer2 = find.temp_layer
+                #self.find.is_hole = False
         
         temp_find = self.find.temps[0]
         index = temp_find.index
@@ -165,6 +183,12 @@ class FindNet:
             ind = self.find.via_index
             self.data.items[index_data].temps[ind].via_layer2 = temp_find.temp_layer
             self.find.is_via = False
+        
+        if self.find.is_hole == True:
+            i = self.find.hole_index
+            self.data.items[index_data].holes[i].via_layer2 = temp_find.temp_layer
+            self.find.is_hole = False
+
 
     def check_add_via(self):
         temp_find = self.find.temps[0]
@@ -208,9 +232,8 @@ class FindNet:
 
             elif self.find.temps[i].type == 'via':
                 via_index = i
-        temp_find = self.find.temps[via_index]
 
-        
+        temp_find = self.find.temps[via_index]
         index = temp_find.index
         self.find.via_index = index
         self.find.is_via = True
@@ -218,8 +241,23 @@ class FindNet:
         self.find.current_layer = temp_find.temp_layer
         index_data = self.data.index
         self.data.items[index_data].temps[index] = temp_find
-        test = self.data.items[index_data].temps[index]
+        #test = self.data.items[index_data].temps[index]
 
+    def find_hole_pad(self):
+        self.find.temps.clear()
+        current_point = self.find.current_point
+        current_layer = self.find.current_layer
+        for pad in self.hole_pads:
+            if pad.GetPosition() == current_point:
+                self.status = 'run'
+                index_data = self.data.index
+                self.data.items[index_data].holes.append(Hole('pad', current_layer))
+                self.find.hole_index = len(self.data.items[index_data].holes) - 1
+                self.find.is_hole = True
+                self.find.current_layer = ANY_LAYER
+
+        
+        
     def check_track(self):
         track_find = 0
         via_find = 0
@@ -230,11 +268,15 @@ class FindNet:
                 via_find += 1
         if track_find == 0 and via_find == 0:
             if self.status == 'run':
+                self.status = 'pad'
+                self.find_hole_pad()
+            if self.status == 'pad':
                 self.status = 'round'
                 self.find_track_round()
                 self.check_track()
-            else:
+            if self.status == 'round':
                 self.status = 'error'
+
         elif track_find > 0 and via_find == 0:
             self.status = 'run'
             self.check_add_track()
@@ -263,7 +305,6 @@ class FindNet:
                 self.data.index += 1
                 self.find.current_layer = self.data.items[self.data.index].current_layer
                 self.find.current_point = self.data.items[self.data.index].current_point
-
                 self.find_next_track()
 
     def get_via_length(self, layer1, layer2):
@@ -308,13 +349,17 @@ class FindNet:
                         self.data.items[i].temps[index].check = 0
                     else:
                         via_count += 1
-                        logging.debug('via layer: %s - %s' %(str(layer1), str(layer2)))
                         via_length = self.get_via_length(layer1, layer2)
                     sum_via_length += via_length
+            sum_hole_length = 0.0
+            for hole in nettrack.holes:
+                hole_length = self.get_via_length(hole.via_layer1, hole.via_layer2)
+                sum_hole_length += hole_length
             self.data.items[i].track_length = sum_track_length/pcbnew.IU_PER_MM
             self.data.items[i].via_length = sum_via_length
+            self.data.items[i].hole_length = sum_hole_length
             self.data.items[i].via_count = via_count
-            self.data.items[i].total_length = (sum_track_length/pcbnew.IU_PER_MM) + sum_via_length
+            self.data.items[i].total_length = (sum_track_length/pcbnew.IU_PER_MM) + sum_via_length + sum_hole_length
 
     def find_min_track(self):
         check = False
