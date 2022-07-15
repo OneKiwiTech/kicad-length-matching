@@ -9,7 +9,7 @@ class Controller:
         self.view = LengthMatchingView()
         self.panel1 = NetPanelView(self.view.notebook)
         self.panel2 = xNetPanelView(self.view.notebook)
-        self.panel3 = InfoPanelView(self.view.notebook)
+        #self.panel3 = InfoPanelView(self.view.notebook)
         
         self.view.notebook.AddPage(self.panel1, "Display")
         self.view.notebook.AddPage(self.panel2, "xNet")
