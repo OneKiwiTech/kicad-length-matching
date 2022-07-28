@@ -48,12 +48,16 @@ class CheckComboPopup(wx.ComboPopup):
 
 class CheckCombo(wx.Panel):
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, -1)
+        #wx.Panel.__init__(self, parent, -1)
+        self.control = wx.Panel(parent, wx.ID_ANY, style = wx.TAB_TRAVERSAL|wx.RAISED_BORDER)
 
-        cc = wx.ComboCtrl(self, size = (250, -1))
+        cc = wx.ComboCtrl(self, -1)
+        #cc = wx.ComboCtrl(self, wx.ID_ANY, "", wx.DefaultPosition, wx.DefaultSize)
+        #cc = wx.ComboCtrl(self, wx.ID_ANY, u"Combo!", wx.DefaultPosition, wx.DefaultSize, 0 )
         tcp = CheckComboPopup()
         cc.SetPopupControl(tcp)
 
         box = wx.BoxSizer()
-        box.Add(cc, 1, wx.EXPAND|wx.ALL, 20)
-        self.SetSizer(box)
+        #bSizer1.Add( self.m_comboBox1, 0, wx.ALL|wx.EXPAND, 5 )
+        box.Add(cc, 0, wx.EXPAND|wx.ALL, 5)
+        self.control.SetSizer(box)

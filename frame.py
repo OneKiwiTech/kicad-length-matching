@@ -11,50 +11,51 @@ import wx
 import wx.xrc
 from combocheck import CheckCombo
 from combolist import ListCombo
+from combofilter import FilterCombo
+
 ###########################################################################
 ## Class ComboFrame
 ###########################################################################
 
-class ComboFrame ( wx.Frame ):
+class MainFrame ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Combo Control", pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Combo Test", pos = wx.DefaultPosition, size = wx.Size( 750,250 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
-		bSizer1 = wx.BoxSizer( wx.HORIZONTAL )
+		sizerMain = wx.BoxSizer( wx.HORIZONTAL )
 
-		sbSizer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"List Combo" ), wx.VERTICAL )
+		sizerList = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Combo List" ), wx.VERTICAL )
 
 		comboListChoices = []
-		#self.comboList = wx.ComboBox( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Combo!", wx.DefaultPosition, wx.DefaultSize, comboListChoices, 0 )
-		self.comboList = ListCombo(self)
-		sbSizer1.Add( self.comboList, 0, wx.ALL, 5 )
+		self.comboList = wx.ComboBox( sizerList.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, comboListChoices, 0 )
+		sizerList.Add( self.comboList, 0, wx.ALL|wx.EXPAND, 5 )
 
 
-		bSizer1.Add( sbSizer1, 1, wx.EXPAND, 5 )
+		sizerMain.Add( sizerList, 1, wx.EXPAND, 5 )
 
-		sbSizer2 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Checkbox Combo" ), wx.VERTICAL )
+		sizerCheck = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Combo Check" ), wx.VERTICAL )
 
 		comboCheckChoices = []
-		#self.comboCheck = wx.ComboBox( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Combo!", wx.DefaultPosition, wx.DefaultSize, comboCheckChoices, 0 )
-		self.comboCheck = CheckCombo(self)
-		sbSizer2.Add( self.comboCheck, 0, wx.ALL, 5 )
+		self.comboCheck = wx.ComboBox( sizerCheck.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, comboCheckChoices, 0 )
+		sizerCheck.Add( self.comboCheck, 0, wx.ALL|wx.EXPAND, 5 )
 
 
-		bSizer1.Add( sbSizer2, 1, wx.EXPAND, 5 )
+		sizerMain.Add( sizerCheck, 1, wx.EXPAND, 5 )
 
-		sbSizer3 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Filter Combo" ), wx.VERTICAL )
+		sizerFilter = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Combo Filter" ), wx.VERTICAL )
 
 		comboFilterChoices = []
-		self.comboFilter = wx.ComboBox( sbSizer3.GetStaticBox(), wx.ID_ANY, u"Combo!", wx.DefaultPosition, wx.DefaultSize, comboFilterChoices, 0 )
-		sbSizer3.Add( self.comboFilter, 0, wx.ALL, 5 )
+		#self.comboFilter = wx.ComboBox( sizerFilter.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, comboFilterChoices, 0 )
+		self.comboFilter = FilterCombo(self, -1, comboFilterChoices, style = wx.CB_DROPDOWN)
+		sizerFilter.Add( self.comboFilter, 0, wx.ALL|wx.EXPAND, 5 )
 
 
-		bSizer1.Add( sbSizer3, 1, wx.EXPAND, 5 )
+		sizerMain.Add( sizerFilter, 1, wx.EXPAND, 5 )
 
 
-		self.SetSizer( bSizer1 )
+		self.SetSizer( sizerMain )
 		self.Layout()
 
 		self.Centre( wx.BOTH )

@@ -96,7 +96,7 @@ class ListComboPopup(wx.ComboPopup):
 class ListCombo(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, -1)
-        cc = wx.ComboCtrl(self, size = (250, -1))
+        cc = wx.ComboCtrl(self, -1)
         tcp = ListComboPopup()
         cc.SetPopupControl(tcp)
 
