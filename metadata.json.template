@@ -1,0 +1,35 @@
+{
+    "$schema": "https://go.kicad.org/pcm/schemas/v1",
+    "name": "Length Matching",
+    "description": "Create component placement",
+    "description_full": "Create component placement",
+    "identifier": "com.github.onekiwi.kicad-length-matching",
+    "type": "plugin",
+    "author": {
+        "name": "OneKiwi",
+        "contact": {
+            "web": "https://github.com/OneKiwiTech"
+        }
+    },
+    "license": "MIT",
+    "resources": {
+        "homepage": "https://github.com/OneKiwiTech/kicad-length-matching"
+    },
+    "versions": [
+        {
+            "version": "VERSION",
+            "status": "stable",
+            "kicad_version": "6.0",
+            "download_sha256": "SHA256",
+            "download_size": DOWNLOAD_SIZE,
+            "download_url": "https://github.com/OneKiwiTech/kicad-length-matching/releases/download/VERSION/kicad-component-placement-VERSION.zip",
+            "install_size": INSTALL_SIZE,
+            "platforms": [
+                "linux",
+                "macos",
+                "windows"
+            ]
+
+        }
+    ]
+}
