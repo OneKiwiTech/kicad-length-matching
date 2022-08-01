@@ -4,6 +4,14 @@ Track length matching with KiCAD
 ## GUI
 ![screenshot](doc/length_matching.png)
 
+## Installation 💾
+
+Add our custom repo to **the Plugin and Content Manager**, the URL is `https://raw.githubusercontent.com/OneKiwiTech/onekiwi-kicad-repository/main/repository.json`
+
+![pcm](doc/pcm.png)
+
+From there you can install the plugin via the GUI.
+
 ## Via Length
 ![Via Length](doc/via_length.png)
 
