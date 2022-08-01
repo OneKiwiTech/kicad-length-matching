@@ -48,7 +48,7 @@ class MainFrame ( wx.Frame ):
 
 		comboFilterChoices = []
 		#self.comboFilter = wx.ComboBox( sizerFilter.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, comboFilterChoices, 0 )
-		self.comboFilter = FilterCombo(self, -1, comboFilterChoices, style = wx.CB_DROPDOWN)
+		self.comboFilter = FilterCombo(self, -1, comboFilterChoices, style = wx.CB_DROPDOWN|wx.CB_READONLY)
 		sizerFilter.Add( self.comboFilter, 0, wx.ALL|wx.EXPAND, 5 )
 
 

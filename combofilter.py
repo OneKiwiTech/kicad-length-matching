@@ -40,14 +40,15 @@ class FilterComboPopup(wx.ComboPopup):
         print('FilterComboPopup.Create')
         self.control = wx.Panel(parent, wx.ID_ANY, style = wx.TAB_TRAVERSAL|wx.RAISED_BORDER)
         sizerMain = wx.BoxSizer(wx.VERTICAL)
-        sizerText = wx.BoxSizer(wx.HORIZONTAL)
-        textFilter = wx.StaticText(self.control, wx.ID_ANY, u"Filter:")
-        textFilter.Wrap(-1)
-        sizerText.Add(textFilter, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        self.editFilter = wx.TextCtrl(
-            self.control, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
-        sizerText.Add(self.editFilter, 1, wx.ALL|wx.EXPAND, 5)
-        sizerMain.Add(sizerText, 0, wx.EXPAND, 5)
+        menu = wx.Menu()
+        menu.Append(wx.ID_ABOUT, 'About')
+        self.searchCtrl = wx.SearchCtrl(self.control, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER)
+        self.searchCtrl.ShowSearchButton(True)
+        self.searchCtrl.ShowCancelButton(True)
+        self.searchCtrl.SetMinSize( wx.Size(-1, 35))
+        self.searchCtrl.SetDescriptiveText('Filter')
+        self.searchCtrl.SetMenu(menu)
+        sizerMain.Add(self.searchCtrl, 0, wx.ALL|wx.EXPAND, 5)
         listFilterChoices = []
         self.listFilter = wx.ListBox(
             self.control, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, listFilterChoices, 0)
@@ -56,8 +57,9 @@ class FilterComboPopup(wx.ComboPopup):
 
         self.control.Bind(wx.EVT_MOTION, self.OnMotion)
         self.control.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
-        self.editFilter.Bind( wx.EVT_TEXT, self.OnTextChange )
-        self.listFilter.Bind( wx.EVT_LEFT_DCLICK, self.OnLeftDoubleClick )
+        self.searchCtrl.Bind(wx.EVT_TEXT, self.OnTextChange)
+        self.searchCtrl.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        self.listFilter.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDoubleClick)
         return True
 
 
@@ -73,6 +75,10 @@ class FilterComboPopup(wx.ComboPopup):
         for item in self.items:
             if item.rfind(value) != -1:
                 self.listFilter.Append(item)
+    
+    def OnSetFocus(self, event):
+        print('OnSetFocus')
+        self.searchCtrl.Clear()
 
     # Return the widget that is to be used for the popup
     def GetControl(self):
