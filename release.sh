@@ -13,7 +13,9 @@ mkdir resources
 cp icon.png resources/
 
 mkdir plugins
-cp -r onekiwi/* plugins/
+cp __init__.py plugins/
+cp icon.png plugins/
+cp -r onekiwi/ plugins/
 
 zip -r $name plugins resources metadata.json
 
