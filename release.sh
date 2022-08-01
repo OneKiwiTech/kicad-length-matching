@@ -10,7 +10,8 @@ sed -i '/download_/d' metadata.json
 sed -i '/install_size/d' metadata.json
 
 mkdir resources
-cp icon.png resources/
+cp icon/icon_64x64.png resources/
+mv resources/icon_64x64.png resources/icon.png
 
 mkdir plugins
 cp __init__.py plugins/

@@ -1,5 +1,5 @@
 # Length Matching Plugin
-![screenshot](icon/icon.png)  
+![screenshot](icon/icon_256x256.png)  
 Track length matching with KiCAD
 ## GUI
 ![screenshot](doc/length_matching.png)
