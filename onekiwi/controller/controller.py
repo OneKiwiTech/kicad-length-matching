@@ -35,7 +35,7 @@ class Controller:
     def OnLoadClick(self, event):
         msg = self.model.compare_data()
         if msg != None:
-            self.view.SetText('Error: Net %s have 1 pad connected' %msg)
+            self.view.SetText('Error: Net %s have 0 or 1 pad connected' %msg)
         else:
             self.model.get_track_length()
             self.panel1.UpdateCombobox(self.model.classes)

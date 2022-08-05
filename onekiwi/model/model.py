@@ -72,12 +72,13 @@ class Model:
         for nameclass in self.nameclasses['classes']:
             nets = []
             nets = get_net_names(nameclass['name'])
-            if len(nets) < 2:
-                return name
+            
             for index, name in enumerate(nets):
                 pads = []
                 code = get_net_code(name)
                 pads = get_pads_from_net_name(name)
+                if len(pads) < 2:
+                    return name
                 ref1 = pads[0].reference
                 pad1 = pads[0].pad
                 pin1 = ref1 + '.' + pad1
