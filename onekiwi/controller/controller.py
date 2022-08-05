@@ -33,13 +33,16 @@ class Controller:
 
     # Event handlers
     def OnLoadClick(self, event):
-        self.model.compare_data()
-        self.model.get_track_length()
-        self.panel1.UpdateCombobox(self.model.classes)
-        nets = self.model.nameclasses["classes"][0]['nets']
-        unit = self.model.get_unit()
-        self.panel1.UpadateTable(nets, unit)
-        self.view.SetText('Load Setting: Done')
+        msg = self.model.compare_data()
+        if msg != None:
+            self.view.SetText('Error: Net %s have 1 pad connected' %msg)
+        else:
+            self.model.get_track_length()
+            self.panel1.UpdateCombobox(self.model.classes)
+            nets = self.model.nameclasses["classes"][0]['nets']
+            unit = self.model.get_unit()
+            self.panel1.UpadateTable(nets, unit)
+            self.view.SetText('Load Setting: Done')
     
     def OnSaveClick(self, event):
         if self.model.statusinit == True:

@@ -72,6 +72,8 @@ class Model:
         for nameclass in self.nameclasses['classes']:
             nets = []
             nets = get_net_names(nameclass['name'])
+            if len(nets) < 2:
+                return name
             for index, name in enumerate(nets):
                 pads = []
                 code = get_net_code(name)
@@ -87,12 +89,15 @@ class Model:
                 for pad in pads:
                     pad_info = {'reference': pad.reference, 'pad': pad.pad, 'pin': pad.pin}
                     nameclass['nets'][index]['pads'].append(pad_info)
+        return None
         #jsdata = json.dumps(self.nameclasses, indent = 4)
         #logging.debug(jsdata)
 
     def compare_data(self):
         self.statusinit = True
-        self.init_data()
+        msg = self.init_data()
+        if msg != None:
+            return msg
         status, data = self.read_json()
         if status == True:
             for netclass in self.nameclasses['classes']:
@@ -120,6 +125,7 @@ class Model:
                                         net['reference2'] = net['pads'][1]['reference']
                                         net['pad2'] = net['pads'][1]['pad']
                                         net['pin2'] = net['pads'][1]['pin']
+        return None
 
                     
     def get_track_length(self):
