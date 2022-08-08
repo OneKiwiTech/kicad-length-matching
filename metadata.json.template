@@ -3,7 +3,7 @@
     "name": "Length Matching",
     "description": "Track Length Calculator",
     "description_full": "Track Length Calculator",
-    "identifier": "vn.onekiwi.kicad-length-matching",
+    "identifier": "vn.onekiwi.length-matching",
     "type": "plugin",
     "author": {
         "name": "OneKiwi",
@@ -22,14 +22,13 @@
             "kicad_version": "6.0",
             "download_sha256": "SHA256",
             "download_size": DOWNLOAD_SIZE,
-            "download_url": "https://github.com/OneKiwiTech/kicad-length-matching/releases/download/VERSION/kicad-component-placement-VERSION.zip",
+            "download_url": "https://github.com/OneKiwiTech/kicad-length-matching/releases/download/VERSION/length-matching-VERSION.zip",
             "install_size": INSTALL_SIZE,
             "platforms": [
                 "linux",
                 "macos",
                 "windows"
             ]
-
         }
     ]
 }
