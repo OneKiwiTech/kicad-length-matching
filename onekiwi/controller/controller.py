@@ -10,12 +10,14 @@ class Controller:
     def __init__(self, board):
         self.view = LengthMatchingView()
         self.classPanel = ClassPanelView(self.view.notebook)
-        self.xNetPanel = xNetPanelView(self.view.notebook)
+        self.xNetPanel = ExtendedNetPanelView(self.view.notebook)
+        self.settingPanel = SettingPanelView(self.view.notebook)
         self.displayPanel = DisplayPanelView(self.view.notebook)
         self.infoPanel = InfoPanelView(self.view.notebook)
         
         self.view.notebook.AddPage(self.classPanel, "Class")
-        self.view.notebook.AddPage(self.xNetPanel, "xNet")
+        self.view.notebook.AddPage(self.xNetPanel, "Extended Net")
+        self.view.notebook.AddPage(self.settingPanel, "Setting")
         self.view.notebook.AddPage(self.displayPanel, "Display")
         self.view.notebook.AddPage(self.infoPanel, "Net Info")
 

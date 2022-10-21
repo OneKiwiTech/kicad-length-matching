@@ -13,10 +13,6 @@ import wx.xrc
 ###########################################################################
 ## Class LengthMatchingDialog
 ###########################################################################
-###########################################################################
-## Class LengthMatchingDialog
-###########################################################################
-
 class LengthMatchingDialog ( wx.Dialog ):
 
 	def __init__( self, parent ):
@@ -26,7 +22,7 @@ class LengthMatchingDialog ( wx.Dialog ):
 
 		bSizer1 = wx.BoxSizer( wx.VERTICAL )
 
-		self.notebook = wx.Notebook( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.notebook = wx.Notebook( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.NB_TOP|wx.BORDER_DEFAULT )
 
 		bSizer1.Add( self.notebook, 1, wx.EXPAND |wx.ALL, 5 )
 
@@ -93,7 +89,7 @@ class ClassPanel ( wx.Panel ):
 
 		bSizer5 = wx.BoxSizer( wx.VERTICAL )
 
-		sbSizer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"label" ), wx.HORIZONTAL )
+		sbSizer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Create Class:" ), wx.HORIZONTAL )
 
 		self.textName = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Name:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.textName.Wrap( -1 )
@@ -109,7 +105,7 @@ class ClassPanel ( wx.Panel ):
 
 		bSizer5.Add( sbSizer1, 0, wx.ALL|wx.EXPAND, 5 )
 
-		sbSizer2 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"label" ), wx.VERTICAL )
+		sbSizer2 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Edit Class:" ), wx.VERTICAL )
 
 		bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -128,10 +124,20 @@ class ClassPanel ( wx.Panel ):
 
 		bSizer9.Add( self.textFrom, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
+		filtterFromChoices = []
+		self.filtterFrom = wx.Choice( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, filtterFromChoices, 0 )
+		self.filtterFrom.SetSelection( 0 )
+		bSizer9.Add( self.filtterFrom, 1, wx.ALL|wx.EXPAND, 5 )
+
 		self.textTo = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"To Reference:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.textTo.Wrap( -1 )
 
 		bSizer9.Add( self.textTo, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		filtterToChoices = []
+		self.filtterTo = wx.Choice( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, filtterToChoices, 0 )
+		self.filtterTo.SetSelection( 0 )
+		bSizer9.Add( self.filtterTo, 1, wx.ALL|wx.EXPAND, 5 )
 
 		self.buttonUpdateNet = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Update Net", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer9.Add( self.buttonUpdateNet, 0, wx.ALL, 5 )
@@ -198,7 +204,7 @@ class ClassPanel ( wx.Panel ):
 		bSizer12.Add( self.buttonUpdateClass, 0, wx.ALL|wx.EXPAND, 5 )
 
 
-		sbSizer2.Add( bSizer12, 0, wx.EXPAND, 5 )
+		sbSizer2.Add( bSizer12, 0, wx.ALL|wx.EXPAND, 5 )
 
 
 		bSizer5.Add( sbSizer2, 1, wx.ALL|wx.EXPAND, 5 )
@@ -211,13 +217,28 @@ class ClassPanel ( wx.Panel ):
 	def __del__( self ):
 		pass
 
+
+
 ###########################################################################
-## Class xNetPanel
+## Class ExtendedNetPanel
 ###########################################################################
 
-class xNetPanel ( wx.Panel ):
+class ExtendedNetPanel ( wx.Panel ):
 
-	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
+
+
+	def __del__( self ):
+		pass
+
+###########################################################################
+## Class SettingPanel
+###########################################################################
+
+class SettingPanel ( wx.Panel ):
+
+	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
 
@@ -230,7 +251,7 @@ class xNetPanel ( wx.Panel ):
 
 class DisplayPanel ( wx.Panel ):
 
-	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
 
@@ -243,7 +264,7 @@ class DisplayPanel ( wx.Panel ):
 
 class InfoPanel ( wx.Panel ):
 
-	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
 
