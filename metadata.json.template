@@ -1,0 +1,34 @@
+{
+    "$schema": "https://go.kicad.org/pcm/schemas/v1",
+    "name": "Length Matching",
+    "description": "Track Length Calculator",
+    "description_full": "Track Length Calculator",
+    "identifier": "vn.onekiwi.length-matching",
+    "type": "plugin",
+    "author": {
+        "name": "OneKiwi",
+        "contact": {
+            "web": "https://github.com/OneKiwiTech"
+        }
+    },
+    "license": "MIT",
+    "resources": {
+        "homepage": "https://github.com/OneKiwiTech/kicad-length-matching"
+    },
+    "versions": [
+        {
+            "version": "VERSION",
+            "status": "stable",
+            "kicad_version": "6.0",
+            "download_sha256": "SHA256",
+            "download_size": DOWNLOAD_SIZE,
+            "download_url": "https://github.com/OneKiwiTech/kicad-length-matching/releases/download/VERSION/length-matching-VERSION.zip",
+            "install_size": INSTALL_SIZE,
+            "platforms": [
+                "linux",
+                "macos",
+                "windows"
+            ]
+        }
+    ]
+}
