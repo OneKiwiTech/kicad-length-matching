@@ -1,7 +1,5 @@
-from cgitb import text
 import wx
 from .dialog import *
-from ..kicad.board import get_current_unit
 from ..version import version
 
 class LengthMatchingView(LengthMatchingDialog):
@@ -16,22 +14,21 @@ class LengthMatchingView(LengthMatchingDialog):
         else:
             return size
 
-    def SetUnitText(self, unit):
-        text = 'Unit: ' + unit
-        self.textUnit.SetLabelText(text)
-    
-    def SetNetText(self, net):
-        text = 'Net: ' + net
-        self.textNet.SetLabelText(text)
+class ClassPanelView(ClassPanel):
+    def __init__( self, parent):
+        ClassPanel.__init__(self, parent)
 
-    def AddViasSize(self, vias):
-        self.choiceVia.Append(vias)
-        self.choiceVia.SetSelection(0)
+class xNetPanelView(xNetPanel):
+    def __init__( self, parent):
+        xNetPanel.__init__(self, parent)
 
-    def AddLayersName(self, names):
-        self.choiceLayer.Append(names)
-        self.choiceLayer.SetSelection(0)
+class DisplayPanelView(DisplayPanel):
+    def __init__( self, parent):
+        DisplayPanel.__init__(self, parent)
 
-    def AddAreasName(self, names):
-        self.choiceArea.Append(names)
-        self.choiceArea.SetSelection(0)
+class InfoPanelView(InfoPanel):
+    def __init__( self, parent):
+        InfoPanel.__init__(self, parent)
+
+
+
