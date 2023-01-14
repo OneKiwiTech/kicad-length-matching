@@ -5,6 +5,7 @@ import pcbnew
 import sys
 import logging
 import logging.config
+import wx
 
 class Controller:
     def __init__(self, board):
@@ -24,6 +25,12 @@ class Controller:
         self.board = board
         self.logger = self.init_logger(self.view.textLog)
         self.model = Model(self.board, self.logger)
+
+        # Connect Events
+        self.view.buttonClearLog.Bind(wx.EVT_BUTTON, self.OnButtonClear)
+        self.view.buttonCopyLog.Bind(wx.EVT_BUTTON, self.OnButtonCopy)
+        self.view.buttonExit.Bind(wx.EVT_BUTTON, self.OnButtonClose)
+        #self.logger.error('Please add via')
         
     def Show(self):
         self.view.Show()
@@ -49,3 +56,15 @@ class Controller:
         root.addHandler(handler1)
         root.addHandler(handler2)
         return logging.getLogger(__name__)
+
+    def OnButtonClear(self, event):
+        self.view.textLog.SetValue('')
+
+    def OnButtonCopy(self, event):
+        log = self.view.textLog.GetValue()
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(wx.TextDataObject(log))
+            wx.TheClipboard.Close()
+
+    def OnButtonClose(self, event):
+        self.Close()
