@@ -18,6 +18,12 @@ class ClassPanelView(ClassPanel):
     def __init__( self, parent):
         ClassPanel.__init__(self, parent)
 
+    def GetEditClassName(self):
+        return self.editClass.GetValue()
+    
+    def SetEditClassName(self, text):
+        return self.editClass.SetValue(text)
+
 class ExtendedNetPanelView(ExtendedNetPanel):
     def __init__( self, parent):
         ExtendedNetPanel.__init__(self, parent)
