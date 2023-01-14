@@ -27,10 +27,15 @@ class Controller:
         self.model = Model(self.board, self.logger)
 
         # Connect Events
+        self.view.buttonLoadSetting.Bind(wx.EVT_BUTTON, self.OnLoadSetting)
+        self.view.buttonSaveSetting.Bind(wx.EVT_BUTTON, self.OnSaveSetting)
+        self.view.buttonUpdateLength.Bind(wx.EVT_BUTTON, self.OnUpdateLength)
+        self.view.buttonClearHighlight.Bind(wx.EVT_BUTTON, self.OnClearHighlight)
         self.view.buttonClearLog.Bind(wx.EVT_BUTTON, self.OnButtonClear)
         self.view.buttonCopyLog.Bind(wx.EVT_BUTTON, self.OnButtonCopy)
         self.view.buttonExit.Bind(wx.EVT_BUTTON, self.OnButtonClose)
-        #self.logger.error('Please add via')
+
+        self.classPanel.buttonAddClass.Bind(wx.EVT_BUTTON, self.OnAddClass)
         
     def Show(self):
         self.view.Show()
@@ -57,6 +62,18 @@ class Controller:
         root.addHandler(handler2)
         return logging.getLogger(__name__)
 
+    def OnLoadSetting(self, event):
+        self.logger.info('OnLoadSetting')
+
+    def OnSaveSetting(self, event):
+        self.logger.info('OnSaveSetting')
+
+    def OnUpdateLength(self, event):
+        self.logger.info('OnUpdateLength')
+
+    def OnClearHighlight(self, event):
+        self.logger.info('OnClearHighlight')
+
     def OnButtonClear(self, event):
         self.view.textLog.SetValue('')
 
@@ -68,3 +85,8 @@ class Controller:
 
     def OnButtonClose(self, event):
         self.Close()
+
+    def OnAddClass(self, event):
+        self.logger.info('OnAddClass')
+        txt = self.classPanel.GetEditClassName()
+        self.classPanel.SetEditClassName('')
