@@ -87,6 +87,14 @@ class Controller:
         self.Close()
 
     def OnAddClass(self, event):
-        self.logger.info('OnAddClass')
-        txt = self.classPanel.GetEditClassName()
-        self.classPanel.SetEditClassName('')
+        name = self.classPanel.GetEditClassName()
+        if name != '':
+            if name not in self.model.clases:
+                self.model.clases.append(name)
+                self.classPanel.SetEditClassName('')
+                self.classPanel.UpdateChoiceClass(self.model.clases)
+            #self.classPanel.AddItemChoiceClass(name)
+            else:
+                self.logger.info('Name already exists!')
+        else:
+            self.logger.info('Please enter name!')

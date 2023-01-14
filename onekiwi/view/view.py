@@ -22,7 +22,21 @@ class ClassPanelView(ClassPanel):
         return self.editClass.GetValue()
     
     def SetEditClassName(self, text):
-        return self.editClass.SetValue(text)
+        self.editClass.SetValue(text)
+
+    def AddItemChoiceClass(self, item):
+        self.choiceClass.Append(item)
+    
+    def UpdateChoiceClass(self, classes):
+        self.choiceClass.Clear()
+        self.choiceClass.Append(classes)
+        self.choiceClass.SetSelection(0)
+
+    def GetCChoiceClassValue(self):
+        return self.choiceClass.GetValue()
+
+    def GetCChoiceClassSelection(self):
+        return self.choiceClass.GetSelection()
 
 class ExtendedNetPanelView(ExtendedNetPanel):
     def __init__( self, parent):
