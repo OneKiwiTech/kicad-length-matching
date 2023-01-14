@@ -25,6 +25,7 @@ class Controller:
         self.board = board
         self.logger = self.init_logger(self.view.textLog)
         self.model = Model(self.board, self.logger)
+        self.GetReference()
 
         # Connect Events
         self.view.buttonLoadSetting.Bind(wx.EVT_BUTTON, self.OnLoadSetting)
@@ -62,6 +63,15 @@ class Controller:
         root.addHandler(handler2)
         return logging.getLogger(__name__)
 
+    def GetReference(self):
+        references = []
+        footprints = self.board.GetFootprints()
+        for footprint in footprints:
+            ref = str(footprint.GetReference())
+            references.append(ref)
+        self.classPanel.UpdateFiltterFrom(references)
+        self.classPanel.UpdateFiltterTo(references)
+
     def OnLoadSetting(self, event):
         self.logger.info('OnLoadSetting')
 
@@ -93,7 +103,6 @@ class Controller:
                 self.model.clases.append(name)
                 self.classPanel.SetEditClassName('')
                 self.classPanel.UpdateChoiceClass(self.model.clases)
-            #self.classPanel.AddItemChoiceClass(name)
             else:
                 self.logger.info('Name already exists!')
         else:

@@ -38,6 +38,17 @@ class ClassPanelView(ClassPanel):
     def GetCChoiceClassSelection(self):
         return self.choiceClass.GetSelection()
 
+    def UpdateFiltterFrom(self, classes):
+        self.filtterFrom.Clear()
+        self.filtterFrom.Append(classes)
+        self.filtterFrom.SetSelection(0)
+    
+    def UpdateFiltterTo(self, classes):
+        self.filtterTo.Clear()
+        self.filtterTo.Append(classes)
+        self.filtterTo.SetSelection(0)
+    
+
 class ExtendedNetPanelView(ExtendedNetPanel):
     def __init__( self, parent):
         ExtendedNetPanel.__init__(self, parent)
