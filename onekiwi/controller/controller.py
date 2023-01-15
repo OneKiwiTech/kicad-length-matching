@@ -112,6 +112,7 @@ class Controller:
             self.logger.info('Please enter name!')
     
     def OnUpdateNet(self, event):
+        power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
         start = self.classPanel.GetFiltterFromValue()
         end = self.classPanel.GetFiltterToValue()
         self.logger.info('Start %s, End %s', start, end)
@@ -126,5 +127,5 @@ class Controller:
         for pad in ref_end.Pads():
             netpad = str(pad.GetNetname())
             padcode = self.board.GetNetcodeFromNetname(netpad)
-            if padcode in netcodes and netpad != 'GND':
+            if padcode in netcodes and netpad not in power_names:
                 self.logger.info('Net %s', netpad)
