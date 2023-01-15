@@ -37,6 +37,8 @@ class Controller:
         self.view.buttonExit.Bind(wx.EVT_BUTTON, self.OnButtonClose)
 
         self.classPanel.buttonAddClass.Bind(wx.EVT_BUTTON, self.OnAddClass)
+        self.classPanel.buttonUpdateNet.Bind(wx.EVT_BUTTON, self.OnUpdateNet)
+        
         
     def Show(self):
         self.view.Show()
@@ -69,6 +71,7 @@ class Controller:
         for footprint in footprints:
             ref = str(footprint.GetReference())
             references.append(ref)
+        references.sort()
         self.classPanel.UpdateFiltterFrom(references)
         self.classPanel.UpdateFiltterTo(references)
 
@@ -107,3 +110,21 @@ class Controller:
                 self.logger.info('Name already exists!')
         else:
             self.logger.info('Please enter name!')
+    
+    def OnUpdateNet(self, event):
+        start = self.classPanel.GetFiltterFromValue()
+        end = self.classPanel.GetFiltterToValue()
+        self.logger.info('Start %s, End %s', start, end)
+
+        ref_start = self.board.FindFootprintByReference(start)
+        ref_end = self.board.FindFootprintByReference(end)
+        netcodes = []
+        for pad in ref_start.Pads():
+            netpad = str(pad.GetNetname())
+            padcode = self.board.GetNetcodeFromNetname(netpad)
+            netcodes.append(padcode)
+        for pad in ref_end.Pads():
+            netpad = str(pad.GetNetname())
+            padcode = self.board.GetNetcodeFromNetname(netpad)
+            if padcode in netcodes and netpad != 'GND':
+                self.logger.info('Net %s', netpad)

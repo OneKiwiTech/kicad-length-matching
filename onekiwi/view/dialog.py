@@ -123,7 +123,7 @@ class ClassPanel ( wx.Panel ):
 		self.choiceClass.SetSelection( 0 )
 		bSizer9.Add( self.choiceClass, 0, wx.ALL, 5 )
 
-		self.textFrom = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"From Reference:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.textFrom = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"From:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.textFrom.Wrap( -1 )
 
 		bSizer9.Add( self.textFrom, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
@@ -133,7 +133,7 @@ class ClassPanel ( wx.Panel ):
 		self.filtterFrom.SetSelection( 0 )
 		bSizer9.Add( self.filtterFrom, 1, wx.ALL|wx.EXPAND, 5 )
 
-		self.textTo = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"To Reference:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.textTo = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"To:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.textTo.Wrap( -1 )
 
 		bSizer9.Add( self.textTo, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )

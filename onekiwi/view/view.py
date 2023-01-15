@@ -32,7 +32,7 @@ class ClassPanelView(ClassPanel):
         self.choiceClass.Append(classes)
         self.choiceClass.SetSelection(0)
 
-    def GetCChoiceClassValue(self):
+    def GetChoiceClassValue(self):
         return self.choiceClass.GetValue()
 
     def GetCChoiceClassSelection(self):
@@ -42,11 +42,19 @@ class ClassPanelView(ClassPanel):
         self.filtterFrom.Clear()
         self.filtterFrom.Append(classes)
         self.filtterFrom.SetSelection(0)
+
+    def GetFiltterFromValue(self):
+        ind = self.filtterFrom.GetSelection()
+        return str(self.filtterFrom.GetString(ind))
     
     def UpdateFiltterTo(self, classes):
         self.filtterTo.Clear()
         self.filtterTo.Append(classes)
         self.filtterTo.SetSelection(0)
+    
+    def GetFiltterToValue(self):
+        ind = self.filtterTo.GetSelection()
+        return str(self.filtterTo.GetString(ind))
     
 
 class ExtendedNetPanelView(ExtendedNetPanel):
