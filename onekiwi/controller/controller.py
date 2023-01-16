@@ -1,7 +1,8 @@
 from ..model.model import Model
+from ..model.pad import PadInfo
 from ..view.view import *
 from .logtext import LogText
-import pcbnew
+from typing import List
 import sys
 import logging
 import logging.config
@@ -112,6 +113,8 @@ class Controller:
             self.logger.info('Please enter name!')
     
     def OnUpdateNet(self, event):
+        netpads = []
+        temps:List[PadInfo] = []
         power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
         start = self.classPanel.GetFiltterFromValue()
         end = self.classPanel.GetFiltterToValue()
@@ -119,13 +122,17 @@ class Controller:
 
         ref_start = self.board.FindFootprintByReference(start)
         ref_end = self.board.FindFootprintByReference(end)
-        netcodes = []
-        for pad in ref_start.Pads():
-            netpad = str(pad.GetNetname())
-            padcode = self.board.GetNetcodeFromNetname(netpad)
-            netcodes.append(padcode)
-        for pad in ref_end.Pads():
-            netpad = str(pad.GetNetname())
-            padcode = self.board.GetNetcodeFromNetname(netpad)
-            if padcode in netcodes and netpad not in power_names:
-                self.logger.info('Net %s', netpad)
+        for pad1 in ref_start.Pads():
+            netname1 = str(pad1.GetNetname())
+            netcode1 = self.board.GetNetcodeFromNetname(netname1)
+            pin1 = str(pad1.GetPadName())
+            for pad2 in ref_end.Pads():
+                netname2 = str(pad2.GetNetname())
+                netcode2 = self.board.GetNetcodeFromNetname(netname2)
+                pin2 = str(pad2.GetPadName())
+                if netcode1 == netcode2 and netname2 not in power_names:
+                    self.logger.info('Net %s', netname2)
+                    temps.append(PadInfo(netname2, netcode2, start, pin1, end, pin2))
+        for temp in temps:
+            netpads.append(temp.show)
+        self.classPanel.UpdateListNet(netpads)

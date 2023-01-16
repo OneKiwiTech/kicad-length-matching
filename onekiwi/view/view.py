@@ -55,6 +55,12 @@ class ClassPanelView(ClassPanel):
     def GetFiltterToValue(self):
         ind = self.filtterTo.GetSelection()
         return str(self.filtterTo.GetString(ind))
+
+    def UpdateListNet(self, item):
+        self.listNet.Clear()
+        self.listNet.Append(item)
+        self.listNet.SetSelection(0)
+        
     
 
 class ExtendedNetPanelView(ExtendedNetPanel):
