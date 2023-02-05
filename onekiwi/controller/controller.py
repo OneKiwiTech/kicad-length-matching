@@ -129,7 +129,9 @@ class Controller:
             self.logger.info('Please enter name!')
     
     def OnUpdateNet(self, event):
-        #netpads = []
+        self.netpads.clear()
+        self.netpads1.clear()
+        self.netpads2.clear()
         temps:List[PadInfo] = []
         power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
         start = self.classPanel.GetReferenceFromValue()
@@ -152,6 +154,7 @@ class Controller:
         for temp in temps:
             self.netpads.append(temp.show)
             self.netpads1.append(temp.show)
+        self.classPanel.ClearListNet()
         self.classPanel.UpdateListNet(self.netpads)
     
     def OnFilterFromChange(self, event):
