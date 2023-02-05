@@ -130,7 +130,7 @@ class ClassPanel ( wx.Panel ):
 		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
 		listNetChoices = []
-		self.listNet = wx.ListBox( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, listNetChoices, 0 )
+		self.listNet = wx.ListBox( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, listNetChoices, wx.LB_MULTIPLE )
 		bSizer20.Add( self.listNet, 1, wx.ALL|wx.EXPAND, 5 )
 
 		bSizer21 = wx.BoxSizer( wx.VERTICAL )
@@ -157,7 +157,7 @@ class ClassPanel ( wx.Panel ):
 		bSizer20.Add( bSizer21, 0, wx.EXPAND, 5 )
 
 		listNetClassChoices = []
-		self.listNetClass = wx.ListBox( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, listNetClassChoices, 0 )
+		self.listNetClass = wx.ListBox( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, listNetClassChoices, wx.LB_MULTIPLE )
 		bSizer20.Add( self.listNetClass, 1, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -204,5 +204,3 @@ class ClassPanel ( wx.Panel ):
 
 	def __del__( self ):
 		pass
-
-

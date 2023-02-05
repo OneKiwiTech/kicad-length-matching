@@ -26,6 +26,7 @@ class Controller:
 
         self.board = board
         self.references = []
+        self.netpads = []
         self.logger = self.init_logger(self.view.textLog)
         self.model = Model(self.board, self.logger)
         self.GetReference()
@@ -43,6 +44,12 @@ class Controller:
         self.classPanel.buttonUpdateNet.Bind(wx.EVT_BUTTON, self.OnUpdateNet)
         self.classPanel.editFrom.Bind(wx.EVT_TEXT, self.OnFilterFromChange)
         self.classPanel.editTo.Bind(wx.EVT_TEXT, self.OnFilterToChange)
+        self.classPanel.listNet.Bind(wx.EVT_LISTBOX, self.OnListNetSelected)
+        self.classPanel.listNetClass.Bind(wx.EVT_LISTBOX, self.OnListNetClassSelected)
+        self.classPanel.buttonAddAll.Bind(wx.EVT_BUTTON, self.OnAddAll)
+        self.classPanel.buttonAddSelected.Bind(wx.EVT_BUTTON, self.OnAddSelected)
+        self.classPanel.buttonRemoveSelected.Bind(wx.EVT_BUTTON, self.OnRemoveSelected)
+        self.classPanel.buttonRemoveAll.Bind(wx.EVT_BUTTON, self.OnRemoveAll)
         
         
     def Show(self):
@@ -116,7 +123,7 @@ class Controller:
             self.logger.info('Please enter name!')
     
     def OnUpdateNet(self, event):
-        netpads = []
+        #netpads = []
         temps:List[PadInfo] = []
         power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
         start = self.classPanel.GetReferenceFromValue()
@@ -137,8 +144,8 @@ class Controller:
                     self.logger.info('Net %s', netname2)
                     temps.append(PadInfo(netname2, netcode2, start, pin1, end, pin2))
         for temp in temps:
-            netpads.append(temp.show)
-        self.classPanel.UpdateListNet(netpads)
+            self.netpads.append(temp.show)
+        self.classPanel.UpdateListNet(self.netpads)
     
     def OnFilterFromChange(self, event):
         value = event.GetEventObject().GetValue()
@@ -155,3 +162,35 @@ class Controller:
             if item.rfind(value) != -1:
                 references.append(item)
         self.classPanel.UpdateReferenceTo(references)
+    
+    def OnListNetSelected(self, event):
+        names = []
+        items = event.GetEventObject().GetSelections()
+        for index in items:
+            v = event.GetEventObject().GetString(index)
+            names.append(v)
+        self.logger.info(names)
+    
+    def OnListNetClassSelected(self, event):
+        names = []
+        items = event.GetEventObject().GetSelections()
+        for index in items:
+            v = event.GetEventObject().GetString(index)
+            names.append(v)
+        self.logger.info(names)
+    
+    def OnAddAll(self, event):
+        self.logger.info('OnAddAll')
+        self.classPanel.ClearListNet()
+        self.classPanel.UpdateListNetClass(self.netpads)
+
+    def OnAddSelected(self, event):
+        self.logger.info('OnAddSelected')
+
+    def OnRemoveSelected(self, event):
+        self.logger.info('OnRemoveSelected')
+
+    def OnRemoveAll(self, event):
+        self.logger.info('OnRemoveAll')
+        self.classPanel.ClearListNetClass()
+        self.classPanel.UpdateListNet(self.netpads)
