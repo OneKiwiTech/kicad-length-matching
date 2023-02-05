@@ -27,6 +27,12 @@ class Controller:
         self.board = board
         self.references = []
         self.netpads = []
+        self.netpads1 = []
+        self.netpads2 = []
+        self.names1 = []
+        self.names2 = []
+        self.index1 = []
+        self.index2 = []
         self.logger = self.init_logger(self.view.textLog)
         self.model = Model(self.board, self.logger)
         self.GetReference()
@@ -145,6 +151,7 @@ class Controller:
                     temps.append(PadInfo(netname2, netcode2, start, pin1, end, pin2))
         for temp in temps:
             self.netpads.append(temp.show)
+            self.netpads1.append(temp.show)
         self.classPanel.UpdateListNet(self.netpads)
     
     def OnFilterFromChange(self, event):
@@ -164,20 +171,20 @@ class Controller:
         self.classPanel.UpdateReferenceTo(references)
     
     def OnListNetSelected(self, event):
-        names = []
+        self.names1.clear()
+        self.index1.clear()
         items = event.GetEventObject().GetSelections()
         for index in items:
             v = event.GetEventObject().GetString(index)
-            names.append(v)
-        self.logger.info(names)
+            self.names1.append(v)
+            self.index1.append(index)
     
     def OnListNetClassSelected(self, event):
-        names = []
+        self.names2.clear()
         items = event.GetEventObject().GetSelections()
         for index in items:
             v = event.GetEventObject().GetString(index)
-            names.append(v)
-        self.logger.info(names)
+            self.names2.append(v)
     
     def OnAddAll(self, event):
         self.logger.info('OnAddAll')
@@ -186,9 +193,13 @@ class Controller:
 
     def OnAddSelected(self, event):
         self.logger.info('OnAddSelected')
+        self.classPanel.UpdateListNetClass(self.names1)
+        for net in self.index1:
+            self.classPanel.DeleteItemListNet(net)
 
     def OnRemoveSelected(self, event):
         self.logger.info('OnRemoveSelected')
+        self.classPanel.UpdateListNet(self.names2)
 
     def OnRemoveAll(self, event):
         self.logger.info('OnRemoveAll')

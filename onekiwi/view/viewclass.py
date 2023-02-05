@@ -49,11 +49,15 @@ class ClassPanelView(ClassPanel):
         self.listNetClass.Clear()
 
     def UpdateListNet(self, item):
-        self.listNet.Clear()
+        #self.listNet.Clear()
         self.listNet.Append(item)
-        #self.listNet.SetSelection(0)
     
     def UpdateListNetClass(self, item):
-        self.listNetClass.Clear()
+        #self.listNetClass.Clear()
         self.listNetClass.Append(item)
-        #self.listNet.SetSelection(0)
+    
+    def DeleteItemListNet(self, item):
+        self.listNet.Delete(item)
+    
+    def DeleteItemListNetClass(self, item):
+        self.listNetClass.Delete(item)
