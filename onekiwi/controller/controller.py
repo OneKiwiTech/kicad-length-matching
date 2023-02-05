@@ -25,6 +25,7 @@ class Controller:
         self.view.notebook.AddPage(self.infoPanel, "Net Info")
 
         self.board = board
+        self.references = []
         self.logger = self.init_logger(self.view.textLog)
         self.model = Model(self.board, self.logger)
         self.GetReference()
@@ -40,6 +41,8 @@ class Controller:
 
         self.classPanel.buttonAddClass.Bind(wx.EVT_BUTTON, self.OnAddClass)
         self.classPanel.buttonUpdateNet.Bind(wx.EVT_BUTTON, self.OnUpdateNet)
+        self.classPanel.editFrom.Bind(wx.EVT_TEXT, self.OnFilterFromChange)
+        self.classPanel.editTo.Bind(wx.EVT_TEXT, self.OnFilterToChange)
         
         
     def Show(self):
@@ -68,14 +71,13 @@ class Controller:
         return logging.getLogger(__name__)
 
     def GetReference(self):
-        references = []
         footprints = self.board.GetFootprints()
         for footprint in footprints:
             ref = str(footprint.GetReference())
-            references.append(ref)
-        references.sort()
-        self.classPanel.UpdateFiltterFrom(references)
-        self.classPanel.UpdateFiltterTo(references)
+            self.references.append(ref)
+        self.references.sort()
+        self.classPanel.UpdateReferenceFrom(self.references)
+        self.classPanel.UpdateReferenceTo(self.references)
 
     def OnLoadSetting(self, event):
         self.logger.info('OnLoadSetting')
@@ -117,8 +119,8 @@ class Controller:
         netpads = []
         temps:List[PadInfo] = []
         power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
-        start = self.classPanel.GetFiltterFromValue()
-        end = self.classPanel.GetFiltterToValue()
+        start = self.classPanel.GetReferenceFromValue()
+        end = self.classPanel.GetReferenceToValue()
         self.logger.info('Start %s, End %s', start, end)
 
         ref_start = self.board.FindFootprintByReference(start)
@@ -137,3 +139,19 @@ class Controller:
         for temp in temps:
             netpads.append(temp.show)
         self.classPanel.UpdateListNet(netpads)
+    
+    def OnFilterFromChange(self, event):
+        value = event.GetEventObject().GetValue()
+        references = []
+        for item in self.references:
+            if item.rfind(value) != -1:
+                references.append(item)
+        self.classPanel.UpdateReferenceFrom(references)
+    
+    def OnFilterToChange(self, event):
+        value = event.GetEventObject().GetValue()
+        references = []
+        for item in self.references:
+            if item.rfind(value) != -1:
+                references.append(item)
+        self.classPanel.UpdateReferenceTo(references)

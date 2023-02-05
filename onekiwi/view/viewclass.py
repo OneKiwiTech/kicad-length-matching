@@ -24,21 +24,21 @@ class ClassPanelView(ClassPanel):
     def GetCChoiceClassSelection(self):
         return self.choiceClass.GetSelection()
 
-    def UpdateFiltterFrom(self, classes):
+    def UpdateReferenceFrom(self, classes):
         self.choiceReferenceFrom.Clear()
         self.choiceReferenceFrom.Append(classes)
         self.choiceReferenceFrom.SetSelection(0)
 
-    def GetFiltterFromValue(self):
+    def GetReferenceFromValue(self):
         ind = self.choiceReferenceFrom.GetSelection()
         return str(self.choiceReferenceFrom.GetString(ind))
     
-    def UpdateFiltterTo(self, classes):
+    def UpdateReferenceTo(self, classes):
         self.choiceReferenceTo.Clear()
         self.choiceReferenceTo.Append(classes)
         self.choiceReferenceTo.SetSelection(0)
     
-    def GetFiltterToValue(self):
+    def GetReferenceToValue(self):
         ind = self.choiceReferenceTo.GetSelection()
         return str(self.choiceReferenceTo.GetString(ind))
 
