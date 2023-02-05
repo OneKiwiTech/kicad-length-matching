@@ -1,6 +1,7 @@
 from ..model.model import Model
 from ..model.pad import PadInfo
 from ..view.view import *
+from ..view.viewclass import ClassPanelView
 from .logtext import LogText
 from typing import List
 import sys
