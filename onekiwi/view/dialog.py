@@ -39,7 +39,7 @@ class LengthMatchingDialog ( wx.Dialog ):
 		bSizer24.Add( self.buttonUpdateLength, 1, wx.ALL|wx.EXPAND, 5 )
 
 		self.buttonClearHighlight = wx.Button( self, wx.ID_ANY, u"Clear Highlight", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer24.Add( self.buttonClearHighlight, 0, wx.ALL, 5 )
+		bSizer24.Add( self.buttonClearHighlight, 1, wx.ALL|wx.EXPAND, 5 )
 
 
 		bSizer1.Add( bSizer24, 0, wx.EXPAND, 5 )
@@ -78,6 +78,9 @@ class LengthMatchingDialog ( wx.Dialog ):
 
 	def __del__( self ):
 		pass
+
+
+
 
 
 ###########################################################################

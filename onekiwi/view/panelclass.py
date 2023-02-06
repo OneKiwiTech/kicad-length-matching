@@ -174,7 +174,7 @@ class ClassPanel ( wx.Panel ):
 		bSizer22.Add( self.textRemane, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 		self.editRename = wx.TextCtrl( self.m_scrolledWindow1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer22.Add( self.editRename, 0, wx.ALL, 5 )
+		bSizer22.Add( self.editRename, 1, wx.ALL|wx.EXPAND, 5 )
 
 		self.buttonRenameClass = wx.Button( self.m_scrolledWindow1, wx.ID_ANY, u"Rename Class", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer22.Add( self.buttonRenameClass, 0, wx.ALL, 5 )
@@ -204,3 +204,5 @@ class ClassPanel ( wx.Panel ):
 
 	def __del__( self ):
 		pass
+
+

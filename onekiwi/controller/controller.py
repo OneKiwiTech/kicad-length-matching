@@ -48,8 +48,11 @@ class Controller:
         self.classPanel.buttonAddSelected.Bind(wx.EVT_BUTTON, self.OnAddSelected)
         self.classPanel.buttonRemoveSelected.Bind(wx.EVT_BUTTON, self.OnRemoveSelected)
         self.classPanel.buttonRemoveAll.Bind(wx.EVT_BUTTON, self.OnRemoveAll)
+        self.classPanel.buttonRenameClass.Bind(wx.EVT_BUTTON, self.OnRenameClass)
+        self.classPanel.buttonRemoveClass.Bind(wx.EVT_BUTTON, self.OnRemoveClass)
+        self.classPanel.buttonUpdateClass.Bind(wx.EVT_BUTTON, self.OnUpdateClass)
         
-        
+
     def Show(self):
         self.view.Show()
     
@@ -108,6 +111,7 @@ class Controller:
     def OnButtonClose(self, event):
         self.Close()
 
+    # Class
     def OnAddClass(self, event):
         name = self.classPanel.GetEditClassName()
         if name != '':
@@ -191,3 +195,12 @@ class Controller:
     def OnRemoveAll(self, event):
         self.classPanel.ClearListNetClass()
         self.classPanel.UpdateListNet(self.netpads)
+    
+    def OnRenameClass(self, event):
+        self.logger.info('OnRenameClass')
+
+    def OnRemoveClass(self, event):
+        self.logger.info('OnRemoveClass')
+
+    def OnUpdateClass(self, event):
+        self.logger.info('OnUpdateClass')
