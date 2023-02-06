@@ -21,7 +21,11 @@ class ExtendedNetPanel ( wx.Panel ):
 
 		bSizer16 = wx.BoxSizer( wx.VERTICAL )
 
-		sbSizer3 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"label" ), wx.HORIZONTAL )
+		self.m_scrolledWindow2 = wx.ScrolledWindow( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.HSCROLL|wx.VSCROLL )
+		self.m_scrolledWindow2.SetScrollRate( 5, 5 )
+		bSizer22 = wx.BoxSizer( wx.VERTICAL )
+
+		sbSizer3 = wx.StaticBoxSizer( wx.StaticBox( self.m_scrolledWindow2, wx.ID_ANY, u"label" ), wx.HORIZONTAL )
 
 		self.m_staticText8 = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"Class:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText8.Wrap( -1 )
@@ -34,9 +38,9 @@ class ExtendedNetPanel ( wx.Panel ):
 		sbSizer3.Add( self.choiceClass, 1, wx.ALL|wx.EXPAND, 5 )
 
 
-		bSizer16.Add( sbSizer3, 0, wx.ALL|wx.EXPAND, 5 )
+		bSizer22.Add( sbSizer3, 0, wx.ALL|wx.EXPAND, 5 )
 
-		sbSizer4 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"label" ), wx.VERTICAL )
+		sbSizer4 = wx.StaticBoxSizer( wx.StaticBox( self.m_scrolledWindow2, wx.ID_ANY, u"label" ), wx.VERTICAL )
 
 		bSizer18 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -103,7 +107,13 @@ class ExtendedNetPanel ( wx.Panel ):
 		sbSizer4.Add( bSizer20, 1, wx.EXPAND, 5 )
 
 
-		bSizer16.Add( sbSizer4, 1, wx.ALL|wx.EXPAND, 5 )
+		bSizer22.Add( sbSizer4, 1, wx.ALL|wx.EXPAND, 5 )
+
+
+		self.m_scrolledWindow2.SetSizer( bSizer22 )
+		self.m_scrolledWindow2.Layout()
+		bSizer22.Fit( self.m_scrolledWindow2 )
+		bSizer16.Add( self.m_scrolledWindow2, 1, wx.EXPAND |wx.ALL, 5 )
 
 
 		self.SetSizer( bSizer16 )
