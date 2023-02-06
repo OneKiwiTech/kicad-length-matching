@@ -3,6 +3,10 @@ from ..model.pad import PadInfo
 from ..view.view import *
 from ..view.viewclass import ClassPanelView
 from ..view.viewextendednet import ExtendedNetPanelView
+from ..view.viewsetting import SettingPanelView
+from ..view.viewdisplay import DisplayPanelView
+from ..view.viewinfo import InfoPanelView
+from ..view.viewdebug import DebugPanelView
 from .logtext import LogText
 from typing import List
 import sys
@@ -18,12 +22,14 @@ class Controller:
         self.settingPanel = SettingPanelView(self.view.notebook)
         self.displayPanel = DisplayPanelView(self.view.notebook)
         self.infoPanel = InfoPanelView(self.view.notebook)
+        self.debugPanel = DebugPanelView(self.view.notebook)
         
         self.view.notebook.AddPage(self.classPanel, "Class")
         self.view.notebook.AddPage(self.xNetPanel, "Extended Net")
         self.view.notebook.AddPage(self.settingPanel, "Setting")
         self.view.notebook.AddPage(self.displayPanel, "Display")
         self.view.notebook.AddPage(self.infoPanel, "Net Info")
+        self.view.notebook.AddPage(self.debugPanel, "Debug")
 
         self.board = board
         self.references = []

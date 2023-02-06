@@ -1,7 +1,6 @@
 import wx
 from .dialog import *
 from ..version import version
-from .panelclass import ClassPanel
 
 class LengthMatchingView(LengthMatchingDialog):
     def __init__(self):
@@ -14,18 +13,3 @@ class LengthMatchingView(LengthMatchingDialog):
             return window.FromDIP(size)
         else:
             return size
-
-class SettingPanelView(SettingPanel):
-    def __init__( self, parent):
-        SettingPanel.__init__(self, parent)
-
-class DisplayPanelView(DisplayPanel):
-    def __init__( self, parent):
-        DisplayPanel.__init__(self, parent)
-
-class InfoPanelView(InfoPanel):
-    def __init__( self, parent):
-        InfoPanel.__init__(self, parent)
-
-
-
