@@ -27,12 +27,6 @@ class Controller:
         self.board = board
         self.references = []
         self.netpads = []
-        self.netpads1 = []
-        self.netpads2 = []
-        self.names1 = []
-        self.names2 = []
-        self.index1 = []
-        self.index2 = []
         self.logger = self.init_logger(self.view.textLog)
         self.model = Model(self.board, self.logger)
         self.GetReference()
@@ -50,8 +44,6 @@ class Controller:
         self.classPanel.buttonUpdateNet.Bind(wx.EVT_BUTTON, self.OnUpdateNet)
         self.classPanel.editFrom.Bind(wx.EVT_TEXT, self.OnFilterFromChange)
         self.classPanel.editTo.Bind(wx.EVT_TEXT, self.OnFilterToChange)
-        self.classPanel.listNet.Bind(wx.EVT_LISTBOX, self.OnListNetSelected)
-        self.classPanel.listNetClass.Bind(wx.EVT_LISTBOX, self.OnListNetClassSelected)
         self.classPanel.buttonAddAll.Bind(wx.EVT_BUTTON, self.OnAddAll)
         self.classPanel.buttonAddSelected.Bind(wx.EVT_BUTTON, self.OnAddSelected)
         self.classPanel.buttonRemoveSelected.Bind(wx.EVT_BUTTON, self.OnRemoveSelected)
@@ -130,8 +122,6 @@ class Controller:
     
     def OnUpdateNet(self, event):
         self.netpads.clear()
-        self.netpads1.clear()
-        self.netpads2.clear()
         temps:List[PadInfo] = []
         power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
         start = self.classPanel.GetReferenceFromValue()
@@ -153,7 +143,6 @@ class Controller:
                     temps.append(PadInfo(netname2, netcode2, start, pin1, end, pin2))
         for temp in temps:
             self.netpads.append(temp.show)
-            self.netpads1.append(temp.show)
         self.classPanel.ClearListNet()
         self.classPanel.UpdateListNet(self.netpads)
     
@@ -173,38 +162,32 @@ class Controller:
                 references.append(item)
         self.classPanel.UpdateReferenceTo(references)
     
-    def OnListNetSelected(self, event):
-        self.names1.clear()
-        self.index1.clear()
-        items = event.GetEventObject().GetSelections()
-        for index in items:
-            v = event.GetEventObject().GetString(index)
-            self.names1.append(v)
-            self.index1.append(index)
-    
-    def OnListNetClassSelected(self, event):
-        self.names2.clear()
-        items = event.GetEventObject().GetSelections()
-        for index in items:
-            v = event.GetEventObject().GetString(index)
-            self.names2.append(v)
-    
     def OnAddAll(self, event):
-        self.logger.info('OnAddAll')
         self.classPanel.ClearListNet()
         self.classPanel.UpdateListNetClass(self.netpads)
 
     def OnAddSelected(self, event):
-        self.logger.info('OnAddSelected')
-        self.classPanel.UpdateListNetClass(self.names1)
-        for net in self.index1:
-            self.classPanel.DeleteItemListNet(net)
+        names = []
+        items = self.classPanel.listNet.GetSelections()
+        for index in items:
+            v = self.classPanel.listNet.GetString(index)
+            names.append(v)
+        self.classPanel.UpdateListNetClass(names)
+        items.sort(reverse=True)
+        for i in items:
+            self.classPanel.DeleteItemListNet(i)
 
     def OnRemoveSelected(self, event):
-        self.logger.info('OnRemoveSelected')
-        self.classPanel.UpdateListNet(self.names2)
+        names = []
+        items = self.classPanel.listNetClass.GetSelections()
+        for index in items:
+            v = self.classPanel.listNetClass.GetString(index)
+            names.append(v)
+        self.classPanel.UpdateListNet(names)
+        items.sort(reverse=True)
+        for i in items:
+            self.classPanel.DeleteItemListNetClass(i)
 
     def OnRemoveAll(self, event):
-        self.logger.info('OnRemoveAll')
         self.classPanel.ClearListNetClass()
         self.classPanel.UpdateListNet(self.netpads)
