@@ -15,10 +15,6 @@ class LengthMatchingView(LengthMatchingDialog):
         else:
             return size
 
-class ExtendedNetPanelView(ExtendedNetPanel):
-    def __init__( self, parent):
-        ExtendedNetPanel.__init__(self, parent)
-
 class SettingPanelView(SettingPanel):
     def __init__( self, parent):
         SettingPanel.__init__(self, parent)
