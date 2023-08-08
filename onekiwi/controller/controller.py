@@ -1,6 +1,9 @@
 from ..model.model import Model
 from ..model.pad import PadInfo
+from ..model.net import NetData
+from ..model.model import NetClass
 from ..view.view import *
+from ..kicad.board import *
 from ..view.viewclass import ClassPanelView
 from ..view.viewextendednet import ExtendedNetPanelView
 from ..view.viewsetting import SettingPanelView
@@ -10,9 +13,11 @@ from ..view.viewdebug import DebugPanelView
 from .logtext import LogText
 from typing import List
 import sys
+import os
 import logging
 import logging.config
 import wx
+import json
 
 class Controller:
     def __init__(self, board):
@@ -33,7 +38,9 @@ class Controller:
 
         self.board = board
         self.references = []
-        self.netpads = []
+        self.updatenets = []
+        self.netpads:List[NetData] = []
+
         self.logger = self.init_logger(self.view.textLog)
         self.model = Model(self.board, self.logger)
         self.GetReference()
@@ -58,6 +65,7 @@ class Controller:
         self.classPanel.buttonRenameClass.Bind(wx.EVT_BUTTON, self.OnRenameClass)
         self.classPanel.buttonRemoveClass.Bind(wx.EVT_BUTTON, self.OnRemoveClass)
         self.classPanel.buttonUpdateClass.Bind(wx.EVT_BUTTON, self.OnUpdateClass)
+        self.classPanel.editNet.Bind(wx.EVT_TEXT, self.OnFilterNetChange)
         
 
     def Show(self):
@@ -99,6 +107,22 @@ class Controller:
 
     def OnSaveSetting(self, event):
         self.logger.info('OnSaveSetting')
+        self.model.netclasses["netclasses"] = []
+        for item in self.model.classes:
+            print(item)
+            #net = {"name": item, "nets":[]}
+            #self.model.netclasses['netclasses'].append(net)
+
+        path = get_pcb_path(self.board)
+        name = get_pcb_name(self.board) + '_length-matching.json'
+        json_file = os.path.join(path, name)
+        # Serializing json 
+        results = json.dumps(self.model.netclasses, indent = 4)
+
+        # Writing to sample.json
+        with open(json_file, "w") as outfile:
+            outfile.write(results)
+        return json_file
 
     def OnUpdateLength(self, event):
         self.logger.info('OnUpdateLength')
@@ -122,40 +146,47 @@ class Controller:
     def OnAddClass(self, event):
         name = self.classPanel.GetEditClassName()
         if name != '':
-            if name not in self.model.clases:
-                self.model.clases.append(name)
+            if name not in self.model.classes:
+                self.model.classes.append(name)
                 self.classPanel.SetEditClassName('')
-                self.classPanel.UpdateChoiceClass(self.model.clases)
+                self.classPanel.UpdateChoiceClass(self.model.classes)
             else:
                 self.logger.info('Name already exists!')
         else:
             self.logger.info('Please enter name!')
     
     def OnUpdateNet(self, event):
+        if len(self.model.classes) < 1:
+            self.logger.info('Please create class name')
+            return
+        self.updatenets.clear()
         self.netpads.clear()
-        temps:List[PadInfo] = []
         power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
-        start = self.classPanel.GetReferenceFromValue()
-        end = self.classPanel.GetReferenceToValue()
-        self.logger.info('Start %s, End %s', start, end)
+        ref1 = self.classPanel.GetReferenceFromValue()
+        ref2 = self.classPanel.GetReferenceToValue()
+        self.logger.info('Start %s, End %s', ref1, ref2)
 
-        ref_start = self.board.FindFootprintByReference(start)
-        ref_end = self.board.FindFootprintByReference(end)
+        ref_start = self.board.FindFootprintByReference(ref1)
+        ref_end = self.board.FindFootprintByReference(ref2)
         for pad1 in ref_start.Pads():
-            netname1 = str(pad1.GetNetname())
-            netcode1 = self.board.GetNetcodeFromNetname(netname1)
+            name1 = str(pad1.GetNetname())
+            code1 = self.board.GetNetcodeFromNetname(name1)
             pin1 = str(pad1.GetPadName())
             for pad2 in ref_end.Pads():
-                netname2 = str(pad2.GetNetname())
-                netcode2 = self.board.GetNetcodeFromNetname(netname2)
+                name2 = str(pad2.GetNetname())
+                code2 = self.board.GetNetcodeFromNetname(name2)
                 pin2 = str(pad2.GetPadName())
-                if netcode1 == netcode2 and netname2 not in power_names:
-                    self.logger.info('Net %s', netname2)
-                    temps.append(PadInfo(netname2, netcode2, start, pin1, end, pin2))
-        for temp in temps:
-            self.netpads.append(temp.show)
+                if code1 == code2 and name2 not in power_names:
+                    if name2 not in [data.name1 for data in self.netpads]:
+                        self.logger.info('Net %s', name2)
+                        net = NetData('net', name2, code2, ref1, pin1, ref2, pin2)
+                        self.netpads.append(net)
+
         self.classPanel.ClearListNet()
-        self.classPanel.UpdateListNet(self.netpads)
+        self.netpads.sort(key=lambda x: x.name1)
+        for data in self.netpads:
+            self.updatenets.append(data.name1)
+        self.classPanel.UpdateListNet(self.updatenets)
     
     def OnFilterFromChange(self, event):
         value = event.GetEventObject().GetValue()
@@ -173,6 +204,16 @@ class Controller:
                 references.append(item)
         self.classPanel.UpdateReferenceTo(references)
     
+    def OnFilterNetChange(self, event):
+        value = event.GetEventObject().GetValue()
+        self.logger.info('OnFilterNetChange %s', value)
+        nets = []
+        for item in self.updatenets:
+            if item.rfind(value) != -1:
+                nets.append(item)
+        self.classPanel.ClearListNet()
+        self.classPanel.UpdateListNet(nets)
+        
     def OnAddAll(self, event):
         self.classPanel.ClearListNet()
         self.classPanel.UpdateListNetClass(self.netpads)
@@ -210,4 +251,9 @@ class Controller:
         self.logger.info('OnRemoveClass')
 
     def OnUpdateClass(self, event):
-        self.logger.info('OnUpdateClass')
+        name = self.classPanel.GetChoiceClassValue()
+        start = self.classPanel.GetReferenceFromValue()
+        end = self.classPanel.GetReferenceToValue()
+        netname = NetClass(name, start, end)
+        #netname.nets = self.netpads
+        self.model.classes.append(netname)

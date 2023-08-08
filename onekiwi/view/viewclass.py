@@ -19,7 +19,8 @@ class ClassPanelView(ClassPanel):
         self.choiceClass.SetSelection(0)
 
     def GetChoiceClassValue(self):
-        return self.choiceClass.GetValue()
+        ind = self.choiceClass.GetSelection()
+        return str(self.choiceClass.GetString(ind))
 
     def GetCChoiceClassSelection(self):
         return self.choiceClass.GetSelection()

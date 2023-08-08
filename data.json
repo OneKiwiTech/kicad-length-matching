@@ -1,0 +1,38 @@
+{
+    "netclasses": [
+        {
+            "name": "SDMMC2",
+            "start": "U2",
+            "end": "U4",
+            "nets": [
+                {
+                    "type": "net",
+                    "name1": "SDMMC2_D0",
+                    "name2": "",
+                    "code1": "248",
+                    "code2": "",
+                    "ref1": "U2",
+                    "pad1": "6",
+                    "ref2": "U4",
+                    "pad2": "L4"
+                },
+                {
+                    "type": "xnet",
+                    "name1": "SDMMC2_D1",
+                    "name2": "SDMMC2_D1#",
+                    "code1": "248",
+                    "code2": "268",
+                    "ref1": "U2",
+                    "pad1": "7",
+                    "ref2": "U4",
+                    "pad2": "L5",
+                    "xref": "R1",
+                    "xpad1": "1",
+                    "xpad2": "2"
+                }
+            ]
+        },
+        {
+        }
+    ]
+}

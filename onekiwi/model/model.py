@@ -1,41 +1,45 @@
 import pcbnew
+import json
+from ..kicad.board import *
 from typing import List
+from .net import NetData
 
-class ExtendedNet:
-    def __init__(self):
-        self.ref = ''
-        self.net1 = ''
-        self.net2 = ''
-        self.code1 = ''
-        self.code2 = ''
-        self.ref1_start = ''
-        self.ref1_end = ''
-        self.pad1_start = ''
-        self.pad1_end = ''
-        self.ref2_start = ''
-        self.ref2_end = ''
-        self.pad2_start = ''
-        self.pad2_end = ''
-        
-class DataNet:
-    def __init__(self, name, code):
+class NetClass:
+    def __init__(self, name, start, end):
         self.name = name
-        self.code = code
-        self.ref_start = ''
-        self.ref_end = ''
-        self.pad_start = ''
-        self.pad_end = ''
-
-class ClassName:
-    def __init__(self, name):
-        self.name = name
-        self.ref_start = ''
-        self.ref_end = ''
-        self.clases:List[DataNet] = []
+        self.start = ''
+        self.end = ''
+        self.nets:List[NetData] = []
 
 class Model:
     def __init__(self, board, logger):
         self.logger = logger
         self.board:pcbnew.BOARD = board
-        self.clases:List[str] = []
+        self.classes:List[NetClass] = []
+        self.netclasses = {}
+
+    def export_to_json(self):
+        path = get_pcb_path()
+        name = get_pcb_name() + '_length-matching.json'
+        json_file = os.path.join(path, name)
+        # Serializing json 
+        results = json.dumps(self.netclasses, indent = 4)
+
+        # Writing to sample.json
+        with open(json_file, "w") as outfile:
+            outfile.write(results)
+        return json_file
+    
+    def read_json(self):
+        data = {}
+        status = False
+        path = get_pcb_path()
+        name = get_pcb_name() + '_length-matching.json'
+        json_file = os.path.join(path, name)
+        # Check If File Exists
+        if os.path.exists(json_file):
+            with open(json_file) as json_file:
+                data = json.load(json_file)
+                status = True
+        return status, data
     

@@ -38,6 +38,12 @@ def get_pcb_path(board):
     path = os.path.dirname(file_name)
     return path
 
+def get_pcb_name(board):
+    file_name = board.GetFileName()
+    base = os.path.basename(file_name)
+    name = os.path.splitext(base)[0]
+    return name
+
 def get_layer_names(board):
     path = get_pcb_path(board)
     job_file = os.path.join(path, "jobfile.json")

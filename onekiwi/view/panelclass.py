@@ -127,6 +127,19 @@ class ClassPanel ( wx.Panel ):
 
 		sbSizer2.Add( gSizer1, 0, wx.EXPAND, 5 )
 
+		bSizer33 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_staticText15 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Filter Net:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText15.Wrap( -1 )
+
+		bSizer33.Add( self.m_staticText15, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		self.editNet = wx.TextCtrl( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer33.Add( self.editNet, 1, wx.ALL, 5 )
+
+
+		sbSizer2.Add( bSizer33, 0, wx.ALL|wx.EXPAND, 5 )
+
 		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
 		listNetChoices = []
