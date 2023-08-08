@@ -1,8 +1,11 @@
+import sys
 import wx
 import pcbnew
 from onekiwi.controller.controller import Controller
 
-filename = '/home/vanson/working/kicad/onekiwi/stm32wb35xx-dev/stm32wb35xx-dev.kicad_pcb'
+filename = ''
+print('filename: ' + str(sys.argv[1]))
+filename = str(sys.argv[1])
 
 class SimplePluginApp(wx.App):
     def OnInit(self):
@@ -23,3 +26,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# python3 dialog.py /home/onekiwi/kicad/bms-three-cell/bms-three-cell.kicad_pcb
