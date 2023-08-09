@@ -59,10 +59,10 @@ class Controller:
         self.classPanel.buttonUpdateNet.Bind(wx.EVT_BUTTON, self.OnUpdateNet)
         self.classPanel.editFrom.Bind(wx.EVT_TEXT, self.OnFilterFromChange)
         self.classPanel.editTo.Bind(wx.EVT_TEXT, self.OnFilterToChange)
-        self.classPanel.buttonAddAll.Bind(wx.EVT_BUTTON, self.OnAddAll)
-        self.classPanel.buttonAddSelected.Bind(wx.EVT_BUTTON, self.OnAddSelected)
-        self.classPanel.buttonRemoveSelected.Bind(wx.EVT_BUTTON, self.OnRemoveSelected)
-        self.classPanel.buttonRemoveAll.Bind(wx.EVT_BUTTON, self.OnRemoveAll)
+        #self.classPanel.buttonAddAll.Bind(wx.EVT_BUTTON, self.OnAddAll)
+        #self.classPanel.buttonAddSelected.Bind(wx.EVT_BUTTON, self.OnAddSelected)
+        #self.classPanel.buttonRemoveSelected.Bind(wx.EVT_BUTTON, self.OnRemoveSelected)
+        #self.classPanel.buttonRemoveAll.Bind(wx.EVT_BUTTON, self.OnRemoveAll)
         self.classPanel.buttonRenameClass.Bind(wx.EVT_BUTTON, self.OnRenameClass)
         self.classPanel.buttonRemoveClass.Bind(wx.EVT_BUTTON, self.OnRemoveClass)
         self.classPanel.buttonUpdateClass.Bind(wx.EVT_BUTTON, self.OnUpdateClass)
@@ -105,6 +105,11 @@ class Controller:
 
     def OnLoadSetting(self, event):
         self.model.get_json_data()
+        self.classes.clear()
+        print(len(self.model.classes))
+        for data in self.model.classes:
+            self.classes.append(data.name)
+        self.classPanel.UpdateChoiceClass(self.classes)
 
     def OnSaveSetting(self, event):
         self.model.save_setting()
@@ -176,11 +181,12 @@ class Controller:
                                 if pin2 not in data.pad2s:
                                     data.pad2s.append(pin2)
 
-        self.classPanel.ClearListNet()
+        #self.classPanel.ClearListNet()
         self.netpads.sort(key=lambda x: x.name1)
         for data in self.netpads:
             self.updatenets.append(data.name1)
-        self.classPanel.UpdateListNet(self.updatenets)
+        #self.classPanel.UpdateListNet(self.updatenets)
+        self.UpadateTable(self.updatenets)
     
     def OnFilterFromChange(self, event):
         value = event.GetEventObject().GetValue()
@@ -207,11 +213,14 @@ class Controller:
                 nets.append(item)
         self.classPanel.ClearListNet()
         self.classPanel.UpdateListNet(nets)
-        
+
+    '''
     def OnAddAll(self, event):
         self.classPanel.ClearListNet()
         self.classPanel.UpdateListNetClass(self.netpads)
+        '''
 
+    '''
     def OnAddSelected(self, event):
         names = []
         items = self.classPanel.listNet.GetSelections()
@@ -222,7 +231,9 @@ class Controller:
         items.sort(reverse=True)
         for i in items:
             self.classPanel.DeleteItemListNet(i)
+        '''
 
+    '''
     def OnRemoveSelected(self, event):
         names = []
         items = self.classPanel.listNetClass.GetSelections()
@@ -233,10 +244,13 @@ class Controller:
         items.sort(reverse=True)
         for i in items:
             self.classPanel.DeleteItemListNetClass(i)
+        '''
 
+    '''
     def OnRemoveAll(self, event):
         self.classPanel.ClearListNetClass()
         self.classPanel.UpdateListNet(self.netpads)
+        '''
     
     def OnRenameClass(self, event):
         self.logger.info('OnRenameClass')
@@ -251,3 +265,15 @@ class Controller:
         netname = NetClass(name, start, end)
         netname.nets = self.netpads
         self.model.classes.append(netname)
+    
+    def UpadateTable(self, nets):
+        rows = self.classPanel.gridClass.GetNumberRows()
+        self.classPanel.gridClass.DeleteRows(0, rows)
+        self.classPanel.gridClass.AppendRows(len(nets))
+        for row, net in enumerate(nets):
+            choice_editor = wx.grid.GridCellChoiceEditor([], True)
+            self.classPanel.gridClass.SetCellAlignment(row, 0, wx.ALIGN_CENTER, wx.ALIGN_TOP)
+            self.classPanel.gridClass.SetCellRenderer(row, 0, wx.grid.GridCellBoolRenderer())
+            self.classPanel.gridClass.SetCellValue(row, 1, net)
+            self.classPanel.gridClass.SetCellEditor(row, 2, choice_editor)
+            self.classPanel.gridClass.SetCellEditor(row, 3, choice_editor)

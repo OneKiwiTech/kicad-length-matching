@@ -9,6 +9,7 @@
 
 import wx
 import wx.xrc
+import wx.grid
 
 ###########################################################################
 ## Class ClassPanel
@@ -142,36 +143,40 @@ class ClassPanel ( wx.Panel ):
 
 		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
-		listNetChoices = []
-		self.listNet = wx.ListBox( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, listNetChoices, wx.LB_MULTIPLE )
-		bSizer20.Add( self.listNet, 1, wx.ALL|wx.EXPAND, 5 )
+		bSizer20.SetMinSize( wx.Size( -1,200 ) )
+		self.gridClass = wx.grid.Grid( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 
-		bSizer21 = wx.BoxSizer( wx.VERTICAL )
+		# Grid
+		self.gridClass.CreateGrid( 1, 4 )
+		self.gridClass.EnableEditing( True )
+		self.gridClass.EnableGridLines( True )
+		self.gridClass.EnableDragGridSize( False )
+		self.gridClass.SetMargins( 0, 0 )
 
+		# Columns
+		self.gridClass.SetColSize( 0, 80 )
+		self.gridClass.SetColSize( 1, 400 )
+		self.gridClass.SetColSize( 2, 80 )
+		self.gridClass.SetColSize( 3, 80 )
+		self.gridClass.EnableDragColMove( False )
+		self.gridClass.EnableDragColSize( True )
+		self.gridClass.SetColLabelValue( 0, u"Selected" )
+		self.gridClass.SetColLabelValue( 1, u"Net Name" )
+		self.gridClass.SetColLabelValue( 2, u"Start" )
+		self.gridClass.SetColLabelValue( 3, u"End" )
+		self.gridClass.SetColLabelSize( wx.grid.GRID_AUTOSIZE )
+		self.gridClass.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
-		bSizer21.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+		# Rows
+		self.gridClass.EnableDragRowSize( True )
+		self.gridClass.SetRowLabelSize( wx.grid.GRID_AUTOSIZE )
+		self.gridClass.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
-		self.buttonAddAll = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u">>", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer21.Add( self.buttonAddAll, 0, wx.ALL, 5 )
+		# Label Appearance
 
-		self.buttonAddSelected = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u">", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer21.Add( self.buttonAddSelected, 0, wx.ALL, 5 )
-
-		self.buttonRemoveSelected = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"<", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer21.Add( self.buttonRemoveSelected, 0, wx.ALL, 5 )
-
-		self.buttonRemoveAll = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"<<", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer21.Add( self.buttonRemoveAll, 0, wx.ALL, 5 )
-
-
-		bSizer21.Add( ( 0, 0), 1, wx.EXPAND, 5 )
-
-
-		bSizer20.Add( bSizer21, 0, wx.EXPAND, 5 )
-
-		listNetClassChoices = []
-		self.listNetClass = wx.ListBox( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, listNetClassChoices, wx.LB_MULTIPLE )
-		bSizer20.Add( self.listNetClass, 1, wx.ALL|wx.EXPAND, 5 )
+		# Cell Defaults
+		self.gridClass.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
+		bSizer20.Add( self.gridClass, 1, wx.ALL|wx.EXPAND, 5 )
 
 
 		sbSizer2.Add( bSizer20, 1, wx.ALL|wx.EXPAND, 5 )
