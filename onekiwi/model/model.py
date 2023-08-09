@@ -7,8 +7,8 @@ from .net import NetData
 class NetClass:
     def __init__(self, name, start, end):
         self.name = name
-        self.start = ''
-        self.end = ''
+        self.start = start
+        self.end = end
         self.nets:List[NetData] = []
 
 class Model:

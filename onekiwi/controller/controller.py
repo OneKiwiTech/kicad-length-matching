@@ -39,6 +39,7 @@ class Controller:
         self.board = board
         self.references = []
         self.updatenets = []
+        self.classes = []
         self.netpads:List[NetData] = []
 
         self.logger = self.init_logger(self.view.textLog)
@@ -108,10 +109,18 @@ class Controller:
     def OnSaveSetting(self, event):
         self.logger.info('OnSaveSetting')
         self.model.netclasses["netclasses"] = []
-        for item in self.model.classes:
-            print(item)
-            #net = {"name": item, "nets":[]}
-            #self.model.netclasses['netclasses'].append(net)
+        for netclass in self.model.classes:
+            item = {"name": netclass.name, "start": netclass.start, "end": netclass.end, "nets": []}
+            for net in netclass.nets:
+                netdata = {"type": net.type, "name1": net.name1, "name2": net.name2,
+                            "code1": net.code1, "code2": net.code2, "ref1": net.ref1,
+                            "pad1": net.pad1, "ref2": net.ref2, "pad2": net.pad2, "pad1s": [], "pad2s": []}
+                for pad1 in net.pad1s:
+                    netdata["pad1s"].append(pad1)
+                for pad2 in net.pad2s:
+                    netdata["pad2s"].append(pad2)
+                item["nets"].append(netdata)
+            self.model.netclasses['netclasses'].append(item)
 
         path = get_pcb_path(self.board)
         name = get_pcb_name(self.board) + '_length-matching.json'
@@ -146,17 +155,17 @@ class Controller:
     def OnAddClass(self, event):
         name = self.classPanel.GetEditClassName()
         if name != '':
-            if name not in self.model.classes:
-                self.model.classes.append(name)
+            if name not in self.classes:
+                self.classes.append(name)
                 self.classPanel.SetEditClassName('')
-                self.classPanel.UpdateChoiceClass(self.model.classes)
+                self.classPanel.UpdateChoiceClass(self.classes)
             else:
                 self.logger.info('Name already exists!')
         else:
             self.logger.info('Please enter name!')
     
     def OnUpdateNet(self, event):
-        if len(self.model.classes) < 1:
+        if len(self.classes) < 1:
             self.logger.info('Please create class name')
             return
         self.updatenets.clear()
@@ -179,8 +188,17 @@ class Controller:
                 if code1 == code2 and name2 not in power_names:
                     if name2 not in [data.name1 for data in self.netpads]:
                         self.logger.info('Net %s', name2)
-                        net = NetData('net', name2, code2, ref1, pin1, ref2, pin2)
+                        net = NetData('net', name2, str(code2), ref1, pin1, ref2, pin2)
+                        net.pad1s.append(pin1)
+                        net.pad2s.append(pin2)
                         self.netpads.append(net)
+                    else:
+                        for data in self.netpads:
+                            if data.code1 == str(code2):
+                                if pin1 not in data.pad1s:
+                                    data.pad1s.append(pin1)
+                                if pin2 not in data.pad2s:
+                                    data.pad2s.append(pin2)
 
         self.classPanel.ClearListNet()
         self.netpads.sort(key=lambda x: x.name1)
@@ -255,5 +273,5 @@ class Controller:
         start = self.classPanel.GetReferenceFromValue()
         end = self.classPanel.GetReferenceToValue()
         netname = NetClass(name, start, end)
-        #netname.nets = self.netpads
+        netname.nets = self.netpads
         self.model.classes.append(netname)
