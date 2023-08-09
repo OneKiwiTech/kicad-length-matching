@@ -104,34 +104,10 @@ class Controller:
         self.classPanel.UpdateReferenceTo(self.references)
 
     def OnLoadSetting(self, event):
-        self.logger.info('OnLoadSetting')
+        self.model.get_json_data()
 
     def OnSaveSetting(self, event):
-        self.logger.info('OnSaveSetting')
-        self.model.netclasses["netclasses"] = []
-        for netclass in self.model.classes:
-            item = {"name": netclass.name, "start": netclass.start, "end": netclass.end, "nets": []}
-            for net in netclass.nets:
-                netdata = {"type": net.type, "name1": net.name1, "name2": net.name2,
-                            "code1": net.code1, "code2": net.code2, "ref1": net.ref1,
-                            "pad1": net.pad1, "ref2": net.ref2, "pad2": net.pad2, "pad1s": [], "pad2s": []}
-                for pad1 in net.pad1s:
-                    netdata["pad1s"].append(pad1)
-                for pad2 in net.pad2s:
-                    netdata["pad2s"].append(pad2)
-                item["nets"].append(netdata)
-            self.model.netclasses['netclasses'].append(item)
-
-        path = get_pcb_path(self.board)
-        name = get_pcb_name(self.board) + '_length-matching.json'
-        json_file = os.path.join(path, name)
-        # Serializing json 
-        results = json.dumps(self.model.netclasses, indent = 4)
-
-        # Writing to sample.json
-        with open(json_file, "w") as outfile:
-            outfile.write(results)
-        return json_file
+        self.model.save_setting()
 
     def OnUpdateLength(self, event):
         self.logger.info('OnUpdateLength')
@@ -188,7 +164,7 @@ class Controller:
                 if code1 == code2 and name2 not in power_names:
                     if name2 not in [data.name1 for data in self.netpads]:
                         self.logger.info('Net %s', name2)
-                        net = NetData('net', name2, str(code2), ref1, pin1, ref2, pin2)
+                        net = NetData('net', name2, str(code2), ref1, pin1, '', '', ref2, pin2, '', '', '')
                         net.pad1s.append(pin1)
                         net.pad2s.append(pin2)
                         self.netpads.append(net)
