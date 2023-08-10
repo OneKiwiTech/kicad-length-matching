@@ -9,7 +9,7 @@
 
 import wx
 import wx.xrc
-import wx.grid
+import wx.dataview
 
 ###########################################################################
 ## Class ClassPanel
@@ -141,42 +141,51 @@ class ClassPanel ( wx.Panel ):
 
 		sbSizer2.Add( bSizer33, 0, wx.ALL|wx.EXPAND, 5 )
 
+		bSizer31 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_staticText14 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Net:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText14.Wrap( -1 )
+
+		bSizer31.Add( self.m_staticText14, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		self.textNet = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"MyLabel", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.textNet.Wrap( -1 )
+
+		bSizer31.Add( self.textNet, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		self.m_staticText16 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Start:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText16.Wrap( -1 )
+
+		bSizer31.Add( self.m_staticText16, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		choicePinStartChoices = []
+		self.choicePinStart = wx.Choice( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choicePinStartChoices, 0 )
+		self.choicePinStart.SetSelection( 0 )
+		bSizer31.Add( self.choicePinStart, 0, wx.ALL, 5 )
+
+		self.m_staticText17 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"End:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText17.Wrap( -1 )
+
+		bSizer31.Add( self.m_staticText17, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		choicePinEndChoices = []
+		self.choicePinEnd = wx.Choice( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choicePinEndChoices, 0 )
+		self.choicePinEnd.SetSelection( 0 )
+		bSizer31.Add( self.choicePinEnd, 0, wx.ALL, 5 )
+
+
+		sbSizer2.Add( bSizer31, 0, wx.EXPAND, 5 )
+
 		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
 		bSizer20.SetMinSize( wx.Size( -1,200 ) )
-		self.gridClass = wx.grid.Grid( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
-
-		# Grid
-		self.gridClass.CreateGrid( 1, 4 )
-		self.gridClass.EnableEditing( True )
-		self.gridClass.EnableGridLines( True )
-		self.gridClass.EnableDragGridSize( False )
-		self.gridClass.SetMargins( 0, 0 )
-
-		# Columns
-		self.gridClass.SetColSize( 0, 80 )
-		self.gridClass.SetColSize( 1, 400 )
-		self.gridClass.SetColSize( 2, 80 )
-		self.gridClass.SetColSize( 3, 80 )
-		self.gridClass.EnableDragColMove( False )
-		self.gridClass.EnableDragColSize( True )
-		self.gridClass.SetColLabelValue( 0, u"Selected" )
-		self.gridClass.SetColLabelValue( 1, u"Net Name" )
-		self.gridClass.SetColLabelValue( 2, u"Start" )
-		self.gridClass.SetColLabelValue( 3, u"End" )
-		self.gridClass.SetColLabelSize( wx.grid.GRID_AUTOSIZE )
-		self.gridClass.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
-
-		# Rows
-		self.gridClass.EnableDragRowSize( True )
-		self.gridClass.SetRowLabelSize( wx.grid.GRID_AUTOSIZE )
-		self.gridClass.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
-
-		# Label Appearance
-
-		# Cell Defaults
-		self.gridClass.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
-		bSizer20.Add( self.gridClass, 1, wx.ALL|wx.EXPAND, 5 )
+		self.dataViewClass = wx.dataview.DataViewListCtrl( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.viewItem = self.dataViewClass.AppendTextColumn( u"Item", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.viewSelect = self.dataViewClass.AppendToggleColumn( u"Select", wx.dataview.DATAVIEW_CELL_ACTIVATABLE, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.viewNet = self.dataViewClass.AppendTextColumn( u"Net Name", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.viewStart = self.dataViewClass.AppendTextColumn( u"Start Pin", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.ViewEnd = self.dataViewClass.AppendTextColumn( u"End Pin", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		bSizer20.Add( self.dataViewClass, 1, wx.ALL|wx.EXPAND, 5 )
 
 
 		sbSizer2.Add( bSizer20, 1, wx.ALL|wx.EXPAND, 5 )

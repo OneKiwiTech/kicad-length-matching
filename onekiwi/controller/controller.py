@@ -59,10 +59,18 @@ class Controller:
         self.classPanel.buttonUpdateNet.Bind(wx.EVT_BUTTON, self.OnUpdateNet)
         self.classPanel.editFrom.Bind(wx.EVT_TEXT, self.OnFilterFromChange)
         self.classPanel.editTo.Bind(wx.EVT_TEXT, self.OnFilterToChange)
+        self.classPanel.choiceReferenceFrom.Bind(wx.EVT_CHOICE, self.OnChoiceReferenceFrom)
+        self.classPanel.choiceReferenceTo.Bind(wx.EVT_CHOICE, self.OnChoiceReferenceTo)
+        self.classPanel.choicePinStart.Bind(wx.EVT_CHOICE, self.OnChoiceReferenceStart)
+        self.classPanel.choicePinEnd.Bind(wx.EVT_CHOICE, self.OnChoiceReferenceEnd)
         #self.classPanel.buttonAddAll.Bind(wx.EVT_BUTTON, self.OnAddAll)
         #self.classPanel.buttonAddSelected.Bind(wx.EVT_BUTTON, self.OnAddSelected)
         #self.classPanel.buttonRemoveSelected.Bind(wx.EVT_BUTTON, self.OnRemoveSelected)
         #self.classPanel.buttonRemoveAll.Bind(wx.EVT_BUTTON, self.OnRemoveAll)
+        #self.classPanel.gridClass.Bind(wx.grid.EVT_GRID_CELL_LEFT_CLICK, self.OnGridClassCellClicked)
+        #self.classPanel.gridClass.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.OnGirdClassCellChange)
+        #self.classPanel.gridClass.Bind(wx.grid.EVT_GRID_LABEL_LEFT_DCLICK, self.OnGridClassLabelLeftDClick)
+        self.classPanel.dataViewClass.Bind(wx.EVT_LEFT_DCLICK, self.TableClassOnLeftDClick)
         self.classPanel.buttonRenameClass.Bind(wx.EVT_BUTTON, self.OnRenameClass)
         self.classPanel.buttonRemoveClass.Bind(wx.EVT_BUTTON, self.OnRemoveClass)
         self.classPanel.buttonUpdateClass.Bind(wx.EVT_BUTTON, self.OnUpdateClass)
@@ -140,6 +148,7 @@ class Controller:
                 self.classes.append(name)
                 self.classPanel.SetEditClassName('')
                 self.classPanel.UpdateChoiceClass(self.classes)
+                #self.model.classes.append(NetClass(name, '', ''))
             else:
                 self.logger.info('Name already exists!')
         else:
@@ -183,10 +192,13 @@ class Controller:
 
         #self.classPanel.ClearListNet()
         self.netpads.sort(key=lambda x: x.name1)
+        self.classPanel.dataViewClass.DeleteAllItems()
         for data in self.netpads:
             self.updatenets.append(data.name1)
+            self.classPanel.dataViewClass.AppendItem(['0', False, data.name1, data.pad1, data.pad2])
         #self.classPanel.UpdateListNet(self.updatenets)
-        self.UpadateTable(self.updatenets)
+        #self.UpadateTable(self.updatenets)
+        
     
     def OnFilterFromChange(self, event):
         value = event.GetEventObject().GetValue()
@@ -267,9 +279,13 @@ class Controller:
         self.model.classes.append(netname)
     
     def UpadateTable(self, nets):
+        self.logger.info('XXX')
         rows = self.classPanel.gridClass.GetNumberRows()
+        self.logger.info('XXX1')
         self.classPanel.gridClass.DeleteRows(0, rows)
+        self.logger.info('XXX2')
         self.classPanel.gridClass.AppendRows(len(nets))
+        self.logger.info('XXX3')
         for row, net in enumerate(nets):
             choice_editor = wx.grid.GridCellChoiceEditor([], True)
             self.classPanel.gridClass.SetCellAlignment(row, 0, wx.ALIGN_CENTER, wx.ALIGN_TOP)
@@ -277,3 +293,18 @@ class Controller:
             self.classPanel.gridClass.SetCellValue(row, 1, net)
             self.classPanel.gridClass.SetCellEditor(row, 2, choice_editor)
             self.classPanel.gridClass.SetCellEditor(row, 3, choice_editor)
+
+    def TableClassOnLeftDClick(self, event):
+        self.logger.info('TableClassOnLeftDClick')
+    
+    def OnChoiceReferenceFrom(self, event):
+        self.logger.info('OnChoiceReferenceFrom')
+
+    def OnChoiceReferenceTo(self, event):
+        self.logger.info('OnChoiceReferenceTo')
+    
+    def OnChoiceReferenceStart(self, event):
+        self.logger.info('OnChoiceReferenceStart')
+
+    def OnChoiceReferenceEnd(self, event):
+        self.logger.info('OnChoiceReferenceEnd')
