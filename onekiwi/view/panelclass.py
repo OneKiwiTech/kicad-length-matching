@@ -183,6 +183,7 @@ class ClassPanel ( wx.Panel ):
 		self.viewItem = self.dataViewClass.AppendTextColumn( u"Item", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
 		self.viewSelect = self.dataViewClass.AppendToggleColumn( u"Select", wx.dataview.DATAVIEW_CELL_ACTIVATABLE, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
 		self.viewNet = self.dataViewClass.AppendTextColumn( u"Net Name", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.ViewCode = self.dataViewClass.AppendTextColumn( u"Net Code", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
 		self.viewStart = self.dataViewClass.AppendTextColumn( u"Start Pin", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
 		self.ViewEnd = self.dataViewClass.AppendTextColumn( u"End Pin", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
 		bSizer20.Add( self.dataViewClass, 1, wx.ALL|wx.EXPAND, 5 )
