@@ -17,6 +17,7 @@ class NetData:
         self.pad2s = []
         self.xpad1s = []
         self.xpad2s = []
+        self.selected = False
         self.filter = False
         self.ipad1 = 0
         self.ipad2 = 0

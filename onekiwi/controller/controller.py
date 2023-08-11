@@ -65,6 +65,9 @@ class Controller:
         self.classPanel.choicePinStart.Bind(wx.EVT_CHOICE, self.OnChoiceReferenceStart)
         self.classPanel.choicePinEnd.Bind(wx.EVT_CHOICE, self.OnChoiceReferenceEnd)
         self.classPanel.dataViewClass.Bind(wx.EVT_LEFT_DCLICK, self.TableClassOnLeftDClick)
+        self.classPanel.dataViewClass.Bind(wx.dataview.EVT_DATAVIEW_ITEM_VALUE_CHANGED, self.TableClassOnValueChanged, id = wx.ID_ANY)
+        self.classPanel.dataViewClass.Bind(wx.dataview.EVT_DATAVIEW_SELECTION_CHANGED, self.TableClassOnSectionChanged, id = wx.ID_ANY)
+        
         self.classPanel.buttonRenameClass.Bind(wx.EVT_BUTTON, self.OnRenameClass)
         self.classPanel.buttonRemoveClass.Bind(wx.EVT_BUTTON, self.OnRemoveClass)
         self.classPanel.buttonUpdateClass.Bind(wx.EVT_BUTTON, self.OnUpdateClass)
@@ -112,13 +115,15 @@ class Controller:
             self.classes.append(data.name)
         self.classPanel.UpdateChoiceClass(self.classes)
         self.netpads.clear()
-        self.netpads = self.model.classes[0].nets
+        self.netpads.extend(self.model.classes[0].nets)
         for ind, ref in enumerate(self.references):
             if self.model.classes[0].start == ref:
                 self.classPanel.choiceReferenceFrom.SetSelection(ind)
             if self.model.classes[0].end == ref:
                 self.classPanel.choiceReferenceTo.SetSelection(ind)
-        self.UpadateClassTable(self.netpads, False)
+        for net in self.netpads:
+            net.selected = True
+        self.UpadateClassTableLoadSetting(self.netpads)
 
     def OnSaveSetting(self, event):
         self.model.save_setting()
@@ -146,6 +151,8 @@ class Controller:
         name = self.classPanel.GetEditClassName()
         if name != '':
             if name not in self.classes:
+                netname = NetClass(name, '', '')
+                self.model.classes.append(netname)
                 self.classes.append(name)
                 self.classPanel.SetEditClassName('')
                 self.classPanel.UpdateChoiceClass(self.classes)
@@ -158,7 +165,7 @@ class Controller:
         if len(self.classes) < 1:
             self.logger.info('Please create class name')
             return
-        self.netpads.clear()
+        #self.netpads.clear()
         power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
         ref1 = self.classPanel.GetReferenceFromValue()
         ref2 = self.classPanel.GetReferenceToValue()
@@ -229,21 +236,61 @@ class Controller:
         name = self.classPanel.GetChoiceClassValue()
         start = self.classPanel.GetReferenceFromValue()
         end = self.classPanel.GetReferenceToValue()
-        netname = NetClass(name, start, end)
-        netname.nets = self.netpads
-        self.model.classes.append(netname)
+        for item in self.model.classes:
+            if item.name == name:
+                item.start = start
+                item.end = end
+                item.nets.clear()
+                for net in self.netpads:
+                    if net.selected == True:
+                        item.nets.append(net)
     
     def UpadateClassTable(self, nets, filter):
         self.classPanel.dataViewClass.DeleteAllItems()
         if filter == True:
             for index, item in enumerate(nets, start=1):
-                if item.filter == True:
+                if item.selected == True:
+                    self.classPanel.dataViewClass.AppendItem([str(index), True, item.name1, item.code1, item.pad1, item.pad2])
+                elif item.filter == True:
                     self.classPanel.dataViewClass.AppendItem([str(index), False, item.name1, item.code1, item.pad1, item.pad2])
         else:
             for index, item in enumerate(nets, start=1):
-                self.classPanel.dataViewClass.AppendItem([str(index), False, item.name1, item.code1, item.pad1, item.pad2])
+                if item.selected == True:
+                    self.classPanel.dataViewClass.AppendItem([str(index), True, item.name1, item.code1, item.pad1, item.pad2])
+                else:
+                    self.classPanel.dataViewClass.AppendItem([str(index), False, item.name1, item.code1, item.pad1, item.pad2])
+        
+    def UpadateClassTableLoadSetting(self, nets):
+        self.classPanel.dataViewClass.DeleteAllItems()
+        for index, item in enumerate(nets, start=1):
+            self.classPanel.dataViewClass.AppendItem([str(index), True, item.name1, item.code1, item.pad1, item.pad2])
+
+    def TableClassOnValueChanged(self, event):
+        self.logger.info('TableClassOnValueChanged')
+        row = event.GetEventObject().GetSelectedRow()
+        print(row)
+        if row >= 0:
+            code = event.GetEventObject().GetTextValue(row, 3)
+            selected = self.classPanel.dataViewClass.GetToggleValue(row, 1)
+            print(selected)
+            for net in self.netpads:
+                if code == net.code1:
+                    net.selected = selected
+    
+    def TableClassOnSectionChanged(self, event):
+        self.logger.info('TableClassOnSectionChanged')
+        row = event.GetEventObject().GetSelectedRow()
+        print(row)
+        if row >= 0:
+            code = event.GetEventObject().GetTextValue(row, 3)
+            selected = event.GetEventObject().GetToggleValue(row, 1)
+            print(selected)
+            for net in self.netpads:
+                if code == net.code1:
+                    net.selected = selected
 
     def TableClassOnLeftDClick(self, event):
+        self.logger.info('TableClassOnLeftDClick')
         row = event.GetEventObject().GetSelectedRow()
         name = event.GetEventObject().GetTextValue(row, 2)
         code = event.GetEventObject().GetTextValue(row, 3)
