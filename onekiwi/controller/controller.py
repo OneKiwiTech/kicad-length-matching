@@ -1,6 +1,6 @@
 import select
 from ..model.model import Model
-from ..model.pad import PadInfo
+from ..model.temp import TempNetClass
 from ..model.net import NetData
 from ..model.model import NetClass
 from ..view.view import *
@@ -39,8 +39,8 @@ class Controller:
 
         self.board = board
         self.references = []
-        self.updatenets = []
         self.classes = []
+        self.temp:TempNetClass = TempNetClass()
         self.netpads:List[NetData] = []
 
         self.logger = self.init_logger(self.view.textLog)
@@ -108,10 +108,17 @@ class Controller:
     def OnLoadSetting(self, event):
         self.model.get_json_data()
         self.classes.clear()
-        print(len(self.model.classes))
         for data in self.model.classes:
             self.classes.append(data.name)
         self.classPanel.UpdateChoiceClass(self.classes)
+        self.netpads.clear()
+        self.netpads = self.model.classes[0].nets
+        for ind, ref in enumerate(self.references):
+            if self.model.classes[0].start == ref:
+                self.classPanel.choiceReferenceFrom.SetSelection(ind)
+            if self.model.classes[0].end == ref:
+                self.classPanel.choiceReferenceTo.SetSelection(ind)
+        self.UpadateClassTable(self.netpads, False)
 
     def OnSaveSetting(self, event):
         self.model.save_setting()
@@ -151,7 +158,6 @@ class Controller:
         if len(self.classes) < 1:
             self.logger.info('Please create class name')
             return
-        self.updatenets.clear()
         self.netpads.clear()
         power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
         ref1 = self.classPanel.GetReferenceFromValue()
@@ -184,7 +190,7 @@ class Controller:
                                     data.pad2s.append(pin2)
 
         self.netpads.sort(key=lambda x: x.name1)
-        self.UpadateClassTable(self.netpads)
+        self.UpadateClassTable(self.netpads, False)
         
     
     def OnFilterFromChange(self, event):
@@ -206,11 +212,12 @@ class Controller:
     def OnFilterNetChange(self, event):
         value = event.GetEventObject().GetValue()
         self.logger.info('OnFilterNetChange %s', value)
-        nets = []
         for net in self.netpads:
             if net.name1.rfind(value) != -1:
-                nets.append(net)
-        self.UpadateClassTable(nets)
+                net.filter = True
+            else:
+                net.filter = False
+        self.UpadateClassTable(self.netpads, True)
     
     def OnRenameClass(self, event):
         self.logger.info('OnRenameClass')
@@ -226,21 +233,30 @@ class Controller:
         netname.nets = self.netpads
         self.model.classes.append(netname)
     
-    def UpadateClassTable(self, nets):
+    def UpadateClassTable(self, nets, filter):
         self.classPanel.dataViewClass.DeleteAllItems()
-        for index, item in enumerate(nets, start=1):
-            self.classPanel.dataViewClass.AppendItem([str(index), False, item.name1, item.code1, item.pad1, item.pad2])
+        if filter == True:
+            for index, item in enumerate(nets, start=1):
+                if item.filter == True:
+                    self.classPanel.dataViewClass.AppendItem([str(index), False, item.name1, item.code1, item.pad1, item.pad2])
+        else:
+            for index, item in enumerate(nets, start=1):
+                self.classPanel.dataViewClass.AppendItem([str(index), False, item.name1, item.code1, item.pad1, item.pad2])
 
     def TableClassOnLeftDClick(self, event):
-        self.logger.info('TableClassOnLeftDClick')
         row = event.GetEventObject().GetSelectedRow()
-        selected = event.GetEventObject().GetToggleValue(row, 1)
         name = event.GetEventObject().GetTextValue(row, 2)
         code = event.GetEventObject().GetTextValue(row, 3)
         self.classPanel.textNet.SetLabel(name)
-        self.logger.info(row)
-        self.logger.info(selected)
-        self.logger.info(code)
+        for net in self.netpads:
+            if code == net.code1:
+                self.temp.set(row, name, code, net.pad1, net.pad2, net.ipad1, net.ipad2)
+                self.classPanel.choicePinStart.Clear()
+                self.classPanel.choicePinStart.Append(net.pad1s)
+                self.classPanel.choicePinStart.SetSelection(net.ipad1)
+                self.classPanel.choicePinEnd.Clear()
+                self.classPanel.choicePinEnd.Append(net.pad2s)
+                self.classPanel.choicePinEnd.SetSelection(net.ipad2)
     
     def OnChoiceReferenceFrom(self, event):
         self.logger.info('OnChoiceReferenceFrom')
@@ -249,7 +265,21 @@ class Controller:
         self.logger.info('OnChoiceReferenceTo')
     
     def OnChoiceReferenceStart(self, event):
-        self.logger.info('OnChoiceReferenceStart')
+        ind = event.GetEventObject().GetSelection()
+        pad = str(event.GetEventObject().GetString(ind))
+        self.temp.set1(pad, ind)
+        self.classPanel.dataViewClass.SetTextValue(pad, self.temp.row, 4)
+        for net in self.netpads:
+            if self.temp.code == net.code1:
+                net.pad1 = pad
+                net.ipad1 = ind
 
     def OnChoiceReferenceEnd(self, event):
-        self.logger.info('OnChoiceReferenceEnd')
+        ind = event.GetEventObject().GetSelection()
+        pad = str(event.GetEventObject().GetString(ind))
+        self.temp.set2(pad, ind)
+        self.classPanel.dataViewClass.SetTextValue(pad, self.temp.row, 5)
+        for net in self.netpads:
+            if self.temp.code == net.code1:
+                net.pad2 = pad
+                net.ipad2 = ind
