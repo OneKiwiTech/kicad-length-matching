@@ -1,4 +1,3 @@
-import select
 from ..model.model import Model
 from ..model.temp import TempNetClass
 from ..model.net import NetData
@@ -14,11 +13,9 @@ from ..view.viewdebug import DebugPanelView
 from .logtext import LogText
 from typing import List
 import sys
-import os
 import logging
 import logging.config
 import wx
-import json
 
 class Controller:
     def __init__(self, board):
@@ -60,6 +57,7 @@ class Controller:
         self.classPanel.buttonUpdateNet.Bind(wx.EVT_BUTTON, self.OnUpdateNet)
         self.classPanel.editFrom.Bind(wx.EVT_TEXT, self.OnFilterFromChange)
         self.classPanel.editTo.Bind(wx.EVT_TEXT, self.OnFilterToChange)
+        self.classPanel.choiceClass.Bind(wx.EVT_CHOICE, self.OnChoiceClass)
         self.classPanel.choiceReferenceFrom.Bind(wx.EVT_CHOICE, self.OnChoiceReferenceFrom)
         self.classPanel.choiceReferenceTo.Bind(wx.EVT_CHOICE, self.OnChoiceReferenceTo)
         self.classPanel.choicePinStart.Bind(wx.EVT_CHOICE, self.OnChoiceReferenceStart)
@@ -165,7 +163,6 @@ class Controller:
         if len(self.classes) < 1:
             self.logger.info('Please create class name')
             return
-        #self.netpads.clear()
         power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
         ref1 = self.classPanel.GetReferenceFromValue()
         ref2 = self.classPanel.GetReferenceToValue()
@@ -305,6 +302,20 @@ class Controller:
                 self.classPanel.choicePinEnd.Append(net.pad2s)
                 self.classPanel.choicePinEnd.SetSelection(net.ipad2)
     
+    def OnChoiceClass(self, event):
+        self.logger.info('OnChoiceClass')
+        i = event.GetEventObject().GetSelection()
+        self.netpads.clear()
+        self.netpads.extend(self.model.classes[i].nets)
+        for ind, ref in enumerate(self.references):
+            if self.model.classes[i].start == ref:
+                self.classPanel.choiceReferenceFrom.SetSelection(ind)
+            if self.model.classes[i].end == ref:
+                self.classPanel.choiceReferenceTo.SetSelection(ind)
+        for net in self.netpads:
+            net.selected = True
+        self.UpadateClassTableLoadSetting(self.netpads)
+
     def OnChoiceReferenceFrom(self, event):
         self.logger.info('OnChoiceReferenceFrom')
 

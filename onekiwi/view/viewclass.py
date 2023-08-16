@@ -42,23 +42,3 @@ class ClassPanelView(ClassPanel):
     def GetReferenceToValue(self):
         ind = self.choiceReferenceTo.GetSelection()
         return str(self.choiceReferenceTo.GetString(ind))
-
-    #def ClearListNet(self):
-        #self.listNet.Clear()
-    
-    #def ClearListNetClass(self):
-        #self.listNetClass.Clear()
-
-    #def UpdateListNet(self, item):
-        #self.listNet.Clear()
-        #self.listNet.Append(item)
-    
-    #def UpdateListNetClass(self, item):
-        #self.listNetClass.Clear()
-        #self.listNetClass.Append(item)
-    
-    #def DeleteItemListNet(self, item):
-        #self.listNet.Delete(item)
-    
-    #def DeleteItemListNetClass(self, item):
-        #self.listNetClass.Delete(item)
