@@ -301,11 +301,14 @@ class Controller:
                 self.classPanel.choicePinEnd.Clear()
                 self.classPanel.choicePinEnd.Append(net.pad2s)
                 self.classPanel.choicePinEnd.SetSelection(net.ipad2)
-    
+
     def OnChoiceClass(self, event):
         self.logger.info('OnChoiceClass')
         i = event.GetEventObject().GetSelection()
         self.netpads.clear()
+        self.classPanel.textNet.SetLabel('')
+        self.classPanel.choicePinStart.Clear()
+        self.classPanel.choicePinEnd.Clear()
         self.netpads.extend(self.model.classes[i].nets)
         for ind, ref in enumerate(self.references):
             if self.model.classes[i].start == ref:
