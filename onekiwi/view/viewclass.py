@@ -10,6 +10,12 @@ class ClassPanelView(ClassPanel):
     def SetEditClassName(self, text):
         self.editClass.SetValue(text)
 
+    def GetEditRename(self):
+        return self.editRename.GetValue()
+    
+    def SetEditRename(self, text):
+        self.editRename.SetValue(text)
+
     def AddItemChoiceClass(self, item):
         self.choiceClass.Append(item)
     
