@@ -65,14 +65,15 @@ class Model:
         for netclass in self.classes:
             item = {"name": netclass.name, "start": netclass.start, "end": netclass.end, "nets": []}
             for net in netclass.nets:
-                netdata = {"type": net.type, "name1": net.name1, "code1": net.code1, "ref1": net.ref1, "pad1": net.pad1,
-                            "name2": net.name2, "code2": net.code2, "ref2": net.ref2, "pad2": net.pad2,
-                            "xref": net.xref, "xpad1": net.xpad1, "xpad2": net.xpad2, "pad1s": [], "pad2s": []}
-                for pad1 in net.pad1s:
-                    netdata["pad1s"].append(pad1)
-                for pad2 in net.pad2s:
-                    netdata["pad2s"].append(pad2)
-                item["nets"].append(netdata)
+                if net.selected == True:
+                    netdata = {"type": net.type, "name1": net.name1, "code1": net.code1, "ref1": net.ref1, "pad1": net.pad1,
+                                "name2": net.name2, "code2": net.code2, "ref2": net.ref2, "pad2": net.pad2,
+                                "xref": net.xref, "xpad1": net.xpad1, "xpad2": net.xpad2, "pad1s": [], "pad2s": []}
+                    for pad1 in net.pad1s:
+                        netdata["pad1s"].append(pad1)
+                    for pad2 in net.pad2s:
+                        netdata["pad2s"].append(pad2)
+                    item["nets"].append(netdata)
             self.netclasses['netclasses'].append(item)
 
         path = self.export_to_json()

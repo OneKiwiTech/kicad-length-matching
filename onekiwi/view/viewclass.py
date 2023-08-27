@@ -27,8 +27,12 @@ class ClassPanelView(ClassPanel):
     def GetChoiceClassValue(self):
         ind = self.choiceClass.GetSelection()
         return str(self.choiceClass.GetString(ind))
+    
+    def SetChoiceClassValue(self, text):
+        ind = self.choiceClass.GetSelection()
+        self.choiceClass.SetString(ind, text)
 
-    def GetCChoiceClassSelection(self):
+    def GetChoiceClassSelection(self):
         return self.choiceClass.GetSelection()
 
     def UpdateReferenceFrom(self, classes):

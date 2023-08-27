@@ -38,7 +38,6 @@ class Controller:
         self.references = []
         self.classes = []
         self.temp:TempNetClass = TempNetClass()
-        self.netpads:List[NetData] = []
 
         self.logger = self.init_logger(self.view.textLog)
         self.model = Model(self.board, self.logger)
@@ -112,16 +111,16 @@ class Controller:
         for data in self.model.classes:
             self.classes.append(data.name)
         self.classPanel.UpdateChoiceClass(self.classes)
-        self.netpads.clear()
-        self.netpads.extend(self.model.classes[0].nets)
+        name = self.classPanel.GetChoiceClassValue()
+        self.classPanel.SetEditRename(name)
         for ind, ref in enumerate(self.references):
             if self.model.classes[0].start == ref:
                 self.classPanel.choiceReferenceFrom.SetSelection(ind)
             if self.model.classes[0].end == ref:
                 self.classPanel.choiceReferenceTo.SetSelection(ind)
-        for net in self.netpads:
+        for net in self.model.classes[0].nets:
             net.selected = True
-        self.UpadateClassTableLoadSetting(self.netpads)
+        self.UpadateClassTableLoadSetting(self.model.classes[0].nets)
 
     def OnSaveSetting(self, event):
         self.model.save_setting()
@@ -144,7 +143,7 @@ class Controller:
     def OnButtonClose(self, event):
         self.Close()
 
-    # Class
+    # Add New Class
     def OnAddClass(self, event):
         name = self.classPanel.GetEditClassName()
         if name != '':
@@ -170,6 +169,9 @@ class Controller:
 
         ref_start = self.board.FindFootprintByReference(ref1)
         ref_end = self.board.FindFootprintByReference(ref2)
+        i = self.classPanel.GetChoiceClassSelection()
+        self.model.classes[i].start = ref1
+        self.model.classes[i].end = ref2
         for pad1 in ref_start.Pads():
             name1 = str(pad1.GetNetname())
             code1 = self.board.GetNetcodeFromNetname(name1)
@@ -179,24 +181,23 @@ class Controller:
                 code2 = self.board.GetNetcodeFromNetname(name2)
                 pin2 = str(pad2.GetPadName())
                 if code1 == code2 and name2 not in power_names:
-                    if name2 not in [data.name1 for data in self.netpads]:
+                    if name2 not in [data.name1 for data in self.model.classes[i].nets]:
                         self.logger.info('Net %s', name2)
                         net = NetData('net', name2, str(code2), ref1, pin1, '', '', ref2, pin2, '', '', '')
                         net.pad1s.append(pin1)
                         net.pad2s.append(pin2)
-                        self.netpads.append(net)
+                        self.model.classes[i].nets.append(net)
                     else:
-                        for data in self.netpads:
+                        for data in self.model.classes[i].nets:
                             if data.code1 == str(code2):
                                 if pin1 not in data.pad1s:
                                     data.pad1s.append(pin1)
                                 if pin2 not in data.pad2s:
                                     data.pad2s.append(pin2)
 
-        self.netpads.sort(key=lambda x: x.name1)
-        self.UpadateClassTable(self.netpads, False)
+        self.model.classes[i].nets.sort(key=lambda x: x.name1)
+        self.UpadateClassTable(self.model.classes[i].nets, False)
         
-    
     def OnFilterFromChange(self, event):
         value = event.GetEventObject().GetValue()
         references = []
@@ -216,15 +217,20 @@ class Controller:
     def OnFilterNetChange(self, event):
         value = event.GetEventObject().GetValue()
         self.logger.info('OnFilterNetChange %s', value)
-        for net in self.netpads:
+        i = self.classPanel.GetChoiceClassSelection()
+        for net in self.model.classes[i].nets:
             if net.name1.rfind(value) != -1:
                 net.filter = True
             else:
                 net.filter = False
-        self.UpadateClassTable(self.netpads, True)
+        self.UpadateClassTable(self.model.classes[i].nets, True)
     
     def OnRenameClass(self, event):
         self.logger.info('OnRenameClass')
+        i = self.classPanel.GetChoiceClassSelection()
+        newname = self.classPanel.GetEditRename()
+        self.model.classes[i].name = newname
+        self.classPanel.SetChoiceClassValue(newname)
 
     def OnRemoveClass(self, event):
         self.logger.info('OnRemoveClass')
@@ -238,7 +244,8 @@ class Controller:
                 item.start = start
                 item.end = end
                 item.nets.clear()
-                for net in self.netpads:
+                i = self.classPanel.GetChoiceClassSelection()
+                for net in self.model.classes[i].nets:
                     if net.selected == True:
                         item.nets.append(net)
     
@@ -270,7 +277,8 @@ class Controller:
             code = event.GetEventObject().GetTextValue(row, 3)
             selected = self.classPanel.dataViewClass.GetToggleValue(row, 1)
             print(selected)
-            for net in self.netpads:
+            i = self.classPanel.GetChoiceClassSelection()
+            for net in self.model.classes[i].nets:
                 if code == net.code1:
                     net.selected = selected
     
@@ -282,7 +290,8 @@ class Controller:
             code = event.GetEventObject().GetTextValue(row, 3)
             selected = event.GetEventObject().GetToggleValue(row, 1)
             print(selected)
-            for net in self.netpads:
+            i = self.classPanel.GetChoiceClassSelection()
+            for net in self.model.classes[i].nets:
                 if code == net.code1:
                     net.selected = selected
 
@@ -292,7 +301,8 @@ class Controller:
         name = event.GetEventObject().GetTextValue(row, 2)
         code = event.GetEventObject().GetTextValue(row, 3)
         self.classPanel.textNet.SetLabel(name)
-        for net in self.netpads:
+        i = self.classPanel.GetChoiceClassSelection()
+        for net in self.model.classes[i].nets:
             if code == net.code1:
                 self.temp.set(row, name, code, net.pad1, net.pad2, net.ipad1, net.ipad2)
                 self.classPanel.choicePinStart.Clear()
@@ -305,19 +315,20 @@ class Controller:
     def OnChoiceClass(self, event):
         self.logger.info('OnChoiceClass')
         i = event.GetEventObject().GetSelection()
-        self.netpads.clear()
+        name = self.classPanel.GetChoiceClassValue()
+        self.classPanel.SetEditRename(name)
         self.classPanel.textNet.SetLabel('')
         self.classPanel.choicePinStart.Clear()
         self.classPanel.choicePinEnd.Clear()
-        self.netpads.extend(self.model.classes[i].nets)
         for ind, ref in enumerate(self.references):
             if self.model.classes[i].start == ref:
                 self.classPanel.choiceReferenceFrom.SetSelection(ind)
             if self.model.classes[i].end == ref:
                 self.classPanel.choiceReferenceTo.SetSelection(ind)
-        for net in self.netpads:
+        i = self.classPanel.GetChoiceClassSelection()
+        for net in self.model.classes[i].nets:
             net.selected = True
-        self.UpadateClassTableLoadSetting(self.netpads)
+        self.UpadateClassTableLoadSetting(self.model.classes[i].nets)
 
     def OnChoiceReferenceFrom(self, event):
         self.logger.info('OnChoiceReferenceFrom')
@@ -326,21 +337,25 @@ class Controller:
         self.logger.info('OnChoiceReferenceTo')
     
     def OnChoiceReferenceStart(self, event):
+        self.logger.info('OnChoiceReferenceStart')
         ind = event.GetEventObject().GetSelection()
         pad = str(event.GetEventObject().GetString(ind))
         self.temp.set1(pad, ind)
         self.classPanel.dataViewClass.SetTextValue(pad, self.temp.row, 4)
-        for net in self.netpads:
+        i = self.classPanel.GetChoiceClassSelection()
+        for net in self.model.classes[i].nets:
             if self.temp.code == net.code1:
                 net.pad1 = pad
                 net.ipad1 = ind
 
     def OnChoiceReferenceEnd(self, event):
+        self.logger.info('OnChoiceReferenceEnd')
         ind = event.GetEventObject().GetSelection()
         pad = str(event.GetEventObject().GetString(ind))
         self.temp.set2(pad, ind)
         self.classPanel.dataViewClass.SetTextValue(pad, self.temp.row, 5)
-        for net in self.netpads:
+        i = self.classPanel.GetChoiceClassSelection()
+        for net in self.model.classes[i].nets:
             if self.temp.code == net.code1:
                 net.pad2 = pad
                 net.ipad2 = ind

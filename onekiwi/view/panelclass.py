@@ -148,7 +148,7 @@ class ClassPanel ( wx.Panel ):
 
 		bSizer31.Add( self.m_staticText14, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-		self.textNet = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"MyLabel", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.textNet = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.textNet.Wrap( -1 )
 
 		bSizer31.Add( self.textNet, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
