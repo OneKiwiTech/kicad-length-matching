@@ -3,6 +3,7 @@ import json
 from ..kicad.board import *
 from typing import List
 from .net import NetData
+from .net import NetExtendedData
 
 class NetClass:
     def __init__(self, name, start, end):
@@ -10,6 +11,7 @@ class NetClass:
         self.start = start
         self.end = end
         self.nets:List[NetData] = []
+        self.xnets:List[NetExtendedData] = []
 
 class Model:
     def __init__(self, board, logger):
@@ -50,9 +52,8 @@ class Model:
             for jsonclass in data['netclasses']:
                 netclass = NetClass(jsonclass['name'], jsonclass['start'], jsonclass['end'])
                 for jsonnet in jsonclass['nets']:
-                    net = NetData(jsonnet['type'], jsonnet['name1'], jsonnet['code1'], jsonnet['ref1'], jsonnet['pad1'], 
-                        jsonnet['name2'], jsonnet['code2'], jsonnet['ref2'], jsonnet['pad2'],
-                        jsonnet['xref'], jsonnet['xpad1'], jsonnet['xpad2'])
+                    net = NetData(jsonnet['name'], jsonnet['code'], jsonnet['ref1'], jsonnet['pad1'], 
+                        jsonnet['ref2'], jsonnet['pad2'])
                     for jsonpad1 in jsonnet['pad1s']:
                         net.pad1s.append(jsonpad1)
                     for jsonpad2 in jsonnet['pad2s']:
@@ -66,9 +67,8 @@ class Model:
             item = {"name": netclass.name, "start": netclass.start, "end": netclass.end, "nets": []}
             for net in netclass.nets:
                 if net.selected == True:
-                    netdata = {"type": net.type, "name1": net.name1, "code1": net.code1, "ref1": net.ref1, "pad1": net.pad1,
-                                "name2": net.name2, "code2": net.code2, "ref2": net.ref2, "pad2": net.pad2,
-                                "xref": net.xref, "xpad1": net.xpad1, "xpad2": net.xpad2, "pad1s": [], "pad2s": []}
+                    netdata = {"name": net.name, "code": net.code, "ref1": net.ref1, "pad1": net.pad1,
+                                "ref2": net.ref2, "pad2": net.pad2, "pad1s": [], "pad2s": []}
                     for pad1 in net.pad1s:
                         netdata["pad1s"].append(pad1)
                     for pad2 in net.pad2s:

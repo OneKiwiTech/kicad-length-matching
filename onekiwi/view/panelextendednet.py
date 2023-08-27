@@ -9,7 +9,7 @@
 
 import wx
 import wx.xrc
-import wx.dataview
+import wx.grid
 
 ###########################################################################
 ## Class ExtendedNetPanel
@@ -171,8 +171,38 @@ class ExtendedNetPanel ( wx.Panel ):
 
 		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.dataViewxNet = wx.dataview.DataViewListCtrl( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer20.Add( self.dataViewxNet, 1, wx.ALL|wx.EXPAND, 5 )
+		self.gridxNet = wx.grid.Grid( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+
+		# Grid
+		self.gridxNet.CreateGrid( 0, 7 )
+		self.gridxNet.EnableEditing( True )
+		self.gridxNet.EnableGridLines( True )
+		self.gridxNet.EnableDragGridSize( False )
+		self.gridxNet.SetMargins( 0, 0 )
+
+		# Columns
+		self.gridxNet.EnableDragColMove( False )
+		self.gridxNet.EnableDragColSize( True )
+		self.gridxNet.SetColLabelValue( 0, u"Selectet" )
+		self.gridxNet.SetColLabelValue( 1, u"Start1" )
+		self.gridxNet.SetColLabelValue( 2, u"Name1" )
+		self.gridxNet.SetColLabelValue( 3, u"End1" )
+		self.gridxNet.SetColLabelValue( 4, u"Start2" )
+		self.gridxNet.SetColLabelValue( 5, u"Name2" )
+		self.gridxNet.SetColLabelValue( 6, u"End2" )
+		self.gridxNet.SetColLabelValue( 7, wx.EmptyString )
+		self.gridxNet.SetColLabelValue( 8, wx.EmptyString )
+		self.gridxNet.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+
+		# Rows
+		self.gridxNet.EnableDragRowSize( True )
+		self.gridxNet.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+
+		# Label Appearance
+
+		# Cell Defaults
+		self.gridxNet.SetDefaultCellAlignment( wx.ALIGN_CENTER, wx.ALIGN_TOP )
+		bSizer20.Add( self.gridxNet, 0, wx.ALL, 5 )
 
 
 		sbSizer4.Add( bSizer20, 1, wx.EXPAND, 5 )

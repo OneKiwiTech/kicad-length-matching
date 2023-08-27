@@ -69,6 +69,11 @@ class Controller:
         self.classPanel.buttonRemoveClass.Bind(wx.EVT_BUTTON, self.OnRemoveClass)
         self.classPanel.buttonUpdateClass.Bind(wx.EVT_BUTTON, self.OnUpdateClass)
         self.classPanel.editNet.Bind(wx.EVT_TEXT, self.OnFilterNetChange)
+
+        self.xNetPanel.editFilter.Bind(wx.EVT_TEXT, self.OnFilterReference)
+        self.xNetPanel.choiceClass.Bind(wx.EVT_CHOICE, self.OnChoiceClassxNet)
+        self.xNetPanel.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdatexNet)
+
         
     def Show(self):
         self.view.Show()
@@ -103,6 +108,7 @@ class Controller:
         self.references.sort()
         self.classPanel.UpdateReferenceFrom(self.references)
         self.classPanel.UpdateReferenceTo(self.references)
+        self.xNetPanel.UpdateReference(self.references)
 
     def OnLoadSetting(self, event):
         self.model.get_json_data()
@@ -110,13 +116,16 @@ class Controller:
         for data in self.model.classes:
             self.classes.append(data.name)
         self.classPanel.UpdateChoiceClass(self.classes)
+        self.xNetPanel.UpdateClassName(self.classes)
         name = self.classPanel.GetChoiceClassValue()
         self.classPanel.SetEditRename(name)
         for ind, ref in enumerate(self.references):
             if self.model.classes[0].start == ref:
                 self.classPanel.choiceReferenceFrom.SetSelection(ind)
+                self.xNetPanel.textFrom.SetLabel(ref)
             if self.model.classes[0].end == ref:
                 self.classPanel.choiceReferenceTo.SetSelection(ind)
+                self.xNetPanel.textTo.SetLabel(ref)
         for net in self.model.classes[0].nets:
             net.selected = True
         self.UpadateClassTableLoadSetting(self.model.classes[0].nets)
@@ -182,21 +191,22 @@ class Controller:
                 code2 = self.board.GetNetcodeFromNetname(name2)
                 pin2 = str(pad2.GetPadName())
                 if code1 == code2 and name2 not in power_names:
-                    if name2 not in [data.name1 for data in self.model.classes[i].nets]:
+                    if name2 not in [data.name for data in self.model.classes[i].nets]:
                         self.logger.info('Net %s', name2)
-                        net = NetData('net', name2, str(code2), ref1, pin1, '', '', ref2, pin2, '', '', '')
+                        net = NetData(name2, str(code2), ref1, pin1, ref2, pin2)
+                        #net = NetData('net', name2, str(code2), ref1, pin1, '', '', ref2, pin2, '', '', '')
                         net.pad1s.append(pin1)
                         net.pad2s.append(pin2)
                         self.model.classes[i].nets.append(net)
                     else:
                         for data in self.model.classes[i].nets:
-                            if data.code1 == str(code2):
+                            if data.code == str(code2):
                                 if pin1 not in data.pad1s:
                                     data.pad1s.append(pin1)
                                 if pin2 not in data.pad2s:
                                     data.pad2s.append(pin2)
 
-        self.model.classes[i].nets.sort(key=lambda x: x.name1)
+        self.model.classes[i].nets.sort(key=lambda x: x.name)
         self.UpadateClassTable(self.model.classes[i].nets, False)
     
     #editFrom
@@ -264,20 +274,20 @@ class Controller:
         if filter == True:
             for index, item in enumerate(nets, start=1):
                 if item.selected == True:
-                    self.classPanel.dataViewClass.AppendItem([str(index), True, item.name1, item.code1, item.pad1, item.pad2])
+                    self.classPanel.dataViewClass.AppendItem([str(index), True, item.name, item.code, item.pad1, item.pad2])
                 elif item.filter == True:
-                    self.classPanel.dataViewClass.AppendItem([str(index), False, item.name1, item.code1, item.pad1, item.pad2])
+                    self.classPanel.dataViewClass.AppendItem([str(index), False, item.name, item.code, item.pad1, item.pad2])
         else:
             for index, item in enumerate(nets, start=1):
                 if item.selected == True:
-                    self.classPanel.dataViewClass.AppendItem([str(index), True, item.name1, item.code1, item.pad1, item.pad2])
+                    self.classPanel.dataViewClass.AppendItem([str(index), True, item.name, item.code, item.pad1, item.pad2])
                 else:
-                    self.classPanel.dataViewClass.AppendItem([str(index), False, item.name1, item.code1, item.pad1, item.pad2])
+                    self.classPanel.dataViewClass.AppendItem([str(index), False, item.name, item.code, item.pad1, item.pad2])
         
     def UpadateClassTableLoadSetting(self, nets):
         self.classPanel.dataViewClass.DeleteAllItems()
         for index, item in enumerate(nets, start=1):
-            self.classPanel.dataViewClass.AppendItem([str(index), True, item.name1, item.code1, item.pad1, item.pad2])
+            self.classPanel.dataViewClass.AppendItem([str(index), True, item.name, item.code, item.pad1, item.pad2])
 
     def TableClassOnValueChanged(self, event):
         self.logger.info('TableClassOnValueChanged')
@@ -289,7 +299,7 @@ class Controller:
             print(selected)
             i = self.classPanel.GetChoiceClassSelection()
             for net in self.model.classes[i].nets:
-                if code == net.code1:
+                if code == net.code:
                     net.selected = selected
     
     def TableClassOnSectionChanged(self, event):
@@ -302,7 +312,7 @@ class Controller:
             print(selected)
             i = self.classPanel.GetChoiceClassSelection()
             for net in self.model.classes[i].nets:
-                if code == net.code1:
+                if code == net.code:
                     net.selected = selected
 
     def TableClassOnLeftDClick(self, event):
@@ -313,7 +323,7 @@ class Controller:
         self.classPanel.textNet.SetLabel(name)
         i = self.classPanel.GetChoiceClassSelection()
         for net in self.model.classes[i].nets:
-            if code == net.code1:
+            if code == net.code:
                 self.temp.set(row, name, code, net.pad1, net.pad2, net.ipad1, net.ipad2)
                 self.classPanel.choicePinStart.Clear()
                 self.classPanel.choicePinStart.Append(net.pad1s)
@@ -354,7 +364,7 @@ class Controller:
         self.classPanel.dataViewClass.SetTextValue(pad, self.temp.row, 4)
         i = self.classPanel.GetChoiceClassSelection()
         for net in self.model.classes[i].nets:
-            if self.temp.code == net.code1:
+            if self.temp.code == net.code:
                 net.pad1 = pad
                 net.ipad1 = ind
 
@@ -366,8 +376,59 @@ class Controller:
         self.classPanel.dataViewClass.SetTextValue(pad, self.temp.row, 5)
         i = self.classPanel.GetChoiceClassSelection()
         for net in self.model.classes[i].nets:
-            if self.temp.code == net.code1:
+            if self.temp.code == net.code:
                 net.pad2 = pad
                 net.ipad2 = ind
     
     ### Tab2: Extended Net ###
+
+    def OnChoiceClassxNet(self, event):
+        self.logger.info('OnChoiceClassxNet')
+        i = event.GetEventObject().GetSelection()
+        for ref in self.references:
+            if self.model.classes[i].start == ref:
+                self.xNetPanel.textFrom.SetLabel(ref)
+            if self.model.classes[i].end == ref:
+                self.xNetPanel.textTo.SetLabel(ref)
+
+    def OnFilterReference(self, event):
+        value = event.GetEventObject().GetValue()
+        references = []
+        for item in self.references:
+            if item.rfind(value) != -1:
+                references.append(item)
+        self.xNetPanel.UpdateReference(references)
+    
+    def OnUpdatexNet(self, event):
+        self.logger.info('OnUpdatexNet')
+        if len(self.classes) < 1:
+            self.logger.info('Please create class name')
+            return
+        
+        start = str(self.xNetPanel.textFrom.GetLabel())
+        end = str(self.xNetPanel.textTo.GetLabel())
+        mid = self.xNetPanel.GetChoiceReferenceValue()
+        self.logger.info('start: %s, mid: %s, end: %s', start, mid, end)
+
+        power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
+
+        ref_start = self.board.FindFootprintByReference(start)
+        ref_end = self.board.FindFootprintByReference(end)
+        ref_mid = self.board.FindFootprintByReference(mid)
+        
+        for pad in ref_mid.Pads():
+            name = str(pad.GetNetname())
+            code = self.board.GetNetcodeFromNetname(name)
+            pin = str(pad.GetPadName())
+            for pad1 in ref_start.Pads():
+                name1 = str(pad1.GetNetname())
+                code1 = self.board.GetNetcodeFromNetname(name1)
+                pin1 = str(pad1.GetPadName())
+                if code == code1:
+                    self.logger.info('Net: %s, %s.%s - %s.%s', name, start, pin1, mid, pin)
+            for pad2 in ref_end.Pads():
+                name2 = str(pad2.GetNetname())
+                code2 = self.board.GetNetcodeFromNetname(name2)
+                pin2 = str(pad2.GetPadName())
+                if code == code2:
+                    self.logger.info('Net: %s, %s.%s - %s.%s', name, mid, pin, end, pin2)
