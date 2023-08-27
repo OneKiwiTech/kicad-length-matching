@@ -234,6 +234,14 @@ class Controller:
 
     def OnRemoveClass(self, event):
         self.logger.info('OnRemoveClass')
+        i = self.classPanel.GetChoiceClassSelection()
+        self.model.classes.pop(i)
+        self.classes.clear()
+        for data in self.model.classes:
+            self.classes.append(data.name)
+        self.classPanel.UpdateChoiceClass(self.classes)
+        name = self.classPanel.GetChoiceClassValue()
+        self.classPanel.SetEditRename(name)
 
     def OnUpdateClass(self, event):
         name = self.classPanel.GetChoiceClassValue()
