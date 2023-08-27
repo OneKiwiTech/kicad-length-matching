@@ -70,7 +70,6 @@ class Controller:
         self.classPanel.buttonUpdateClass.Bind(wx.EVT_BUTTON, self.OnUpdateClass)
         self.classPanel.editNet.Bind(wx.EVT_TEXT, self.OnFilterNetChange)
         
-
     def Show(self):
         self.view.Show()
     
@@ -143,7 +142,8 @@ class Controller:
     def OnButtonClose(self, event):
         self.Close()
 
-    # Add New Class
+    ### Tab1: Classes ###
+    # button Add Class
     def OnAddClass(self, event):
         name = self.classPanel.GetEditClassName()
         if name != '':
@@ -158,6 +158,7 @@ class Controller:
         else:
             self.logger.info('Please enter name!')
     
+    # button Update Net
     def OnUpdateNet(self, event):
         if len(self.classes) < 1:
             self.logger.info('Please create class name')
@@ -197,7 +198,8 @@ class Controller:
 
         self.model.classes[i].nets.sort(key=lambda x: x.name1)
         self.UpadateClassTable(self.model.classes[i].nets, False)
-        
+    
+    #editFrom
     def OnFilterFromChange(self, event):
         value = event.GetEventObject().GetValue()
         references = []
@@ -367,3 +369,5 @@ class Controller:
             if self.temp.code == net.code1:
                 net.pad2 = pad
                 net.ipad2 = ind
+    
+    ### Tab2: Extended Net ###
