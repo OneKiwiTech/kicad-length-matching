@@ -1,5 +1,6 @@
 from ..model.model import Model
 from ..model.temp import TempNetClass
+from ..model.temp import TempxNet
 from ..model.net import NetData
 from ..model.model import NetClass
 from ..view.view import *
@@ -39,6 +40,9 @@ class Controller:
         self.classes = []
         self.temp:TempNetClass = TempNetClass()
 
+        self.xnets:List[TempxNet] = []
+        self.xnete:List[TempxNet] = []
+
         self.logger = self.init_logger(self.view.textLog)
         self.model = Model(self.board, self.logger)
         self.GetReference()
@@ -73,6 +77,9 @@ class Controller:
         self.xNetPanel.editFilter.Bind(wx.EVT_TEXT, self.OnFilterReference)
         self.xNetPanel.choiceClass.Bind(wx.EVT_CHOICE, self.OnChoiceClassxNet)
         self.xNetPanel.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdatexNet)
+
+        self.xNetPanel.choiceNetName1.Bind(wx.EVT_CHOICE, self.OnChoiceNetNameStart)
+        self.xNetPanel.choiceNetName2.Bind(wx.EVT_CHOICE, self.OnChoiceNetNameEnd)
 
         
     def Show(self):
@@ -410,25 +417,91 @@ class Controller:
         mid = self.xNetPanel.GetChoiceReferenceValue()
         self.logger.info('start: %s, mid: %s, end: %s', start, mid, end)
 
-        power_names = ['GND', 'GNDA', 'GNDD', 'Earth', 'VSS', 'VSSA', 'VCC', 'VDD', 'VBUS']
-
         ref_start = self.board.FindFootprintByReference(start)
         ref_end = self.board.FindFootprintByReference(end)
         ref_mid = self.board.FindFootprintByReference(mid)
         
         for pad in ref_mid.Pads():
             name = str(pad.GetNetname())
-            code = self.board.GetNetcodeFromNetname(name)
+            code = str(self.board.GetNetcodeFromNetname(name))
             pin = str(pad.GetPadName())
             for pad1 in ref_start.Pads():
                 name1 = str(pad1.GetNetname())
-                code1 = self.board.GetNetcodeFromNetname(name1)
+                code1 = str(self.board.GetNetcodeFromNetname(name1))
                 pin1 = str(pad1.GetPadName())
                 if code == code1:
-                    self.logger.info('Net: %s, %s.%s - %s.%s', name, start, pin1, mid, pin)
+                    if code not in [net.code for net in self.xnets]:
+                        self.xnets.append(TempxNet(name, code, start, pin1, mid, pin))
+                    else:
+                        for xnet in self.xnets:
+                            if xnet.code == code:
+                                if pin1 not in xnet.pad1s:
+                                    xnet.add_dis1(start, pin1)
+                                if pin not in xnet.pad2s:
+                                    xnet.add_dis2(mid, pin)
+
             for pad2 in ref_end.Pads():
                 name2 = str(pad2.GetNetname())
-                code2 = self.board.GetNetcodeFromNetname(name2)
+                code2 = str(self.board.GetNetcodeFromNetname(name2))
                 pin2 = str(pad2.GetPadName())
                 if code == code2:
-                    self.logger.info('Net: %s, %s.%s - %s.%s', name, mid, pin, end, pin2)
+                    if code not in [net.code for net in self.xnete]:
+                        self.xnete.append(TempxNet(name, code, mid, pin, end, pin2))
+                    else:
+                        for xnet in self.xnete:
+                            if xnet.code == code:
+                                if pin not in xnet.pad1s:
+                                    xnet.add_dis1(mid, pin)
+                                if pin2 not in xnet.pad2s:
+                                    xnet.add_dis2(end, pin2)
+        
+        self.xnets.sort(key=lambda x: x.name)
+        self.xnete.sort(key=lambda x: x.name)
+        names1 = []
+        names2 = []
+        pad1s = []
+        pad1e = []
+        pad2s = []
+        pad2e = []
+        for s in self.xnets:
+            names1.append(s.name)
+        for e in self.xnete:
+            names2.append(e.name)
+        for pad in self.xnets[0].dis1s:
+            pad1s.append(pad)
+        for pad in self.xnets[0].dis2s:
+            pad1e.append(pad)
+        for pad in self.xnete[0].dis1s:
+            pad2s.append(pad)
+        for pad in self.xnete[0].dis2s:
+            pad2e.append(pad)
+        self.xNetPanel.UpdateNetNameStart(names1)
+        self.xNetPanel.UpdateNetNameEnd(names2)
+        self.xNetPanel.UpdateNetPad1Start(pad1s)
+        self.xNetPanel.UpdateNetPad1End(pad1e)
+        self.xNetPanel.UpdateNetPad2Start(pad2s)
+        self.xNetPanel.UpdateNetPad2End(pad2e)
+    
+    def OnChoiceNetNameStart(self, event):
+        self.logger.info('OnChoiceNetNameStart')
+        ind = event.GetEventObject().GetSelection()
+        pad1s = []
+        pad1e = []
+        for pad in self.xnets[ind].dis1s:
+            pad1s.append(pad)
+        for pad in self.xnets[ind].dis2s:
+            pad1e.append(pad)
+        self.xNetPanel.UpdateNetPad1Start(pad1s)
+        self.xNetPanel.UpdateNetPad1End(pad1e)
+    
+    def OnChoiceNetNameEnd(self, event):
+        self.logger.info('OnChoiceNetNameEnd')
+        ind = event.GetEventObject().GetSelection()
+        pad2s = []
+        pad2e = []
+        for pad in self.xnete[ind].dis1s:
+            pad2s.append(pad)
+        for pad in self.xnete[ind].dis2s:
+            pad2e.append(pad)
+        self.xNetPanel.UpdateNetPad2Start(pad2s)
+        self.xNetPanel.UpdateNetPad2End(pad2e)

@@ -9,7 +9,7 @@
 
 import wx
 import wx.xrc
-import wx.grid
+import wx.dataview
 
 ###########################################################################
 ## Class ExtendedNetPanel
@@ -101,15 +101,15 @@ class ExtendedNetPanel ( wx.Panel ):
 
 		bSizer35 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText24 = wx.StaticText( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Primary Net:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText24 = wx.StaticText( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Primary Net:     ", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText24.Wrap( -1 )
 
 		bSizer35.Add( self.m_staticText24, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-		self.textNet1 = wx.StaticText( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.textNet1.Wrap( -1 )
-
-		bSizer35.Add( self.textNet1, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		choiceNetName1Choices = []
+		self.choiceNetName1 = wx.Choice( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choiceNetName1Choices, 0 )
+		self.choiceNetName1.SetSelection( 0 )
+		bSizer35.Add( self.choiceNetName1, 1, wx.ALL, 5 )
 
 		self.m_staticText27 = wx.StaticText( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Start:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText27.Wrap( -1 )
@@ -141,10 +141,10 @@ class ExtendedNetPanel ( wx.Panel ):
 
 		bSizer39.Add( self.m_staticText28, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-		self.textNet2 = wx.StaticText( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.textNet2.Wrap( -1 )
-
-		bSizer39.Add( self.textNet2, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		choiceNetName2Choices = []
+		self.choiceNetName2 = wx.Choice( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, choiceNetName2Choices, 0 )
+		self.choiceNetName2.SetSelection( 0 )
+		bSizer39.Add( self.choiceNetName2, 1, wx.ALL, 5 )
 
 		self.m_staticText30 = wx.StaticText( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Start:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText30.Wrap( -1 )
@@ -169,54 +169,24 @@ class ExtendedNetPanel ( wx.Panel ):
 
 		sbSizer4.Add( bSizer39, 0, wx.ALL|wx.EXPAND, 5 )
 
-		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
-
-		self.gridxNet = wx.grid.Grid( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
-
-		# Grid
-		self.gridxNet.CreateGrid( 0, 7 )
-		self.gridxNet.EnableEditing( True )
-		self.gridxNet.EnableGridLines( True )
-		self.gridxNet.EnableDragGridSize( False )
-		self.gridxNet.SetMargins( 0, 0 )
-
-		# Columns
-		self.gridxNet.EnableDragColMove( False )
-		self.gridxNet.EnableDragColSize( True )
-		self.gridxNet.SetColLabelValue( 0, u"Selectet" )
-		self.gridxNet.SetColLabelValue( 1, u"Start1" )
-		self.gridxNet.SetColLabelValue( 2, u"Name1" )
-		self.gridxNet.SetColLabelValue( 3, u"End1" )
-		self.gridxNet.SetColLabelValue( 4, u"Start2" )
-		self.gridxNet.SetColLabelValue( 5, u"Name2" )
-		self.gridxNet.SetColLabelValue( 6, u"End2" )
-		self.gridxNet.SetColLabelValue( 7, wx.EmptyString )
-		self.gridxNet.SetColLabelValue( 8, wx.EmptyString )
-		self.gridxNet.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
-
-		# Rows
-		self.gridxNet.EnableDragRowSize( True )
-		self.gridxNet.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
-
-		# Label Appearance
-
-		# Cell Defaults
-		self.gridxNet.SetDefaultCellAlignment( wx.ALIGN_CENTER, wx.ALIGN_TOP )
-		bSizer20.Add( self.gridxNet, 0, wx.ALL, 5 )
-
-
-		sbSizer4.Add( bSizer20, 1, wx.EXPAND, 5 )
-
 		bSizer40 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_button14 = wx.Button( sbSizer4.GetStaticBox(), wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer40.Add( self.m_button14, 0, wx.ALL, 5 )
+		self.buttonAddxNet = wx.Button( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Add xNet", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer40.Add( self.buttonAddxNet, 0, wx.ALL, 5 )
 
-		self.m_button15 = wx.Button( sbSizer4.GetStaticBox(), wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer40.Add( self.m_button15, 0, wx.ALL, 5 )
+		self.buttonRemovexNet = wx.Button( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Remove xNet", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer40.Add( self.buttonRemovexNet, 0, wx.ALL, 5 )
 
 
 		sbSizer4.Add( bSizer40, 0, wx.EXPAND, 5 )
+
+		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_dataViewListCtrl2 = wx.dataview.DataViewListCtrl( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer20.Add( self.m_dataViewListCtrl2, 1, wx.ALL, 5 )
+
+
+		sbSizer4.Add( bSizer20, 1, wx.EXPAND, 5 )
 
 
 		bSizer22.Add( sbSizer4, 1, wx.ALL|wx.EXPAND, 5 )
