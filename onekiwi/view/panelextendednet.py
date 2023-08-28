@@ -75,7 +75,7 @@ class ExtendedNetPanel ( wx.Panel ):
 
 		bSizer18 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText10 = wx.StaticText( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Filter:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText10 = wx.StaticText( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Filter Reference:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText10.Wrap( -1 )
 
 		bSizer18.Add( self.m_staticText10, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )

@@ -63,7 +63,7 @@ class ClassPanel ( wx.Panel ):
 
 		bSizer15 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.textFilterFrom = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Filter:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.textFilterFrom = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Filter From:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.textFilterFrom.Wrap( -1 )
 
 		bSizer15.Add( self.textFilterFrom, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
@@ -76,7 +76,7 @@ class ClassPanel ( wx.Panel ):
 
 		bSizer16 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.textFilterTo = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Filter:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.textFilterTo = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Filter To:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.textFilterTo.Wrap( -1 )
 
 		bSizer16.Add( self.textFilterTo, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )

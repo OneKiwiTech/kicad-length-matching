@@ -48,6 +48,8 @@ class Controller:
         self.GetReference()
 
         # Connect Events
+        self.view.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnNotebookPageChage)
+
         self.view.buttonLoadSetting.Bind(wx.EVT_BUTTON, self.OnLoadSetting)
         self.view.buttonSaveSetting.Bind(wx.EVT_BUTTON, self.OnSaveSetting)
         self.view.buttonUpdateLength.Bind(wx.EVT_BUTTON, self.OnUpdateLength)
@@ -118,6 +120,24 @@ class Controller:
         self.classPanel.UpdateReferenceFrom(self.references)
         self.classPanel.UpdateReferenceTo(self.references)
         self.xNetPanel.UpdateReference(self.references)
+
+    def OnNotebookPageChage(self, event):
+        self.logger.info('OnNotebookPageChage')
+        page = event.GetEventObject().GetSelection()
+        # Page Class
+        if page == 0:
+            self.logger.info('Page Class')
+        # Page Extended Net
+        elif page == 1:
+            self.logger.info('Page Extended Net')
+        # Page Setting
+        elif page == 2:
+            self.logger.info('Page Setting')
+        # Page Display
+        elif page == 3:
+            self.logger.info('Page Display')
+        else:
+            self.logger.info('Error')
 
     def OnLoadSetting(self, event):
         self.model.get_json_data()
@@ -394,12 +414,14 @@ class Controller:
 
     def OnChoiceClassxNet(self, event):
         self.logger.info('OnChoiceClassxNet')
+        #self.xNetPanel.dataViewxNet.DeleteAllItems()
         i = event.GetEventObject().GetSelection()
         for ref in self.references:
             if self.model.classes[i].start == ref:
                 self.xNetPanel.textFrom.SetLabel(ref)
             if self.model.classes[i].end == ref:
                 self.xNetPanel.textTo.SetLabel(ref)
+        self.UpadatexNetTable()
 
     def OnFilterReference(self, event):
         value = event.GetEventObject().GetValue()
@@ -554,13 +576,20 @@ class Controller:
         self.xNetPanel.dataViewxNet.AppendItem([str(count), start1, name1, end1, start2, name2, end2])
         xnet = NetExtendedData(name1, code1, ref1, pad1, name2, code2, ref2, pad2, xref, xpad1, xpad2)
         self.model.classes[i].xnets.append(xnet)
-        # DeleteItem
-        # DeleteAllItems
-        # GetItemCount
     
     def UpadatexNetTableLoadSetting(self, xnets):
         self.xNetPanel.dataViewxNet.DeleteAllItems()
         for index, item in enumerate(xnets, start=1):
+            pad1s = item.ref1+'.'+item.pad1
+            pad1e = item.xref+'.'+item.xpad1
+            pad2s = item.xref+'.'+item.xpad2
+            pad2e = item.ref2+'.'+item.pad2
+            self.xNetPanel.dataViewxNet.AppendItem([str(index), pad1s, item.name1, pad1e, pad2s, item.name2, pad2e])
+
+    def UpadatexNetTable(self):
+        self.xNetPanel.dataViewxNet.DeleteAllItems()
+        i = self.xNetPanel.choiceClass.GetSelection()
+        for index, item in enumerate(self.model.classes[i].xnets, start=1):
             pad1s = item.ref1+'.'+item.pad1
             pad1e = item.xref+'.'+item.xpad1
             pad2s = item.xref+'.'+item.xpad2
