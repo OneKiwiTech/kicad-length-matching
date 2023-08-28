@@ -137,6 +137,7 @@ class Controller:
         for net in self.model.classes[0].nets:
             net.selected = True
         self.UpadateClassTableLoadSetting(self.model.classes[0].nets)
+        self.UpadatexNetTableLoadSetting(self.model.classes[0].xnets)
 
     def OnSaveSetting(self, event):
         self.model.save_setting()
@@ -536,10 +537,20 @@ class Controller:
         ref2 = self.xnete[iname2].ref2
         pad2 = self.xnete[iname2].pad2s[iend2]
         xpad2 = self.xnete[iname2].pad1s[iend1]
+        count = self.xNetPanel.dataViewxNet.GetItemCount() + 1
 
-        self.xNetPanel.dataViewxNet.AppendItem([str(0), start1, name1, end1, start2, name2, end2])
+        self.xNetPanel.dataViewxNet.AppendItem([str(count), start1, name1, end1, start2, name2, end2])
         xnet = NetExtendedData(name1, code1, ref1, pad1, name2, code2, ref2, pad2, xref, xpad1, xpad2)
         self.model.classes[i].xnets.append(xnet)
         # DeleteItem
         # DeleteAllItems
         # GetItemCount
+    
+    def UpadatexNetTableLoadSetting(self, xnets):
+        self.xNetPanel.dataViewxNet.DeleteAllItems()
+        for index, item in enumerate(xnets, start=1):
+            pad1s = item.ref1+'.'+item.pad1
+            pad1e = item.xref+'.'+item.xpad1
+            pad2s = item.xref+'.'+item.xpad2
+            pad2e = item.ref2+'.'+item.pad2
+            self.xNetPanel.dataViewxNet.AppendItem([str(index), pad1s, item.name1, pad1e, pad2s, item.name2, pad2e])
