@@ -81,6 +81,7 @@ class Controller:
         
         self.xNetPanel.choiceNetName1.Bind(wx.EVT_CHOICE, self.OnChoiceNetNameStart)
         self.xNetPanel.choiceNetName2.Bind(wx.EVT_CHOICE, self.OnChoiceNetNameEnd)
+        self.xNetPanel.dataViewxNet.Bind(wx.EVT_LEFT_DCLICK, self.OnxNetOnLeftDClick)
 
         
     def Show(self):
@@ -510,7 +511,14 @@ class Controller:
             pad2e.append(pad)
         self.xNetPanel.UpdateNetPad2Start(pad2s)
         self.xNetPanel.UpdateNetPad2End(pad2e)
-    
+
+    def OnxNetOnLeftDClick(self, event):
+        self.logger.info('OnxNetOnLeftDClick')
+        i = self.xNetPanel.choiceClass.GetSelection()
+        row = event.GetEventObject().GetSelectedRow()
+        self.xNetPanel.dataViewxNet.DeleteItem(row)
+        self.model.classes[i].xnets.pop(row)
+
     def OnAddxNet(self, event):
         self.logger.info('OnAddxNet')
         i = self.xNetPanel.choiceClass.GetSelection()

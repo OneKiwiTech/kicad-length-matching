@@ -174,8 +174,10 @@ class ExtendedNetPanel ( wx.Panel ):
 		self.buttonAddxNet = wx.Button( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Add xNet", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer40.Add( self.buttonAddxNet, 0, wx.ALL, 5 )
 
-		self.buttonRemovexNet = wx.Button( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Remove xNet", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer40.Add( self.buttonRemovexNet, 0, wx.ALL, 5 )
+		self.m_staticText261 = wx.StaticText( sbSizer4.GetStaticBox(), wx.ID_ANY, u"Double click to remove xnet", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText261.Wrap( -1 )
+
+		bSizer40.Add( self.m_staticText261, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
 		sbSizer4.Add( bSizer40, 0, wx.EXPAND, 5 )
