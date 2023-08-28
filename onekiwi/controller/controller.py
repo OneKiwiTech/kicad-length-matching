@@ -517,6 +517,10 @@ class Controller:
         i = self.xNetPanel.choiceClass.GetSelection()
         row = event.GetEventObject().GetSelectedRow()
         self.xNetPanel.dataViewxNet.DeleteItem(row)
+        count = self.xNetPanel.dataViewxNet.GetItemCount() + 1
+        for ind in range(1, count):
+            self.logger.info('i %s', str(ind))
+            self.xNetPanel.dataViewxNet.SetValue(str(ind), ind-1, 0)
         self.model.classes[i].xnets.pop(row)
 
     def OnAddxNet(self, event):
