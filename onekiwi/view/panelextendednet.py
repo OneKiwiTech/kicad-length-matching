@@ -26,7 +26,7 @@ class ExtendedNetPanel ( wx.Panel ):
 		self.m_scrolledWindow2.SetScrollRate( 5, 5 )
 		bSizer22 = wx.BoxSizer( wx.VERTICAL )
 
-		sbSizer3 = wx.StaticBoxSizer( wx.StaticBox( self.m_scrolledWindow2, wx.ID_ANY, u"label" ), wx.HORIZONTAL )
+		sbSizer3 = wx.StaticBoxSizer( wx.StaticBox( self.m_scrolledWindow2, wx.ID_ANY, u"Class" ), wx.HORIZONTAL )
 
 		bSizer32 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -71,7 +71,7 @@ class ExtendedNetPanel ( wx.Panel ):
 
 		bSizer22.Add( sbSizer3, 0, wx.ALL|wx.EXPAND, 5 )
 
-		sbSizer4 = wx.StaticBoxSizer( wx.StaticBox( self.m_scrolledWindow2, wx.ID_ANY, u"label" ), wx.VERTICAL )
+		sbSizer4 = wx.StaticBoxSizer( wx.StaticBox( self.m_scrolledWindow2, wx.ID_ANY, u"Add Net" ), wx.VERTICAL )
 
 		bSizer18 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -182,8 +182,15 @@ class ExtendedNetPanel ( wx.Panel ):
 
 		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_dataViewListCtrl2 = wx.dataview.DataViewListCtrl( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer20.Add( self.m_dataViewListCtrl2, 1, wx.ALL, 5 )
+		self.dataViewxNet = wx.dataview.DataViewListCtrl( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.viewItem = self.dataViewxNet.AppendTextColumn( u"Item", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.viewPad1s = self.dataViewxNet.AppendTextColumn( u"Pad", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.viewNet1 = self.dataViewxNet.AppendTextColumn( u"Net", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.viewPad1e = self.dataViewxNet.AppendTextColumn( u"Pad", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.viewPad2s = self.dataViewxNet.AppendTextColumn( u"Pad", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.viewNet2 = self.dataViewxNet.AppendTextColumn( u"Net", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		self.viewPad2e = self.dataViewxNet.AppendTextColumn( u"Pad", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
+		bSizer20.Add( self.dataViewxNet, 1, wx.ALL|wx.EXPAND, 5 )
 
 
 		sbSizer4.Add( bSizer20, 1, wx.EXPAND, 5 )

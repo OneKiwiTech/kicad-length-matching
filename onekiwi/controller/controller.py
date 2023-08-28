@@ -77,7 +77,8 @@ class Controller:
         self.xNetPanel.editFilter.Bind(wx.EVT_TEXT, self.OnFilterReference)
         self.xNetPanel.choiceClass.Bind(wx.EVT_CHOICE, self.OnChoiceClassxNet)
         self.xNetPanel.buttonUpdate.Bind(wx.EVT_BUTTON, self.OnUpdatexNet)
-
+        self.xNetPanel.buttonAddxNet.Bind(wx.EVT_BUTTON, self.OnAddxNet)
+        
         self.xNetPanel.choiceNetName1.Bind(wx.EVT_CHOICE, self.OnChoiceNetNameStart)
         self.xNetPanel.choiceNetName2.Bind(wx.EVT_CHOICE, self.OnChoiceNetNameEnd)
 
@@ -457,6 +458,9 @@ class Controller:
         
         self.xnets.sort(key=lambda x: x.name)
         self.xnete.sort(key=lambda x: x.name)
+        if len(self.xnets) == 0 or len(self.xnete) == 0:
+            self.logger.info('list nets is empty')
+            return
         names1 = []
         names2 = []
         pad1s = []
@@ -505,3 +509,20 @@ class Controller:
             pad2e.append(pad)
         self.xNetPanel.UpdateNetPad2Start(pad2s)
         self.xNetPanel.UpdateNetPad2End(pad2e)
+    
+    def OnAddxNet(self, event):
+        self.logger.info('OnAddxNet')
+        iname1 = self.xNetPanel.choiceNetName1.GetSelection()
+        istart1 = self.xNetPanel.choiceNetStart1.GetSelection()
+        iend1 = self.xNetPanel.choiceNetEnd1.GetSelection()
+        iname2 = self.xNetPanel.choiceNetName2.GetSelection()
+        istart2 = self.xNetPanel.choiceNetStart2.GetSelection()
+        iend2 = self.xNetPanel.choiceNetEnd2.GetSelection()
+        name1 = self.xnets[iname1].name
+        start1 = self.xnets[iname1].dis1s[istart1]
+        end1 = self.xnets[iname1].dis2s[iend1]
+        name2 = self.xnete[iname2].name
+        start2 = self.xnete[iname2].dis1s[istart2]
+        end2 = self.xnete[iname2].dis2s[iend2]
+        self.xNetPanel.dataViewxNet.AppendItem([str(0), start1, name1, end1, start2, name2, end2])
+                

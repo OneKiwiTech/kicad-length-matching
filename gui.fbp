@@ -2965,23 +2965,23 @@
                             <property name="name">bSizer22</property>
                             <property name="orient">wxVERTICAL</property>
                             <property name="permission">none</property>
-                            <object class="sizeritem" expanded="0">
+                            <object class="sizeritem" expanded="1">
                                 <property name="border">5</property>
                                 <property name="flag">wxALL|wxEXPAND</property>
                                 <property name="proportion">0</property>
-                                <object class="wxStaticBoxSizer" expanded="0">
+                                <object class="wxStaticBoxSizer" expanded="1">
                                     <property name="id">wxID_ANY</property>
-                                    <property name="label">label</property>
+                                    <property name="label">Class</property>
                                     <property name="minimum_size"></property>
                                     <property name="name">sbSizer3</property>
                                     <property name="orient">wxHORIZONTAL</property>
                                     <property name="parent">1</property>
                                     <property name="permission">none</property>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">2</property>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">bSizer32</property>
                                             <property name="orient">wxHORIZONTAL</property>
@@ -3376,7 +3376,7 @@
                                 <property name="proportion">1</property>
                                 <object class="wxStaticBoxSizer" expanded="1">
                                     <property name="id">wxID_ANY</property>
-                                    <property name="label">label</property>
+                                    <property name="label">Add Net</property>
                                     <property name="minimum_size"></property>
                                     <property name="name">sbSizer4</property>
                                     <property name="orient">wxVERTICAL</property>
@@ -3716,7 +3716,7 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="1">
+                                    <object class="sizeritem" expanded="0">
                                         <property name="border">5</property>
                                         <property name="flag">wxALL|wxEXPAND</property>
                                         <property name="proportion">0</property>
@@ -4102,11 +4102,11 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="1">
+                                    <object class="sizeritem" expanded="0">
                                         <property name="border">5</property>
                                         <property name="flag">wxALL|wxEXPAND</property>
                                         <property name="proportion">0</property>
-                                        <object class="wxBoxSizer" expanded="1">
+                                        <object class="wxBoxSizer" expanded="0">
                                             <property name="minimum_size"></property>
                                             <property name="name">bSizer39</property>
                                             <property name="orient">wxHORIZONTAL</property>
@@ -4492,7 +4492,7 @@
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">0</property>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">bSizer40</property>
                                             <property name="orient">wxHORIZONTAL</property>
@@ -4649,14 +4649,14 @@
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">bSizer20</property>
                                             <property name="orient">wxHORIZONTAL</property>
                                             <property name="permission">none</property>
                                             <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL</property>
+                                                <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">1</property>
                                                 <object class="wxDataViewListCtrl" expanded="0">
                                                     <property name="bg"></property>
@@ -4669,7 +4669,7 @@
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
-                                                    <property name="name">m_dataViewListCtrl2</property>
+                                                    <property name="name">dataViewxNet</property>
                                                     <property name="permission">protected</property>
                                                     <property name="pos"></property>
                                                     <property name="size"></property>
@@ -4679,6 +4679,83 @@
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
+                                                    <object class="dataViewListColumn" expanded="0">
+                                                        <property name="align">wxALIGN_LEFT</property>
+                                                        <property name="ellipsize"></property>
+                                                        <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
+                                                        <property name="label">Item</property>
+                                                        <property name="mode">wxDATAVIEW_CELL_INERT</property>
+                                                        <property name="name">viewItem</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="type">Text</property>
+                                                        <property name="width">-1</property>
+                                                    </object>
+                                                    <object class="dataViewListColumn" expanded="0">
+                                                        <property name="align">wxALIGN_LEFT</property>
+                                                        <property name="ellipsize"></property>
+                                                        <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
+                                                        <property name="label">Pad</property>
+                                                        <property name="mode">wxDATAVIEW_CELL_INERT</property>
+                                                        <property name="name">viewPad1s</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="type">Text</property>
+                                                        <property name="width">-1</property>
+                                                    </object>
+                                                    <object class="dataViewListColumn" expanded="0">
+                                                        <property name="align">wxALIGN_LEFT</property>
+                                                        <property name="ellipsize"></property>
+                                                        <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
+                                                        <property name="label">Net</property>
+                                                        <property name="mode">wxDATAVIEW_CELL_INERT</property>
+                                                        <property name="name">viewNet1</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="type">Text</property>
+                                                        <property name="width">-1</property>
+                                                    </object>
+                                                    <object class="dataViewListColumn" expanded="0">
+                                                        <property name="align">wxALIGN_LEFT</property>
+                                                        <property name="ellipsize"></property>
+                                                        <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
+                                                        <property name="label">Pad</property>
+                                                        <property name="mode">wxDATAVIEW_CELL_INERT</property>
+                                                        <property name="name">viewPad1e</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="type">Text</property>
+                                                        <property name="width">-1</property>
+                                                    </object>
+                                                    <object class="dataViewListColumn" expanded="0">
+                                                        <property name="align">wxALIGN_LEFT</property>
+                                                        <property name="ellipsize"></property>
+                                                        <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
+                                                        <property name="label">Pad</property>
+                                                        <property name="mode">wxDATAVIEW_CELL_INERT</property>
+                                                        <property name="name">viewPad2s</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="type">Text</property>
+                                                        <property name="width">-1</property>
+                                                    </object>
+                                                    <object class="dataViewListColumn" expanded="0">
+                                                        <property name="align">wxALIGN_LEFT</property>
+                                                        <property name="ellipsize"></property>
+                                                        <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
+                                                        <property name="label">Net</property>
+                                                        <property name="mode">wxDATAVIEW_CELL_INERT</property>
+                                                        <property name="name">viewNet2</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="type">Text</property>
+                                                        <property name="width">-1</property>
+                                                    </object>
+                                                    <object class="dataViewListColumn" expanded="0">
+                                                        <property name="align">wxALIGN_LEFT</property>
+                                                        <property name="ellipsize"></property>
+                                                        <property name="flags">wxDATAVIEW_COL_RESIZABLE</property>
+                                                        <property name="label">Pad</property>
+                                                        <property name="mode">wxDATAVIEW_CELL_INERT</property>
+                                                        <property name="name">viewPad2e</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="type">Text</property>
+                                                        <property name="width">-1</property>
+                                                    </object>
                                                 </object>
                                             </object>
                                         </object>
