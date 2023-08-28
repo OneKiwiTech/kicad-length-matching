@@ -49,27 +49,27 @@ class Model:
         status, data = self.read_json()
         if status == True:
             self.classes.clear()
-            for jsonclass in data['netclasses']:
-                netclass = NetClass(jsonclass['name'], jsonclass['start'], jsonclass['end'])
-                for jsonnet in jsonclass['nets']:
-                    net = NetData(jsonnet['name'], jsonnet['code'], jsonnet['ref1'], jsonnet['pad1'], 
-                        jsonnet['ref2'], jsonnet['pad2'])
-                    for jsonpad1 in jsonnet['pad1s']:
-                        net.pad1s.append(jsonpad1)
-                    for jsonpad2 in jsonnet['pad2s']:
-                        net.pad2s.append(jsonpad2)
+            for jclass in data['netclasses']:
+                netclass = NetClass(jclass['name'], jclass['start'], jclass['end'])
+                for jnet in jclass['nets']:
+                    net = NetData(jnet['name'], jnet['code'], jnet['ref1'], jnet['pad1'], 
+                        jnet['ref2'], jnet['pad2'])
+                    for jpad1 in jnet['pad1s']:
+                        net.pad1s.append(jpad1)
+                    for jpad2 in jnet['pad2s']:
+                        net.pad2s.append(jpad2)
                     netclass.nets.append(net)
-                for jsonnet in jsonclass['xnets']:
-                    xnet = NetExtendedData(jsonnet['name1'], jsonnet['code1'], jsonnet['ref1'], jsonnet['pad1'], 
-                                           jsonnet['name2'], jsonnet['code2'], jsonnet['ref2'], jsonnet['pad2'],
-                                           jsonnet['xref'], jsonnet['xpad1'], jsonnet['xpad2'])
+                for jnet in jclass['xnets']:
+                    xnet = NetExtendedData(jnet['name1'], jnet['code1'], jnet['ref1'], jnet['pad1'], 
+                                           jnet['name2'], jnet['code2'], jnet['ref2'], jnet['pad2'],
+                                           jnet['xref'], jnet['xpad1'], jnet['xpad2'])
                     netclass.xnets.append(xnet)
                 self.classes.append(netclass)
     
     def save_setting(self):
         self.netclasses["netclasses"] = []
         for netclass in self.classes:
-            item = {"name": netclass.name, "start": netclass.start, "end": netclass.end, "nets": [],  "xnets": []}
+            item = {"name": netclass.name, "start": netclass.start, "end": netclass.end, "nets": [], "xnets": []}
             for net in netclass.nets:
                 if net.selected == True:
                     netdata = {"name": net.name, "code": net.code, "ref1": net.ref1, "pad1": net.pad1,
