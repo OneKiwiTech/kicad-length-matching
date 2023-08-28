@@ -59,12 +59,17 @@ class Model:
                     for jsonpad2 in jsonnet['pad2s']:
                         net.pad2s.append(jsonpad2)
                     netclass.nets.append(net)
+                for jsonnet in jsonclass['xnets']:
+                    xnet = NetExtendedData(jsonnet['name1'], jsonnet['code1'], jsonnet['ref1'], jsonnet['pad1'], 
+                                           jsonnet['name2'], jsonnet['code2'], jsonnet['ref2'], jsonnet['pad2'],
+                                           jsonnet['xref'], jsonnet['xpad1'], jsonnet['xpad2'])
+                    netclass.xnets.append(xnet)
                 self.classes.append(netclass)
     
     def save_setting(self):
         self.netclasses["netclasses"] = []
         for netclass in self.classes:
-            item = {"name": netclass.name, "start": netclass.start, "end": netclass.end, "nets": []}
+            item = {"name": netclass.name, "start": netclass.start, "end": netclass.end, "nets": [],  "xnets": []}
             for net in netclass.nets:
                 if net.selected == True:
                     netdata = {"name": net.name, "code": net.code, "ref1": net.ref1, "pad1": net.pad1,
@@ -74,6 +79,11 @@ class Model:
                     for pad2 in net.pad2s:
                         netdata["pad2s"].append(pad2)
                     item["nets"].append(netdata)
+            for xnet in netclass.xnets:
+                xnetdata = {"name1": xnet.name1, "code1": xnet.code1, "ref1": xnet.ref1, "pad1": xnet.pad1,
+                            "name2": xnet.name2, "code2": xnet.code2, "ref2": xnet.ref2, "pad2": xnet.pad2,
+                            "xref": xnet.xref, "xpad1": xnet.xpad1, "xpad2": xnet.xpad2}
+                item["xnets"].append(xnetdata)
             self.netclasses['netclasses'].append(item)
 
         path = self.export_to_json()

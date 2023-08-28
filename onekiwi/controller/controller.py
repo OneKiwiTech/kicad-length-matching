@@ -1,7 +1,7 @@
 from ..model.model import Model
 from ..model.temp import TempNetClass
 from ..model.temp import TempxNet
-from ..model.net import NetData
+from ..model.net import NetData, NetExtendedData
 from ..model.model import NetClass
 from ..view.view import *
 from ..kicad.board import *
@@ -512,6 +512,7 @@ class Controller:
     
     def OnAddxNet(self, event):
         self.logger.info('OnAddxNet')
+        i = self.xNetPanel.choiceClass.GetSelection()
         iname1 = self.xNetPanel.choiceNetName1.GetSelection()
         istart1 = self.xNetPanel.choiceNetStart1.GetSelection()
         iend1 = self.xNetPanel.choiceNetEnd1.GetSelection()
@@ -524,7 +525,21 @@ class Controller:
         name2 = self.xnete[iname2].name
         start2 = self.xnete[iname2].dis1s[istart2]
         end2 = self.xnete[iname2].dis2s[iend2]
+
+        code1 = self.xnets[iname1].code
+        ref1 = self.xnets[iname1].ref1
+        xref = self.xnets[iname1].ref2
+        pad1 = self.xnets[iname1].pad1s[istart1]
+        xpad1 = self.xnets[iname1].pad2s[istart2]
+
+        code2 = self.xnete[iname2].code
+        ref2 = self.xnete[iname2].ref2
+        pad2 = self.xnete[iname2].pad2s[iend2]
+        xpad2 = self.xnete[iname2].pad1s[iend1]
+
         self.xNetPanel.dataViewxNet.AppendItem([str(0), start1, name1, end1, start2, name2, end2])
+        xnet = NetExtendedData(name1, code1, ref1, pad1, name2, code2, ref2, pad2, xref, xpad1, xpad2)
+        self.model.classes[i].xnets.append(xnet)
         # DeleteItem
         # DeleteAllItems
         # GetItemCount
