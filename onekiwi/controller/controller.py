@@ -525,4 +525,6 @@ class Controller:
         start2 = self.xnete[iname2].dis1s[istart2]
         end2 = self.xnete[iname2].dis2s[iend2]
         self.xNetPanel.dataViewxNet.AppendItem([str(0), start1, name1, end1, start2, name2, end2])
-                
+        # DeleteItem
+        # DeleteAllItems
+        # GetItemCount

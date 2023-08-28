@@ -182,6 +182,7 @@ class ExtendedNetPanel ( wx.Panel ):
 
 		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
+		bSizer20.SetMinSize( wx.Size( -1,200 ) )
 		self.dataViewxNet = wx.dataview.DataViewListCtrl( sbSizer4.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.viewItem = self.dataViewxNet.AppendTextColumn( u"Item", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
 		self.viewPad1s = self.dataViewxNet.AppendTextColumn( u"Pad", wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_RESIZABLE )
