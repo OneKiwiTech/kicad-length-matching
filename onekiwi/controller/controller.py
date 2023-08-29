@@ -192,6 +192,7 @@ class Controller:
                 self.classes.append(name)
                 self.classPanel.SetEditClassName('')
                 self.classPanel.UpdateChoiceClass(self.classes)
+                self.xNetPanel.UpdateClassName(self.classes)
             else:
                 self.logger.info('Name already exists!')
         else:
@@ -410,11 +411,10 @@ class Controller:
                 net.pad2 = pad
                 net.ipad2 = ind
     
-    ### Tab2: Extended Net ###
 
+    ### Tab2: Extended Net ###
     def OnChoiceClassxNet(self, event):
         self.logger.info('OnChoiceClassxNet')
-        #self.xNetPanel.dataViewxNet.DeleteAllItems()
         i = event.GetEventObject().GetSelection()
         for ref in self.references:
             if self.model.classes[i].start == ref:
