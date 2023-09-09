@@ -78,7 +78,7 @@ class Model:
                 code = get_net_code(name)
                 pads = get_pads_from_net_name(name)
                 if len(pads) < 2:
-                    return name
+                    return name #TODO: got error here for an IC with no connection flag (X symbol on schematic)
                 ref1 = pads[0].reference
                 pad1 = pads[0].pad
                 pin1 = ref1 + '.' + pad1

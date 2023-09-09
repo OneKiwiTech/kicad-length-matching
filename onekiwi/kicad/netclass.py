@@ -8,14 +8,19 @@ class PadNet:
 
 def get_net_classes():
     board = get_board()
-    netclasses = board.GetDesignSettings().GetNetClasses().NetClasses()
+    netclasses = board.GetAllNetClasses()
     classes = [str(k) for k, v in netclasses.items()]
     return classes
 
 def get_net_names(netclass):
     board = get_board()
-    classes = board.GetDesignSettings().GetNetClasses()
-    nets = [str(net) for net in classes.Find(netclass).NetNames()]
+    netnames = board.GetNetsByName().values()
+    nets = []
+    for net in netnames:
+        if net.GetNetClassName() == netclass:
+            netname = net.GetNetname()
+            if len(netname): #ignore empty netname (e.g. found in Default netclass)
+                nets.append(netname)
     return nets
 
 def get_net_code(netname):
