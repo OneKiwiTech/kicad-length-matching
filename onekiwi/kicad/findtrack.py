@@ -355,11 +355,11 @@ class FindNet:
             for hole in nettrack.holes:
                 hole_length = self.get_via_length(hole.via_layer1, hole.via_layer2)
                 sum_hole_length += hole_length
-            self.data.items[i].track_length = sum_track_length/pcbnew.IU_PER_MM
+            self.data.items[i].track_length = sum_track_length/pcbnew.PCB_IU_PER_MM
             self.data.items[i].via_length = sum_via_length
             self.data.items[i].hole_length = sum_hole_length
             self.data.items[i].via_count = via_count
-            self.data.items[i].total_length = (sum_track_length/pcbnew.IU_PER_MM) + sum_via_length + sum_hole_length
+            self.data.items[i].total_length = (sum_track_length/pcbnew.PCB_IU_PER_MM) + sum_via_length + sum_hole_length
 
     def find_min_track(self):
         check = False
