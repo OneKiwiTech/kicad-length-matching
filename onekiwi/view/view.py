@@ -31,7 +31,7 @@ class NetPanelView(NetPanel):
         elif unit == 'mil':
             scale = 10000/254
         rows = self.gridNet.GetNumberRows()
-        self.gridNet.DeleteRows(0, rows)
+        #self.gridNet.DeleteRows(0, rows)
         self.gridNet.AppendRows(len(nets))
         #self.gridNet.SetCornerLabelValue('Net Code')
         for row, net in enumerate(nets):

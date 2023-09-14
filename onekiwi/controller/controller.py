@@ -4,8 +4,9 @@ import json
 import logging
 
 class Controller:
-    def __init__(self):
-        self.model = Model()
+    def __init__(self, board):
+        self.board = board
+        self.model = Model(board)
         self.view = LengthMatchingView()
         self.panel1 = NetPanelView(self.view.notebook)
         self.panel2 = xNetPanelView(self.view.notebook)

@@ -14,12 +14,13 @@ class DataNet:
 class DataClass:
     def __init__(self, name, nets):
         self.name = name
-        self.nets:List[DataNet] = nets
+        self.nets:List[DataNet] = nets.copy()
 
 class Model:
-    def __init__(self):
-        self.classes = get_net_classes()
-        self.thickness = get_thickness_stackup()
+    def __init__(self, board):
+        self.board = board
+        self.classes = get_net_classes(board)
+        self.thickness = get_thickness_stackup(board)
         self.nameclasses = {}
         self.dataclass:List[DataClass] = []
         self.statusinit = False
@@ -39,8 +40,8 @@ class Model:
             return 'mil'
 
     def export_to_json(self):
-        path = get_pcb_path()
-        name = get_pcb_name() + '_length-matching.json'
+        path = get_pcb_path(self.board)
+        name = get_pcb_name(self.board) + '_length-matching.json'
         json_file = os.path.join(path, name)
         # Serializing json 
         results = json.dumps(self.nameclasses, indent = 4)
@@ -53,8 +54,8 @@ class Model:
     def read_json(self):
         data = {}
         status = False
-        path = get_pcb_path()
-        name = get_pcb_name() + '_length-matching.json'
+        path = get_pcb_path(self.board)
+        name = get_pcb_name(self.board) + '_length-matching.json'
         json_file = os.path.join(path, name)
         # Check If File Exists
         if os.path.exists(json_file):
@@ -71,12 +72,12 @@ class Model:
             
         for nameclass in self.nameclasses['classes']:
             nets = []
-            nets = get_net_names(nameclass['name'])
+            nets = get_net_names(self.board, nameclass['name'])
             
             for index, name in enumerate(nets):
                 pads = []
-                code = get_net_code(name)
-                pads = get_pads_from_net_name(name)
+                code = get_net_code(self.board, name)
+                pads = get_pads_from_net_name(self.board, name)
                 if len(pads) < 2:
                     return name #TODO: got error here for an IC with no connection flag (X symbol on schematic)
                 ref1 = pads[0].reference
@@ -138,7 +139,7 @@ class Model:
                 reference2 = net['reference2']
                 pad1 = net['pad1']
                 pad2 = net['pad2']
-                track_data = TrackLength(reference1, pad1, reference2, pad2, self.thickness)
+                track_data = TrackLength(self.board, reference1, pad1, reference2, pad2, self.thickness)
                 info = track_data.find_min_track()
                 net['status'] = info.status
                 net['viacount'] = info.via_count

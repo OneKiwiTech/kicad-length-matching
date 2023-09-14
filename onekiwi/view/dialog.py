@@ -76,7 +76,7 @@ class NetPanel ( wx.Panel ):
 
 		comboClassChoices = []
 		self.comboClass = wx.ComboBox( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, comboClassChoices, 0 )
-		bSizer2.Add( self.comboClass, 2, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5 )
+		bSizer2.Add( self.comboClass, 2, wx.ALL|wx.EXPAND, 5 )
 
 
 		bSizer2.Add( ( 0, 0), 1, wx.EXPAND, 5 )

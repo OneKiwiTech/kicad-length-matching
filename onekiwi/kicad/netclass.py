@@ -6,14 +6,14 @@ class PadNet:
         self.pad = pad
         self.pin = reference + "." + pad
 
-def get_net_classes():
-    board = get_board()
-    netclasses = board.GetAllNetClasses()
+def get_net_classes(board):
+    #board = get_board()
+    #netclasses = board.GetAllNetClasses()
+    netclasses = board.GetNetClasses()
     classes = [str(k) for k, v in netclasses.items()]
     return classes
 
-def get_net_names(netclass):
-    board = get_board()
+def get_net_names(board, netclass):
     netnames = board.GetNetsByName().values()
     nets = []
     for net in netnames:
@@ -23,18 +23,15 @@ def get_net_names(netclass):
                 nets.append(netname)
     return nets
 
-def get_net_code(netname):
-    board = get_board()
+def get_net_code(board, netname):
     netcode = board.GetNetcodeFromNetname(netname)
     return netcode
 
-def get_pin(reference, pad):
-    board = get_board()
+def get_pin(board, reference, pad):
     return board.FindFootprintByReference(reference).FindPadByNumber(pad)
     
-def get_pads_from_net_name(netname):
+def get_pads_from_net_name(board, netname):
     pads = []
-    board = get_board()
     netcode = board.GetNetcodeFromNetname(netname)
     footprints = board.GetFootprints()
     for footprint in footprints:

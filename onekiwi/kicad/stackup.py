@@ -6,9 +6,9 @@ class Stackup:
         self.name = name
         self.thickness = thickness
 
-def get_layer_stackup():
-    board = get_board()
-    path = get_pcb_path()
+def get_layer_stackup(board):
+    #board = get_board()
+    path = get_pcb_path(board)
     job_file = os.path.join(path, "jobfile.json")
     pcbnew.GERBER_JOBFILE_WRITER(board).CreateJobFile(job_file)
     pcbnew.GERBER_JOBFILE_WRITER(board).WriteJSONJobFile(job_file)
@@ -31,9 +31,9 @@ def get_layer_stackup():
 
     return stackups
 
-def get_thickness_stackup():
-    board = get_board()
-    path = get_pcb_path()
+def get_thickness_stackup(board):
+    #board = get_board()
+    path = get_pcb_path(board)
     job_file = os.path.join(path, "jobfile.json")
     pcbnew.GERBER_JOBFILE_WRITER(board).CreateJobFile(job_file)
     pcbnew.GERBER_JOBFILE_WRITER(board).WriteJSONJobFile(job_file)

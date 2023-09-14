@@ -7,7 +7,7 @@ from .netclass import *
 ANY_LAYER = 'Any'
 
 class TrackLength:
-    def __init__(self, ref_start, pad_start, ref_end, pad_end, thickness):
+    def __init__(self, board, ref_start, pad_start, ref_end, pad_end, thickness):
         self.name = ''
         self.code = 0
         self.ref_start = ref_start
@@ -21,16 +21,17 @@ class TrackLength:
         self.tracks = []
         self.thickness = thickness
         self.hole_pads = []
+        self.board = board
 
     def get_info(self):
-        board = get_board()
-        pin_start = board.FindFootprintByReference(self.ref_start).FindPadByNumber(self.pad_start)
-        pin_end = board.FindFootprintByReference(self.ref_end).FindPadByNumber(self.pad_end)
+        #board = get_board()
+        pin_start = self.board.FindFootprintByReference(self.ref_start).FindPadByNumber(self.pad_start)
+        pin_end = self.board.FindFootprintByReference(self.ref_end).FindPadByNumber(self.pad_end)
         self.name = pin_start.GetNetname()
-        self.code = board.GetNetcodeFromNetname(self.name)
-        self.tracks = list(board.TracksInNet(self.code)) #Convert Tuple to List
-        start_pad_layer = board.FindFootprintByReference(self.ref_start).IsFlipped()
-        end_pad_layer = board.FindFootprintByReference(self.ref_end).IsFlipped()
+        self.code = self.board.GetNetcodeFromNetname(self.name)
+        self.tracks = list(self.board.TracksInNet(self.code)) #Convert Tuple to List
+        start_pad_layer = self.board.FindFootprintByReference(self.ref_start).IsFlipped()
+        end_pad_layer = self.board.FindFootprintByReference(self.ref_end).IsFlipped()
         if self.ref_start == self.ref_end and self.pad_start == self.pad_end:
             self.tracks.clear()
 
@@ -51,9 +52,9 @@ class TrackLength:
                 self.layer_end = pcbnew.F_Cu
 
     def find_hole_pad(self):
-        pads = get_pads_from_net_name(self.name)
+        pads = get_pads_from_net_name(self.board, self.name)
         for item in pads:
-            pin = get_pin(item.reference, item.pad)
+            pin = get_pin(self.board, item.reference, item.pad)
             if pin.GetPosition() != self.point_start and pin.GetPosition() != self.point_end:
                 # Pad type: Through Hole
                 if pin.GetAttribute() == pcbnew.PAD_ATTRIB_PTH:

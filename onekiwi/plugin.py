@@ -14,11 +14,12 @@ class LengthMatchingAction(pcbnew.ActionPlugin):
 		self.icon_file_name = os.path.join(os.path.dirname(__file__), 'icon.png') # Optional
 
 	def Run(self):
+		board = pcbnew.GetBoard()
 		# The entry function of the plugin that is executed on user action
 		self.InitLogger()
 		self.logger = logging.getLogger(__name__)
 		#if controller.Show() == wx.ID_OK:
-		controller = Controller()
+		controller = Controller(board)
 		controller.Show()
 		pcbnew.UpdateUserInterface()
 

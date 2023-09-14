@@ -12,19 +12,19 @@ def get_board():
         board = pcbnew.GetBoard()
     return board
 
-def get_pcb_name():
-    file_name = get_board().GetFileName()
+def get_pcb_name(board):
+    file_name = board.GetFileName()
     base = os.path.basename(file_name)
     name = os.path.splitext(base)[0]
     return name
 
-def get_pcb_full_name():
-    file_name = get_board().GetFileName()
+def get_pcb_full_name(board):
+    file_name = board.GetFileName()
     name = os.path.basename(file_name)
     return name
 
-def get_pcb_path():
-    file_name = get_board().GetFileName()
+def get_pcb_path(board):
+    file_name = board.GetFileName()
     path = os.path.dirname(file_name)
     return path
     
